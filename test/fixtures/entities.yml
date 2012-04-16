@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  title: MyText
+  entity_type: 
+  description: MyText
+  project: 
+  section: 
+
+two:
+  title: MyText
+  entity_type: 
+  description: MyText
+  project: 
+  section: 

@@ -1,0 +1,87 @@
+Below the '-=-=-' is all old:
+
+* Work on "entity" dispatcher
+-- ensure link
+
+* Standardize dispatcher help format (Done for Home Dispatcher)
+* Standardize comment format (done for Home Dispatcher)
+* Modify "show" command to show fields
+* Move some command sunder project and section dispatchers versus home
+
+* Update "delete" command to be able to delete descriptors, links, etc.
+-- and to recurse
+
+* Test "field add/list/delete" for entity and links
+* Test addition of links 
+* Transform dispatcher needs to be done for transform manipulation
+* Look at tab completion
+* Add "back" command in Home dispatcher
+* Add "run" and "export" commands in Home dispatcher
+* Add "connect" command in Home dispatcher
+
+* Make it easier to set descriptor and field values - ?
+* Additional error checking / catch statements, e.g., in the "set" command in home dispatcher
+
+
+
+-=-=-=-=-
+-=-=-=-=-
+ at msfconsole
+
+Rex::UI::Console I believe
+
+If too complicated - screw it, start off with IO::STDIN/STDOUT
+
+Basic commands:
+ - ? | h | help
+ - list:
+   - projects, sections, objects, links, fields, transforms
+ - add:
+    - project, section, object, link, field, transforms
+ - print: display current table
+ - edit: edit current object
+ - run: 
+    - transform <title>
+ - delete: remove current object
+ - import
+    - csv <file>
+    - xml <file>
+    - json <file>
+ - use <id/title/name>
+ 
+-=-=-=-
+
+osint> ?
+
+ Commands available
+
+ Projects list
+ 
+ Projects add
+   Project Title:
+   Project Description:
+ 
+ Projects use <title>
+
+ For example, 
+ Project use test_project
+ 
+
+osint/test_project> ?
+
+ Commands available
+
+ Objects list/add/use/modify
+ Links list/add/use/modify
+
+osint/test_project/test_object> ?
+
+  modify: modify the content
+  link: setup a link
+  print: print to stdout
+  run transform <name>: run a particular transform
+
+osint/test_project/test_link> ?
+
+  modify:
+  print:

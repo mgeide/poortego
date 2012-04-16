@@ -1,0 +1,66 @@
+
+TODO:
+- Look to see if there is a metasploit style guide for programming
+
+Looks like:
+
+#!/usr/bin/env ruby  <-- for executable .rb files
+
+###
+#
+# Brief class description.
+#
+###
+class Blah
+
+        #
+        # Detailed class description.   <-- This whole section is optional
+        #
+        # Attribute1
+        #
+        #       Attribute description.
+        #
+        # Attribute2
+        # ...
+
+
+
+        #
+        # Brief method description.
+        #
+        def to_s
+        end
+
+        attr_accessor :blahblah
+
+protected
+
+        ...
+
+end
+
+
+- when you go from project to section the prompt changes, but not like a directory scructure
+-- Maybe a work around is to use a ShellInterface to track the prompt
+
+
+Home/Core:
+  - project / transform / entity_type / link_type
+      - create
+      - select
+      - delete
+      - modify
+   - back (if can get working)
+   - (optional) connect - to override database.yaml DB location
+
+  Project:
+   - section:
+     - create
+     - select
+     - delete
+     - modify
+  
+  Section:
+    - descriptor
+    - entity
+    - relation
