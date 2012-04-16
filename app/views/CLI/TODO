@@ -1,4 +1,4 @@
-Below the '-=-=-' is all old:
+
 
 * Work on "entity" dispatcher
 -- ensure link
@@ -22,7 +22,7 @@ Below the '-=-=-' is all old:
 * Make it easier to set descriptor and field values - ?
 * Additional error checking / catch statements, e.g., in the "set" command in home dispatcher
 
-
+Below the '-=-=-' is all old:
 
 -=-=-=-=-
 -=-=-=-=-
