@@ -58,12 +58,11 @@ class SectionDispatcher
     objB_name  = args[1]
     link_name  = "#{objA_name} --> #{objB_name}"  ## Default link name: "obJA --> objB"
     
-    link_id = Link.select_or_insert(driver.interface.working_values["Current Project"], 
-                                    driver.interface.working_values["Current Section"], 
-                                    objA_name, objB_name, link_name)
+    link_obj = Link.select_or_insert(driver.interface.working_values["Current Project"], 
+                                     driver.interface.working_values["Current Section"], 
+                                     objA_name, objB_name, link_name)
     
-    if (link_id > 1)
-      link_obj = Link.find(link_id)
+    unless (link_obj.nil?)
       driver.interface.working_values["Current Link"] = link_obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Link"]
       driver.interface.working_values["Current Selection Type"] = 'link'
@@ -111,14 +110,13 @@ class SectionDispatcher
       return
     when 'list'
       print_status("Listing descriptors for section:")  
-      descriptor_value = SectionDescriptor.list_with_values(section_id)
-      descriptor_value.each {|key,value|
-       puts "#{key}  |  #{value}"  
+      descriptor_objs = SectionDescriptor.list(section_id)
+      descriptor_objs.each {|descriptor_obj|
+       puts "#{descriptor_obj.field_name}  |  #{descriptor_obj.value}"  
       }
     when 'set'
       descriptor_value = args[2]  # Value to set for descriptor
-      descriptor_id    = SectionDescriptor.select_or_insert(section_id, descriptor_name)
-      descriptor_obj  = SectionDescriptor.find(descriptor_id)
+      descriptor_obj   = SectionDescriptor.select_or_insert(section_id, descriptor_name)
       descriptor_obj.update_attributes(:value => descriptor_value)
       descriptor_obj.save
       print_status("SectionDescriptor #{descriptor_name} set to #{descriptor_value}")    

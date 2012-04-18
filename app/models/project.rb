@@ -1,16 +1,15 @@
-############################
-# Project ActiveRecord     #
-#                          #
-# Description:             #
-# Store Project Object     #
-#                          #
-# Attributes:              #
-#  title:        string    #
-#  description:  text      # 
-#                          #
-############################
+###
+#
+# Project ActiveRecord -
+# This is the main container which houses sections,
+# which in turn house your data (entities, fields, links)    
+#                          
+# Attributes:              
+#  title:        string    
+#  description:  text       
+#                          
+###
 class Project < ActiveRecord::Base
-  #attr_accessor :title
   
   validates :title, :presence => true,
                    :uniqueness => true
@@ -18,148 +17,98 @@ class Project < ActiveRecord::Base
   has_many :sections
   has_many :entities
   has_many :links
-
-  ################################
-  # Method: list()
-  ################################
+ 
+  #
+  # List projects
+  #
   def self.list(*args)
-    
-    project_names = Array.new()
+    project_rows = Array.new()
     begin
-        # Try to find Projects by title
-        project_rows = self.find(:all, :order => "title ASC")
-        project_rows.each do |project_row|
-          project_names.push(project_row['title'])
-        end
+      project_rows = self.find(:all, :order => "title ASC")
     rescue Exception => e
-            #ActiveRecord::Base.clear_active_connections!
-            puts "Exception listing Projecst"
-            puts self.inspect
-            puts e.message
+      puts "Exception listing Project"
+      puts self.inspect
+      puts e.message
     end
-    
-    return project_names
-    
+    return project_rows
   end
   
-  ################################
-  # Method: select()
-  ################################
+  #
+  # Select a project
+  #
   def self.select(*args)
-    
-    ## TODO: add logic to validate argument
-    name = args[0]
-    
-    project_id = -1
+    project_row = nil
     begin
-        # Try to find Project by title first
-        project_row = self.find(:first, :conditions => "title='#{name}'")
-        unless (project_row.nil?)
-            if (project_row.id > -1)
-              project_id = project_row.id
-              puts "[DEBUG] SELECTED project with title #{name}, Id = #{project_id}"
-            end
-        end
+      name = args[0]
+      project_row = self.find(:first, :conditions => "title='#{name}'")
     rescue Exception => e
-            #ActiveRecord::Base.clear_active_connections!
-            puts "Exception selecting Project"
-            puts self.inspect
-            puts e.message
+      puts "Exception selecting Project"
+      puts self.inspect
+      puts e.message
     end
-    
-    return project_id
-    
+    return project_row
   end
   
-  ################################
-  # Method: insert()
-  ################################
+  #
+  # Insert a project
+  #
   def self.insert(*args)
-    
-    ## TODO: add logic to validate argument
-    name = args[0]
-    
-    project_id = -1
+    project_row = nil
     begin
-        # Try to create Project with title
-        project = self.new("title" => name)
-        project.save()
-        project_id = project.id
-        puts "[DEBUG] INSERTED project with title #{name}, Id = #{project_id}"
+      name = args[0]
+      project_row = self.new("title" => name)
+      project_row.save()  
+      puts "[DEBUG] INSERTED project with title #{name}, Id = #{project_row.id}"
     rescue Exception => e
-            #ActiveRecord::Base.clear_active_connections!
-            puts "Exception inserting Project"
-            puts self.inspect
-            puts e.message
+      puts "Exception inserting Project"
+      puts self.inspect
+      puts e.message
     end
-    
-    return project_id
-    
+    return project_row
   end
   
-  ################################
-  # Method: select_or_insert()
-  ################################
+  #
+  # Select a project if exists, otherwise insert it
+  #
   def self.select_or_insert(*args)
-    
-    ## TODO: add logic to validate argument
-    name = args[0]
-    
-    already_retried = false
-    project_id = -1
+    project_row = nil
     begin
-        # Try to select Project by title first
-        project_id = self.select(name)
-        
-        # If not exists then insert
-        unless (project_id > -1)
-            project_id = self.insert(name)
-        end
+      name = args[0]
+      # Try to select Project by title first
+      project_row = self.select(name)
+      # Otherwise insert  
+      if (project_row.nil?)
+        project_row = self.insert(name)
+      end
     rescue Exception => e
-        #ActiveRecord::Base.connection.reconnect!
-        unless already_retried
-            already_retried = true
-            puts "Retrying Project entry"
-            retry
-        else
-            #ActiveRecord::Base.clear_active_connections!
-            puts "Exception selecting/inserting Project"
-            puts self.inspect
-            puts e.message
-        end
+      puts "Exception selecting/inserting Project"
+      puts self.inspect
+      puts e.message
     end
-    
-    return project_id    
-  
+    return project_row   
   end
   
-  ################################
-  # Method: delete_from_name()
-  ################################
+  #
+  # Delete project by name
+  #
   def self.delete_from_name(*args)
-        
-    ## TODO: add logic to validate argument
-    name = args[0]
-    
-    project_id = -1
+    project_row = nil
     begin
-        # Try to find Project by title first
-        project_row = self.find(:first, :conditions => "title='#{name}'")
-        unless (project_row.nil?)
-            if (project_row.id > -1)
-              project_id = project_row.id
-              self.delete(project_id)
-              puts "[DEBUG] DELETED project with title #{name}, Id = #{project_id}"
-            end
-        end
+      name = args[0]
+      # Try to find Project by title first
+      project_row = self.find(:first, :conditions => "title='#{name}'")
+      unless (project_row.nil?)
+        self.delete(project_row.id)
+        puts "[DEBUG] DELETED project with title #{name}, Id = #{project_row.id}"
+      else
+        puts "[DEBUG] Nothing found with that name, so nothing deleted."
+      end
     rescue Exception => e
-            #ActiveRecord::Base.clear_active_connections!
-            puts "Exception deleting Project"
-            puts self.inspect
-            puts e.message
+      puts "Exception deleting Project"
+      puts self.inspect
+      puts e.message
     end
-    
-    return project_id
+    return project_row
   end
   
 end

@@ -47,21 +47,21 @@ class EntityTypeDispatcher
      field_name = args[0]
      type_id = driver.interface.working_values["Current EntityType"].id
      
-     id = EntityTypeField.select_or_insert(type_id, field_name)
+     field_obj = EntityTypeField.select_or_insert(type_id, field_name)
   end
   
   def cmd_remove(*args)
      field_name = args[0]
      type_id = driver.interface.working_values["Current EntityType"].id
      
-     id = EntityTypeField.delete_from_name(type_id, field_name)
+     field_obj = EntityTypeField.delete_from_name(type_id, field_name)
   end
 
   def cmd_fields(*args)
      
     type_id = driver.interface.working_values["Current EntityType"].id
      
-    list_names = EntityTypeField.list(type_id)
+    type_fields = EntityTypeField.list(type_id)
     
     # Build table of listing with 4 columns 
     tbl = Rex::Ui::Text::Table.new('Indent' => 4,
@@ -69,13 +69,13 @@ class EntityTypeDispatcher
     col_num = 0
     row_array = Array.new()
       
-    list_names.each do |list_name|
+    type_fields.each do |type_field|
       if (col_num > 3)
         tbl << row_array
         row_array = Array.new()
         col_num = 0
       end
-      row_array << list_name
+      row_array << type_field.field_name
       col_num = col_num + 1  
     end  # End of table loop
       

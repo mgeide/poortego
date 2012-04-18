@@ -24,6 +24,7 @@ require "#{current_dir}/../../../../../models/link_type"
 require "#{current_dir}/../../../../../models/link_type_field"
 require "#{current_dir}/../../../../../models/link_field"
 
+require "#{current_dir}/graphviz_generator"
 
 module Poortego
 module Console
@@ -39,7 +40,6 @@ class HomeDispatcher
   # Inherit from CommandDispatcher
   include Poortego::Console::CommandDispatcher
   
-
   #
   # Constructor
   #
@@ -70,8 +70,12 @@ class HomeDispatcher
   #
   def set_prompt
      type = driver.interface.working_values["Current Selection Type"]
-     name = driver.interface.working_values["Current Object"].title
-     driver.update_prompt("(%bld%red"+type+":"+name+"%clr)")
+     if (type == 'none')
+       driver.update_prompt("")
+     else
+       name = driver.interface.working_values["Current Object"].title
+       driver.update_prompt("(%bld%red"+type+":"+name+"%clr)")
+     end
   end
   
   #
@@ -90,9 +94,9 @@ class HomeDispatcher
       "select"    => "Select an object to manipulate",
       "create"    => "Create an object",
       "set"       => "Set field values for current object",
-      "delete"    => "Delete an object",  ## TODO: add support to delete more types of things
+      "delete"    => "Delete an object",
       #"run"       => "Run transform/plugin in the current scope",  ## TODO
-      #"export"    => "Export data in the current scope to a specific format (e.g., graph)". ## TODO
+      "export"    => "Export data in the current scope to a specific format (e.g., graph)", ## TODO
     }
   end
   
@@ -171,7 +175,7 @@ class HomeDispatcher
    
     # Default show type is the current selection
     show_type = driver.interface.working_values["Current Selection Type"]
-    show_id   = driver.interface.working_values["Current Object"].id 
+    show_obj  = driver.interface.working_values["Current Object"] 
    
     # Argument driven type (optional) 
     if (args.length > 0)
@@ -186,24 +190,24 @@ class HomeDispatcher
         cmd_show_help
         return
       when 'project'
-        show_id = Project.select(show_name)
+        show_obj = Project.select(show_name)
       when 'section'
-        show_id = Section.select(driver.interface.working_values["Current Project"].id, 
-                                 show_name)
+        show_obj = Section.select(driver.interface.working_values["Current Project"].id, 
+                                  show_name)
       when 'transform'
-        show_id = Transform.select(show_name)
+        show_obj = Transform.select(show_name)
       when 'entity'
-        show_id = Entity.select(driver.interface.working_values["Current Project"].id, 
-                                driver.interface.working_values["Current Section"].id, 
-                                show_name)
+        show_obj = Entity.select(driver.interface.working_values["Current Project"].id, 
+                                 driver.interface.working_values["Current Section"].id, 
+                                 show_name)
       when 'link'
-        show_id = Link.select(driver.interface.working_values["Current Project"].id, 
-                              driver.interface.working_values["Current Section"].id, 
-                              show_name)
+        show_obj = Link.select(driver.interface.working_values["Current Project"].id, 
+                               driver.interface.working_values["Current Section"].id, 
+                               show_name)
       when 'entity_type'
-        show_id = EntityType.select(show_name)
+        show_obj = EntityType.select(show_name)
       when 'link_type'
-        show_id = LinkType.select(show_name)  
+        show_obj = LinkType.select(show_name)  
       else
         print_error("Invalid show type (#{show_type}).  Use -h if you need help.")
         return
@@ -214,82 +218,67 @@ class HomeDispatcher
       return
     end
     
-    case show_type
-    when '-h', '-?'       # Show Help
-        cmd_show_help
-        return
-    when 'project'        # Show Project
-      object = Project.find(show_id) 
-    when 'section'        # Show Section
-      object = Section.find(show_id)
-    when 'transform'      # Show Transform
-      object = Transform.find(show_id)
-    when 'entity'         # Show Object
-      object = Entity.find(show_id)
-    when 'link'           # Show Link
-      object = Link.find(show_id)
-    when 'entity_type'    # Show Entity Type
-      object = EntityType.find(show_id)
-    when 'link_type'      # Show Link Type
-      object = LinkType.find(show_id)
-    else
-      print_error("Invalid show type. See show help for more info on how to use this command.")
-      return                   
-    end
-    
     # Populate table with the object's contents
     tbl = Rex::Ui::Text::Table.new('Indent' => 4,
                                    'Columns' => ["#{show_type} fields",
                                                  'values'   ])
-    object.attributes.each do |attr_name, attr_value|
+    show_obj.attributes.each do |attr_name, attr_value|
       tbl << [attr_name, attr_value] 
+      ## TODO? some of these attributes are an "id" such as a Type id, do the name lookup instead?
     end
-    print_status("Showing #{show_type}, id #{show_id} :")
+    print_status("Showing #{show_type}, id #{show_obj.id} :")
     puts "\n" + tbl.to_s
     
+    #
     # Table addendum for certain types
+    #
     case show_type
     when 'section'        # Show Section Descriptors
        display_flag = 0
        tbl_more = Rex::Ui::Text::Table.new('Indent' => 4,
                                            'Columns' => ['section descriptors',
                                                          'values'   ])
-       descriptor_value = SectionDescriptor.list_with_values(show_id)
-       descriptor_value.each {|key,value|
-         tbl_more << [key, value]
+       descriptors = SectionDescriptor.list(show_obj.id)
+       descriptors.each {|descriptor|
+         tbl_more << [decriptor.field_name, descriptor.value]
          display_flag = 1 
        }
        if (display_flag == 1)
          puts "\n" + tbl_more.to_s
        end
-    when 'link'
-      # Show Link Type instead of just id?
+    when 'link'   # Show link fields
       display_flag = 0
       tbl_more = Rex::Ui::Text::Table.new('Indent' => 4,
                                            'Columns' => ['link fields',
                                                          'values'   ])
-      link_value = LinkField.list_with_values(show_id)
-      link_value.each {|key,value|
-         tbl_more << [key, value]
+      link_fields = LinkField.list(show_obj.id)
+      link_fields.each {|link_field|
+         tbl_more << [link_field.name, link_field.value]
          display_flag = 1 
       }
       if (display_flag == 1)
         puts "\n" + tbl_more.to_s
       end
-    when 'entity'
-      # Show Entity Type instead of just id?
+    when 'entity'  # Show entity fields
       display_flag = 0
       tbl_more = Rex::Ui::Text::Table.new('Indent' => 4,
                                            'Columns' => ['entity fields',
                                                          'values'   ])
-      entity_value = EntityField.list_with_values(show_id)
-      entity_value.each {|key,value|
-         tbl_more << [key, value]
+      entity_fields = EntityField.list(show_obj.id)
+      entity_fields.each {|entity_field|
+         tbl_more << [entity_field.name, entity_field.value]
          display_flag = 1 
       }
       if (display_flag == 1)
         puts "\n" + tbl_more.to_s
       end
+      
+      # Display Links From
+      ## TODO
+      
+      # Display Links To
+      ## TODO
+      
     end
     
     puts "\n"
@@ -324,27 +313,27 @@ class HomeDispatcher
     end
     
     # Populate object names array with the contents to list
-    list_names = Array.new()
+    list_objs = nil
     case list_type
     when '-h', '-?'       # List Help
         cmd_list_help
     when 'project', 'projects'        # List Project
-      list_names = Project.list()  
+      list_objs = Project.list()  
     when 'section', 'sections'        # List Section
-      list_names = Section.list(driver.interface.working_values["Current Project"].id)
+      list_objs = Section.list(driver.interface.working_values["Current Project"].id)
     when 'transform', 'transforms'    # List Transform
-      list_names = Transform.list()
+      list_objs = Transform.list()
     when 'entity', 'entities'          # List Entity
-      list_names = Entity.list(driver.interface.working_values["Current Project"].id, 
+      list_objs =  Entity.list(driver.interface.working_values["Current Project"].id, 
                                driver.interface.working_values["Current Section"].id)
     when 'link', 'links'              # List Links
-      list_names = Link.list(driver.interface.working_values["Current Project"].id, 
+      list_objs =  Link.list(driver.interface.working_values["Current Project"].id, 
                              driver.interface.working_values["Current Section"].id)
       # TODO: add list display if done while current object is an entity
     when 'entity_type', 'entity_types'  # List Entity Types
-      list_names = EntityType.list()
+      list_objs = EntityType.list()
     when 'link_type', 'link_types'  # List Link Types
-      list_names = LinkType.list()
+      list_objs = LinkType.list()
     else
       print_error("Invalid type argument passed to list command.")
       return                 
@@ -356,13 +345,13 @@ class HomeDispatcher
     col_num = 0
     row_array = Array.new()
       
-    list_names.each do |list_name|
+    list_objs.each do |list_obj|
       if (col_num > 3)
         tbl << row_array
         row_array = Array.new()
         col_num = 0
       end
-      row_array << list_name
+      row_array << list_obj.title
       col_num = col_num + 1  
     end  # End of table loop
       
@@ -398,7 +387,7 @@ class HomeDispatcher
  
     type = ''
     name = '' 
-    id   = -1 
+    obj  = nil 
      
     if (args.length == 1)
       type = driver.interface.working_values["Default Command Type"]
@@ -417,42 +406,42 @@ class HomeDispatcher
       cmd_select_help
       return
     when 'project'
-      id = Project.select(name)
-      driver.interface.working_values["Current Project"] = Project.find(id)
+      obj = Project.select(name)
+      driver.interface.working_values["Current Project"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Project"]
       driver.enstack_dispatcher(ProjectDispatcher)
     when 'section'
-      id = Section.select(driver.interface.working_values["Current Project"].id, name)
-      driver.interface.working_values["Current Section"] = Section.find(id)
+      obj = Section.select(driver.interface.working_values["Current Project"].id, name)
+      driver.interface.working_values["Current Section"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Section"]
       driver.enstack_dispatcher(SectionDispatcher)
     when 'transform'
-      id = Project.select(name)
-      driver.interface.working_values["Current Transform"] = Transform.find(id)
+      obj = Transform.select(name)
+      driver.interface.working_values["Current Transform"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Transform"]
       driver.enstack_dispatcher(TransformDispatcher)
     when 'entity'
-      id = Entity.select(driver.interface.working_values["Current Project"].id, 
-                         driver.interface.working_values["Current Section"].id, 
-                         name)
-      driver.interface.working_values["Current Entity"] = Entity.find(id)
+      obj = Entity.select(driver.interface.working_values["Current Project"].id, 
+                          driver.interface.working_values["Current Section"].id, 
+                          name)
+      driver.interface.working_values["Current Entity"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Entity"]
       driver.enstack_dispatcher(EntityDispatcher)
     when 'link'
-      id = Link.select(driver.interface.working_values["Current Project"].id, 
-                       driver.interface.working_values["Current Section"].id, 
-                       name)
-      driver.interface.working_values["Current Link"] = Link.find(id)
+      obj = Link.select_by_name(driver.interface.working_values["Current Project"].id, 
+                                driver.interface.working_values["Current Section"].id, 
+                                name)
+      driver.interface.working_values["Current Link"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Link"]
       driver.enstack_dispatcher(LinkDispatcher)
     when 'entity_type'
-      id = EntityType.select(name)
-      driver.interface.working_values["Current EntityType"] = EntityType.find(id)
+      obj = EntityType.select(name)
+      driver.interface.working_values["Current EntityType"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current EntityType"]
       driver.enstack_dispatcher(EntityTypeDispatcher)
     when 'link_type'
-      id = LinkType.select(name)
-      driver.interface.working_values["Current LinkType"] = LinkType.find(id)
+      obj = LinkType.select(name)
+      driver.interface.working_values["Current LinkType"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current LinkType"]
       driver.enstack_dispatcher(LinkTypeDispatcher)  
     else
@@ -460,13 +449,14 @@ class HomeDispatcher
       return
     end
     
-    if (id < 1)
+    #if (id < 1)
+    if (obj.nil?)
       print_error("Invalid #{type} name, use list for list of valid #{type}s.")
       return   
     else
       driver.interface.working_values["Current Selection Type"] = type
       driver.interface.update_default_type()
-      print_status("Selected #{type}, id #{id}")
+      print_status("Selected #{type}, id #{obj.id}")
       self.set_prompt()
     end
     
@@ -492,7 +482,7 @@ class HomeDispatcher
  
     type = ''
     name = '' 
-    id   = -1
+    obj  = nil
      
     if (args.length == 1)
       if ((args[0] == '-h') || (args[0] == '-?'))
@@ -515,42 +505,42 @@ class HomeDispatcher
       cmd_create_help
       return
     when 'project'
-      id = Project.select_or_insert(name)
-      driver.interface.working_values["Current Project"] = Project.find(id)
+      obj = Project.select_or_insert(name)
+      driver.interface.working_values["Current Project"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Project"]
       driver.enstack_dispatcher(ProjectDispatcher)
     when 'section'
-      id = Section.select_or_insert(driver.interface.working_values["Current Project"].id, name)
-      driver.interface.working_values["Current Section"] = Section.find(id)
+      obj = Section.select_or_insert(driver.interface.working_values["Current Project"].id, name)
+      driver.interface.working_values["Current Section"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Section"]
       driver.enstack_dispatcher(SectionDispatcher)
     when 'transform'
-      id = Project.select_or_insert(name)
-      driver.interface.working_values["Current Transform"] = Transform.find(id)
+      obj = Transform.select_or_insert(name)
+      driver.interface.working_values["Current Transform"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Transform"]
       driver.enstack_dispatcher(TransformDispatcher)
     when 'entity'
-      id = Entity.select_or_insert(driver.interface.working_values["Current Project"].id, 
-                                   driver.interface.working_values["Current Section"].id, 
-                                   name)
-      driver.interface.working_values["Current Entity"] = Entity.find(id)
+      obj = Entity.select_or_insert(driver.interface.working_values["Current Project"].id, 
+                                    driver.interface.working_values["Current Section"].id, 
+                                    name)
+      driver.interface.working_values["Current Entity"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Entity"]
       driver.enstack_dispatcher(EntityDispatcher)
     when 'link'
-      id = Link.select_or_insert(driver.interface.working_values["Current Project"].id, 
-                                 driver.interface.working_values["Current Section"].id, 
-                                 name)
-      driver.interface.working_values["Current Link"] = Link.find(id)
+      obj = Link.select_or_insert(driver.interface.working_values["Current Project"].id, 
+                                  driver.interface.working_values["Current Section"].id, 
+                                  name)
+      driver.interface.working_values["Current Link"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Link"]
       driver.enstack_dispatcher(LinkDispatcher)
     when 'entity_type'
-      id = EntityType.select_or_insert(name)
-      driver.interface.working_values["Current EntityType"] = EntityType.find(id)
+      obj = EntityType.select_or_insert(name)
+      driver.interface.working_values["Current EntityType"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current EntityType"]
       driver.enstack_dispatcher(EntityTypeDispatcher)
     when 'link_type'
-      id = LinkType.select_or_insert(name)
-      driver.interface.working_values["Current LinkType"] = LinkType.find(id)
+      obj = LinkType.select_or_insert(name)
+      driver.interface.working_values["Current LinkType"] = obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current LinkType"]
       driver.enstack_dispatcher(LinkTypeDispatcher)  
     else
@@ -558,13 +548,13 @@ class HomeDispatcher
       return
     end
     
-    if (id < 1)
+    if (obj.nil?)
       print_error("Invalid #{type} name, use list for list of valid #{type}s.")
       return   
     else
       driver.interface.working_values["Current Selection Type"] = type
       driver.interface.update_default_type()
-      print_status("Created #{type}, id #{id}")
+      print_status("Created #{type}, id #{obj.id}")
       self.set_prompt()
     end
     
@@ -624,7 +614,7 @@ class HomeDispatcher
     
     type = ''
     name = '' 
-    id   = -1
+    obj  = nil
      
     if (args.length == 1)
       type = driver.interface.working_values["Default Command Type"]
@@ -647,28 +637,31 @@ class HomeDispatcher
       cmd_delete_help
       return
     when 'project'
-      id = Project.delete_from_name(name) 
+      obj = Project.delete_from_name(name) 
     when 'section'
-      id = Section.delete_from_name(driver.interface.working_values["Current Project"].id, name)
+      obj = Section.delete_from_name(driver.interface.working_values["Current Project"].id, name)
     when 'transform'
-      id = Transform.delete_from_name(name)
+      obj = Transform.delete_from_name(name)
     when 'entity'
-      id = Entity.delete_from_name(driver.interface.working_values["Current Project"].id, 
-                                   driver.interface.working_values["Current Section"].id, 
-                                   name)
+      obj = Entity.delete_from_name(driver.interface.working_values["Current Project"].id, 
+                                    driver.interface.working_values["Current Section"].id, 
+                                    name)
     when 'link'
-      ## TODO
+      obj = Link.delete_from_name(driver.interface.working_values["Current Project"].id, 
+                                  driver.interface.working_values["Current Section"].id, 
+                                  name)
     when 'descriptor'
-      ## TODO
+      obj = Link.delete_from_name(driver.interface.working_values["Current Section"].id, 
+                                  name)
     else
       print_error("Invalid type")
       return
     end
     
-    if (id < 1)
+    if (obj.nil?)
       print_error("Invalid #{type} name, use list for list of valid #{type}s.")
     else
-      print_status("Deleted #{type}, id #{id}")
+      print_status("Deleted #{type}, id #{obj.id}")
     end 
     
     ## TODO prevent from happening or update prompt if current thing is deleted
@@ -679,13 +672,47 @@ class HomeDispatcher
   # "Delete" command help
   #
   def cmd_delete_help(*args)
-    print_status("Delete a thing from DB.")
     print_status("Command    : delete")
     print_status("Description: delete a thing.")
     print_status("Usage      : 'delete [type] <name>'")
     print_status("Details    :")
-    print_status("Where type is optional and name is required. Vaid types: project, section, transform, entity, link, entity_type, link_type.")
+    print_status("Where type is optional and name is required. Vaid types: project, section, descriptor, transform, entity, link, entity_type, link_type.")
     print_status("The default type is the current default command type.")
+  end
+  
+  #
+  # Export command logic
+  #
+  def cmd_export(*args)
+    if (args.length < 1)
+      cmd_export_help
+      return
+    end
+    
+    format_type = args[0]
+    case format_type
+    when "-h", "-?"
+      cmd_export_help
+      return
+    when "graphviz"
+      gv_generator = GraphvizGenerator.new(driver.interface.working_values)
+      gv_generator.export()
+    else
+      print_error("Invalid export format.")
+      return
+    end
+    
+    
+  end
+  
+  #
+  # Export command help
+  #
+  def cmd_export_help(*args)
+    print_status("Export things at and below current selection into a format.")
+    print_status("Command    : export")
+    print_status("Description: export things that are at and below the current selection into another format.")
+    print_status("Usage      : 'export <format>'")
   end
   
   #

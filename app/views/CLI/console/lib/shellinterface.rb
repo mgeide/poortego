@@ -16,11 +16,21 @@ class ShellInterface
   end
   
   #
+  # Set prompt
+  #
+  def set_prompt()
+     type = self.working_values["Current Selection Type"]
+     name = self.working_values["Current Object"].title
+     driver.update_prompt("(%bld%red"+type+":"+name+"%clr)")
+  end
+  
+  #
   # Initialize Working Values
   #
   def initialize_working_values()
     
     # Define a Hash containing the current working values
+    ## Unknown, is using self fine, or do I need to use "@" for class variable?
     self.working_values = Hash.new()
     self.working_values["Current Selection Type"] = 'none'
     self.working_values["Default Command Type"]   = 'project'
@@ -98,7 +108,7 @@ class ShellInterface
       self.working_values["Current Entity"]         = nil
       self.working_values["Current Selection Type"] = 'section'
     else
-      if (self.current_entity_id > 0)        
+      if (self.working_values["Current Entity"].id > 0)        
         self.working_values["Current Object"]         = self.working_values["Current Entity"]
         self.working_values["Current Transform"]      = nil
         self.working_values["Current Link"]           = nil
@@ -106,7 +116,7 @@ class ShellInterface
         self.working_values["Current EntityType"]     = nil
         self.working_values["Current LinkType"]       = nil
         self.working_values["Current Selection Type"] = 'entity'
-      elsif (self.current_section_id > 0) 
+      elsif (self.working_values["Current Section"].id > 0) 
         self.working_values["Current Object"]         = self.working_values["Current Section"]
         self.working_values["Current Transform"]      = nil
         self.working_values["Current Entity"]         = nil
@@ -115,7 +125,7 @@ class ShellInterface
         self.working_values["Current EntityType"]     = nil
         self.working_values["Current LinkType"]       = nil
         self.working_values["Current Selection Type"] = 'section'
-      elsif (self.current_project_id > 0)
+      elsif (self.working_values["Current Project"].id > 0)
         self.working_values["Current Object"]         = self.working_values["Current Project"]
         self.working_values["Current Section"]        = nil
         self.working_values["Current Transform"]      = nil

@@ -1,15 +1,12 @@
 
-
 * Work on "entity" dispatcher
 -- ensure link
 
-* Standardize dispatcher help format (Done for Home Dispatcher)
-* Standardize comment format (done for Home Dispatcher)
 * Modify "show" command to show fields
-* Move some command sunder project and section dispatchers versus home
+* Move some commands under project and section dispatchers versus home
 
-* Update "delete" command to be able to delete descriptors, links, etc.
--- and to recurse
+* Update "delete" command to be recursive, so that when a project, section, etc. is deleted
+all related things that are exclusively tied to these objects are also deleted 
 
 * Test "field add/list/delete" for entity and links
 * Test addition of links 
@@ -21,6 +18,9 @@
 
 * Make it easier to set descriptor and field values - ?
 * Additional error checking / catch statements, e.g., in the "set" command in home dispatcher
+
+* Ensure Standardized dispatcher help format (e.g., done for Home Dispatcher)
+* Ensure Standardized comment format (e.g., done for Home Dispatcher)
 
 Below the '-=-=-' is all old:
 

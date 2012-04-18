@@ -1,17 +1,17 @@
-############################
-# Entity ActiveRecord      #
-#                          #
-# Description:             #
-# Store Entity Object      #
-#                          #
-# Attributes:              #
-#  title:        text      #
-#  description:  text      # 
-#  entity_type:  reference #      
-#  section_id:   reference #
-#  project_id:   reference #
-#                          #
-############################
+###
+#
+# Entity ActiveRecord -
+# This is the main "data" structure
+# Can contain links to other entities and name/value fields
+#                          
+# Attributes:              
+#  title:        text      
+#  description:  text       
+#  entity_type:  reference       
+#  section_id:   reference 
+#  project_id:   reference 
+#                          
+###
 class Entity < ActiveRecord::Base
   validates :title, :presence => true
   validates :section_id, :presence => true
@@ -29,159 +29,108 @@ class Entity < ActiveRecord::Base
   has_many :entity_fields # Entities are referenced by entity_field
                           # Multiple entity_fields may reference an entity  
                           
-  ################################
-  # Method: list()
-  ################################
+  #
+  # List
+  #
   def self.list(*args)
-    
-    project_id = args[0]
-    section_id = args[1]
-    object_names = Array.new()
-    
+    entity_rows = Array.new()
     begin
-        # Try to find Objects by title
-        object_rows = self.find(:all, :conditions => "project_id=#{project_id} AND section_id=#{section_id}", :order => "title ASC")
-        object_rows.each do |object_row|
-          object_names.push(object_row['title'])
-        end
+      project_id = args[0]
+      section_id = args[1]
+      entity_rows = self.find(:all, :conditions => "project_id=#{project_id} AND section_id=#{section_id}", :order => "title ASC")
     rescue Exception => e
-            #ActiveRecord::Base.clear_active_connections!
-            puts "Exception listing Objects"
-            puts self.inspect
-            puts e.message
+      puts "Exception listing Entities"
+      puts self.inspect
+      puts e.message
     end
-    
-    return object_names
-    
+    return entity_rows
   end                       
 
-  ################################
-  # Method: select()
-  ################################
+  #
+  # Select
+  #
   def self.select(*args)
-    
-    ## TODO: add logic to validate argument
-    project_id = args[0]
-    section_id = args[1]
-    object_name = args[2]
-    
-    object_id = -1
+    entity_row = nil
     begin
-        # Try to find Object by title first
-        object_row = self.find(:first, :conditions => "title='#{object_name}' AND project_id=#{project_id} AND section_id=#{section_id}")
-        unless (object_row.nil?)
-            if (object_row.id > -1)
-              object_id = object_row.id
-              puts "[DEBUG] SELECTED object with title #{object_name}, Id = #{object_id}"
-            end
-        end
+      project_id  = args[0]
+      section_id  = args[1]
+      entity_name = args[2]
+      entity_row  = self.find(:first, :conditions => "title='#{entity_name}' AND project_id=#{project_id} AND section_id=#{section_id}")
     rescue Exception => e
-            #ActiveRecord::Base.clear_active_connections!
-            puts "Exception selecting Object"
-            puts self.inspect
-            puts e.message
+      puts "Exception selecting Entity"
+      puts self.inspect
+      puts e.message
     end
-    
-    return object_id
-    
+    return entity_row
   end
 
-  ################################
-  # Method: insert()
-  ################################
+  #
+  # Insert
+  #
   def self.insert(*args)
-    
-    ## TODO: add logic to validate argument
-    project_id = args[0]
-    section_id = args[1]
-    object_name = args[2]
-    
-    object_id = -1
+    entity_row = nil
     begin
-        # Try to create Object with title
-        object = self.new("title" => object_name, "project_id" => project_id, "section_id" => section_id)
-        object.save()
-        object_id = object.id
-        puts "[DEBUG] INSERTED object with title #{object_name}, Id = #{object_id}"
+      project_id  = args[0]
+      section_id  = args[1]
+      entity_name = args[2]
+      entity_row  = self.new("title" => entity_name, "project_id" => project_id, "section_id" => section_id)
+      entity_row.save()
+      puts "[DEBUG] INSERTED entity with title #{entity_name}, Id = #{entity_row.id}"
     rescue Exception => e
-            #ActiveRecord::Base.clear_active_connections!
-            puts "Exception inserting Object"
-            puts self.inspect
-            puts e.message
+      puts "Exception inserting Entity"
+      puts self.inspect
+      puts e.message
     end
-    
-    return object_id
-    
+    return entity_row
   end
   
-  ################################
-  # Method: select_or_insert()
-  ################################
+  #
+  # Select if exists, otherwise insert
+  #
   def self.select_or_insert(*args)
-    
-    ## TODO: add logic to validate argument
-    project_id = args[0]
-    section_id = args[1]
-    object_name = args[2]
-    
-    already_retried = false
-    object_id = -1
+    entity_row = nil    
     begin
-        # Try to select Section by title first
-        object_id = self.select(project_id, section_id, object_name)
-        
-        # If not exists then insert
-        unless (object_id > -1)
-            object_id = self.insert(project_id, section_id, object_name)
-        end
+      project_id  = args[0]
+      section_id  = args[1]
+      entity_name = args[2]
+      entity_row = self.select(project_id, section_id, entity_name)
+      if (entity_row.nil?)  
+        entity_row = self.insert(project_id, section_id, entity_name)
+      end
     rescue Exception => e
-        #ActiveRecord::Base.connection.reconnect!
-        unless already_retried
-            already_retried = true
-            puts "Retrying Object entry"
-            retry
-        else
-            #ActiveRecord::Base.clear_active_connections!
-            puts "Exception selecting/inserting Object"
-            puts self.inspect
-            puts e.message
-        end
+      puts "Exception selecting/inserting Entity"
+      puts self.inspect
+      puts e.message
     end
-    
-    return object_id    
-  
+    return entity_row
   end
 
-  ################################
-  # Method: delete_from_name()
-  ################################
+  #
+  # Delete from name
+  #
   def self.delete_from_name(*args)
-        
-    ## TODO: add logic to validate argument
-    project_id = args[0]
-    section_id = args[1]
-    object_name = args[2]
-    
-    object_id = -1
+    entity_row = nil    
     begin
-        # Try to find Section by title first
-        object_id = self.select(project_id, section_id, object_name)
-        if (object_id > -1)
-              self.delete(object_id)
-              puts "[DEBUG] DELETED section with title #{object_name}, Id = #{object_id}"
-        end
+      project_id  = args[0]
+      section_id  = args[1]
+      entity_name = args[2]
+      entity_row  = self.select(project_id, section_id, entity_name)
+      unless (entity_row.nil?)
+        self.delete(entity_row.id)
+        puts "[DEBUG] DELETED entity with title #{entity_name}, Id = #{entity_row.id}"
+      else
+        puts "[DEBUG] Nothing found with that name, so nothing deleted."
+      end
     rescue Exception => e
-            #ActiveRecord::Base.clear_active_connections!
-            puts "Exception deleting Section"
-            puts self.inspect
-            puts e.message
+      puts "Exception deleting Entity"
+      puts self.inspect
+      puts e.message
     end
-    
-    return object_id
+    return entity_row
   end  
   
   ################################
-  # Method: set_type()
+  # Method: set_type() -- TODO??
   ################################
   def self.set_type(*args)
     project_id = args[0]

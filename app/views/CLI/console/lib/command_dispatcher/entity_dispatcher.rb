@@ -27,6 +27,16 @@ class EntityDispatcher
   end
   
   #
+  # Set prompt
+  #
+  def set_prompt
+     type = driver.interface.working_values["Current Selection Type"]
+     name = driver.interface.working_values["Current Object"].title
+     
+     driver.update_prompt("(%bld%red"+type+":"+name+"%clr)")
+  end
+  
+  #
   # Support these commands
   #
   def commands
@@ -52,8 +62,7 @@ class EntityDispatcher
   def cmd_linkto(*args)
     project_id = driver.interface.working_values["Current Project"].id
     section_id = driver.interface.working_values["Current Section"].id
-    entity_id  = driver.interface.working_values["Current Entity"].id
-    entity_obj = Entity.find(entity_id)
+    entity_obj = driver.interface.working_values["Current Entity"]
     
     linkto_entity_name = args[0]
     if ((linkto_entity_name == '-h') || (linkto_entity_name == '-?'))
@@ -61,14 +70,17 @@ class EntityDispatcher
       return
     end
     
-    link_name = driver.interface.working_values["Current Entity"].title + " --> " + linkto_entity_name
-    
-    link_id = Link.select_or_insert(project_id, section_id, entity_obj.title, linkto_entity_name, link_name)
-    driver.interface.working_values["Current Link"] = Link.find(link_id)
-    driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Link"]
-    driver.interface.working_values["Current Selection Type"] = 'link'
-    driver.enstack_dispatcher(LinkDispatcher)
-    set_prompt()
+    link_name = driver.interface.working_values["Current Entity"].title + " --> " + linkto_entity_name    
+    link_obj = Link.select_or_insert(project_id, section_id, entity_obj.title, linkto_entity_name, link_name)
+    unless (link_obj.nil?)
+      driver.interface.working_values["Current Link"] = link_obj
+      driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Link"]
+      driver.interface.working_values["Current Selection Type"] = 'link'
+      driver.enstack_dispatcher(LinkDispatcher)
+      self.set_prompt()
+    else
+      print_error("Unable to build link: #{link_name}")
+    end  
   end
   
   #
@@ -99,26 +111,27 @@ class EntityDispatcher
     end
     
     case field_action
-    when '-h', '?'
+    when '-h', '-?'
       cmd_field_help
       return
     when 'list'  
-      field_value = EntityField.list_with_values(entity_id)
-      field_value.each {|key,value|
-       puts "#{key}  |  #{value}"  
+      entity_fields = EntityField.list(entity_id)
+      entity_fields.each {|entity_field|
+       puts "#{entity_field.name}  |  #{entity_field.value}"  
       }
     when 'set'
       field_value = args[2]
       
-      field_id   = EntityField.select_or_insert(entity_id, field_name)
-      puts "[DEBUG] EntityField Id: #{field_id}"
-      field_obj  = EntityField.find(field_id)
+      field_obj   = EntityField.select_or_insert(entity_id, field_name)
       field_obj.update_attributes(:value => field_value)
-      field_obj.save    
+      field_obj.save
+      print_status("Set #{field_name} to #{field_value}")    
     when 'add'
-      EntityField.select_or_insert(entity_id, field_name)
+      field_obj = EntityField.select_or_insert(entity_id, field_name)
+      print_status("Selected/Inserted Field #{field_name}")
     when 'remove'
-      EntityField.delete_from_name(entity_id, field_name)      
+      field_obj = EntityField.delete_from_name(entity_id, field_name)
+      print_status("Deleted Field #{field_name}")      
     end  
     
   end

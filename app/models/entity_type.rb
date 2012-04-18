@@ -17,18 +17,18 @@ class EntityType < ActiveRecord::Base
                                 # EntityType can have multiple EntityTypeFields 
                                 
                                 
-  ################################
-  # Method: list()
-  ################################
+  #
+  # List
+  #
   def self.list(*args)
     
-    type_names = Array.new()
+    type_rows = Array.new()
     begin
         # Try to find Types by title
         type_rows = self.find(:all, :order => "title ASC")
-        type_rows.each do |type_row|
-          type_names.push(type_row['title'])
-        end
+        #type_rows.each do |type_row|
+        #  type_names.push(type_row['title'])
+        #end
     rescue Exception => e
             #ActiveRecord::Base.clear_active_connections!
             puts "Exception listing Types"
@@ -36,7 +36,7 @@ class EntityType < ActiveRecord::Base
             puts e.message
     end
     
-    return type_names
+    return type_rows
     
   end
   
