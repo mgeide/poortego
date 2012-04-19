@@ -1,1 +1,2 @@
 db/development.sqlite3
+app/views/CLI/graphviz_eport.png

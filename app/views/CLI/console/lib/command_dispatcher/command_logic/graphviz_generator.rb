@@ -12,7 +12,29 @@ class GraphvizGenerator
     
     puts "[DEBUG] Export #{type} #{obj.title}"
     
-    g = GraphViz.new( :G, :type => :digraph )
+    #g = GraphViz.new( :G, :type => :digraph )
+    g = GraphViz::new("structs", "type" => "graph")
+    g[:rankdir] = "LR"
+    
+    # Set global node options
+    g.node[:color]    = "#ddaa66"
+    g.node[:style]    = "filled"
+    g.node[:shape]    = "box"
+    g.node[:penwidth] = "1"
+    g.node[:fontname] = "Trebuchet MS"
+    g.node[:fontsize] = "8"
+    g.node[:fillcolor]= "#ffeecc"
+    g.node[:fontcolor]= "#775500"
+    g.node[:margin]   = "0.0"
+    
+    # set global edge options
+    g.edge[:color]    = "#999999"
+    g.edge[:weight]   = "1"
+    g.edge[:fontsize] = "6"
+    g.edge[:fontcolor]= "#444444"
+    g.edge[:fontname] = "Verdana"
+    g.edge[:dir]      = "forward"
+    g.edge[:arrowsize]= "0.5"
     
     case type
     when 'project'
@@ -37,9 +59,8 @@ class GraphvizGenerator
         link_title = ''
         if (link_obj.title !~ / --> /)
           link_title = link_obj.title
-          # TODO: add link labels
         end
-        g.add_edges( entityA, entityB)
+        g.add_edges( entityA, entityB).label = link_title
       end
       
       g.output( :png => "graphviz_eport.png" )

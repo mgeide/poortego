@@ -16,15 +16,6 @@ class ShellInterface
   end
   
   #
-  # Set prompt
-  #
-  def set_prompt()
-     type = self.working_values["Current Selection Type"]
-     name = self.working_values["Current Object"].title
-     driver.update_prompt("(%bld%red"+type+":"+name+"%clr)")
-  end
-  
-  #
   # Initialize Working Values
   #
   def initialize_working_values()
@@ -32,6 +23,7 @@ class ShellInterface
     # Define a Hash containing the current working values
     ## Unknown, is using self fine, or do I need to use "@" for class variable?
     self.working_values = Hash.new()
+    self.working_values["Current Dispatcher"]     = 'HomeDispatcher'
     self.working_values["Current Selection Type"] = 'none'
     self.working_values["Default Command Type"]   = 'project'
     self.working_values["Current Object"]         = nil

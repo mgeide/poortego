@@ -34,7 +34,12 @@ class Link < ActiveRecord::Base
     begin
       project_id = args[0]
       section_id = args[1]
-      link_rows = self.find(:all, :conditions => "project_id=#{project_id} AND section_id=#{section_id}", :order => "title ASC")
+      if (args.length == 3)
+        entity_a_id = args[2]
+        link_rows = self.find(:all, :conditions => "project_id=#{project_id} AND section_id=#{section_id} AND entity_a_id=#{entity_a_id}", :order => "title ASC")
+      else
+        link_rows = self.find(:all, :conditions => "project_id=#{project_id} AND section_id=#{section_id}", :order => "title ASC")
+      end
     rescue Exception => e
       puts "Exception listing Links"
       puts self.inspect

@@ -1,4 +1,22 @@
 
+Moving commands into CMD files, did this for home_dispatcher, do this for other dispatchers, e.g., entity_dispatcher
+
+Figured out tab completion ... see connect command
+#1 Tab completion / filtering of things to select, linkto, delete, etc.
+-- e.g., list eunews* to list anything begining with eunews
+-- or, select eunews<tab> to auto-complete or show available options
+
+#2 Need an ability of easily assigning entity and link types, I didn't do this when I build my graph
+-- Auto detection of IP addresses, ASNs, Netblocks, MD5s, domains, paths, etc.
+
+#3 Need transforms (they're tied though to entity/link types)
+
+* Additional Functionality:
+-- Tag certain fields and titles to be redacted, and have the ability to export a full or redacted report
+-- Import of things like pcap and auto-generate the graphs
+-- Ability to find intersections among Sections within a Project
+-- Ability to find and link entities that have the same field/value pairs (maybe entities are a square, and circles are a field in the graph)
+
 * Work on "entity" dispatcher
 -- ensure link
 

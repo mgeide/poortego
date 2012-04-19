@@ -19,8 +19,6 @@ class TransformDispatcher
   # Inherit from CommandDispatcher
   include Poortego::Console::CommandDispatcher
   
-  @@commands = []
-  
   ##########################
   # ProjectShell Constructor
   ########################## 

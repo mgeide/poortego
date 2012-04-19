@@ -9,6 +9,10 @@ module Poortego
 module Console
 module CommandDispatcher
 
+current_dir = File.expand_path(File.dirname(__FILE__))
+require "#{current_dir}/command_logic/CMD_functions"
+require "#{current_dir}/command_logic/CMD_Linkto"
+
 ###
 #
 # Entity Dispatcher Class
@@ -24,16 +28,6 @@ class EntityDispatcher
   #
   def initialize(driver)
     super
-  end
-  
-  #
-  # Set prompt
-  #
-  def set_prompt
-     type = driver.interface.working_values["Current Selection Type"]
-     name = driver.interface.working_values["Current Object"].title
-     
-     driver.update_prompt("(%bld%red"+type+":"+name+"%clr)")
   end
   
   #
@@ -57,39 +51,22 @@ class EntityDispatcher
   end
   
   #
-  # Link current entity to another
+  # Linkto command, see CMD_Linkto.rb
   #
   def cmd_linkto(*args)
-    project_id = driver.interface.working_values["Current Project"].id
-    section_id = driver.interface.working_values["Current Section"].id
-    entity_obj = driver.interface.working_values["Current Entity"]
-    
-    linkto_entity_name = args[0]
-    if ((linkto_entity_name == '-h') || (linkto_entity_name == '-?'))
-      cmd_linkto_help
-      return
-    end
-    
-    link_name = driver.interface.working_values["Current Entity"].title + " --> " + linkto_entity_name    
-    link_obj = Link.select_or_insert(project_id, section_id, entity_obj.title, linkto_entity_name, link_name)
-    unless (link_obj.nil?)
-      driver.interface.working_values["Current Link"] = link_obj
-      driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Link"]
-      driver.interface.working_values["Current Selection Type"] = 'link'
-      driver.enstack_dispatcher(LinkDispatcher)
-      self.set_prompt()
-    else
-      print_error("Unable to build link: #{link_name}")
+    current_dispatcher = driver.interface.working_values["Current Dispatcher"]
+    cmd = CMD_Linkto.new(driver)
+    cmd.cmd_linkto(*args)
+    # Enstack selected object dispatcher as appropriate
+    if (current_dispatcher != driver.interface.working_values["Current Dispatcher"])
+        # Dispatcher object based on working_values["Current Dispatcher"] string value
+        driver.enstack_dispatcher(Poortego::Console::CommandDispatcher::const_get(driver.interface.working_values["Current Dispatcher"]))
     end  
   end
   
-  #
-  # "linkto" command help
-  #
   def cmd_linkto_help
-    print_status("Command    : linkto")
-    print_status("Description: link the current entity to another.")
-    print_status("Usage      : 'linkto <entity>'")
+    cmd = CMD_Linkto.new(driver)
+    cmd.cmd_linkto_help(*args)
   end
   
   #
