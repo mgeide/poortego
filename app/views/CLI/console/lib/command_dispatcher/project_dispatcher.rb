@@ -30,6 +30,11 @@ class ProjectDispatcher
   #
   def commands
     {
+      # This is a place-holder dispatcher for Project
+      # in case there are Project specific commands
+      # 
+      # In general, you'll likely be using inherited commands:
+      # set/update, list/ls, delete/rm, create/add
     }
   end
   

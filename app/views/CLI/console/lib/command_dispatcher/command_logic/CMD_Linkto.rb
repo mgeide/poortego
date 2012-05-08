@@ -1,6 +1,12 @@
 current_dir = File.expand_path(File.dirname(__FILE__))
 require "#{current_dir}/CMD_functions"
 
+
+###
+#
+# "linkto" Command - used from Entity dispatcher
+#
+###
 class CMD_Linkto
   attr_accessor :driver
 

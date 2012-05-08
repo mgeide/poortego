@@ -1,6 +1,6 @@
 ###
 #
-# Dispatcher for "project" commands
+# Dispatcher for "linktype" commands
 #
 ###
 
@@ -10,7 +10,7 @@ module CommandDispatcher
 
 ###
 # 
-# Project Dispatcher Class
+# LinkType Dispatcher Class
 #
 ###  
 class LinkTypeDispatcher
@@ -30,7 +30,11 @@ class LinkTypeDispatcher
   #
   def commands
     {
-      "set" => "Add a field to the type",
+      # This is a place-holder dispatcher for LinkType
+      # in case there are LinkType specific commands
+      # 
+      # In general, you'll likely be using inherited commands:
+      # set/update, list/ls, delete/rm, create/add
     }
   end
   

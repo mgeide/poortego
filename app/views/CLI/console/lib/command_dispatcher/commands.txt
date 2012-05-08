@@ -1,48 +1,31 @@
 
-TODO:
-- Look to see if there is a metasploit style guide for programming
+section> show
+works, shows everything
 
-Looks like:
+section> create descriptor purpose2
+section> show
+doesn't show everything -?
 
-#!/usr/bin/env ruby  <-- for executable .rb files
-
-###
-#
-# Brief class description.
-#
-###
-class Blah
-
-        #
-        # Detailed class description.   <-- This whole section is optional
-        #
-        # Attribute1
-        #
-        #       Attribute description.
-        #
-        # Attribute2
-        # ...
+section> set purpose2 test
+unknown attribute: purpose2
 
 
+-=-=-
+Create a Section descriptor:
+-=-=-
 
-        #
-        # Brief method description.
-        #
-        def to_s
-        end
+> create [section] test
+test> descriptor add purpose
+test> descriptor set purpose "for testing"
+test> show
 
-        attr_accessor :blahblah
-
-protected
-
-        ...
-
-end
+Create an Entity Type:
+-=-=-=-=-=-=-=-=-=-=-=-
 
 
-- when you go from project to section the prompt changes, but not like a directory scructure
--- Maybe a work around is to use a ShellInterface to track the prompt
 
+
+-=-=-=-
 
 Home/Core:
   - project / transform / entity_type / link_type

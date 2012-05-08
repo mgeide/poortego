@@ -83,6 +83,45 @@ class CMD_Delete
         obj = SectionDescriptor.delete_from_name(driver.interface.working_values["Current Section"].id, 
                                                  name)
       end
+    when 'field'
+      if (driver.interface.working_values["Current Selection Type"] == 'entity')
+        if (name =~ /^\d$/)
+          obj = EntityField.delete(name)
+        else
+          obj = EntityField.delete_from_name(driver.interface.working_values["Current Entity"].id,
+                                             name)
+        end
+      elsif (driver.interface.working_values["Current Selection Type"] == 'link')
+        if (name =~ /^\d$/)
+          obj = LinkField.delete(name)
+        else
+          obj = LinkField.delete_from_name(driver.interface.working_values["Current Link"].id,
+                                           name)
+        end
+      elsif (driver.interface.working_values["Current Selection Type"] == 'link_type')
+        # Remove field from link type
+        obj = LinkTypeField.delete_from_name(driver.interface.working_values["Current LinkType"].id,
+                                             name)
+      elsif (driver.interface.working_values["Current Selection Type"] == 'entity_type')
+        # Remove field from entity type
+        obj = EntityTypeField.delete_from_name(driver.interface.working_values["Current EntityType"].id,
+                                             name)  
+      else
+        print_error("Invalid: type #{type} does not have field.")
+        return
+      end
+    when 'entity_type'
+      if (name =~ /^\d$/)
+        obj = EntityType.delete(name)
+      else
+        obj = EntityType.delete_from_name(name)
+      end
+    when 'link_type'
+      if (name =~ /^\d$/)
+        obj = LinkType.delete(name)
+      else
+        obj = LinkType.delete_from_name(name)
+      end  
     else
       print_error("Invalid type")
       return
@@ -90,6 +129,7 @@ class CMD_Delete
     
     if (obj.nil?)
       print_error("Invalid #{type} name, use list for list of valid #{type}s.")
+      return
     else
       if (obj.class.to_s == 'Fixnum')
         print_status("Deleted #{type}, id #{name}")

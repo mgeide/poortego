@@ -45,7 +45,8 @@ class LinkType < ActiveRecord::Base
     ## TODO: add logic to validate argument
     name = args[0]
     
-    id = -1
+    id  = -1
+    row = nil
     begin
         # Try to find by title first
         row = self.find(:first, :conditions => "title='#{name}'")
@@ -62,7 +63,7 @@ class LinkType < ActiveRecord::Base
             puts e.message
     end
     
-    return id
+    return row
     
   end
   
@@ -74,7 +75,8 @@ class LinkType < ActiveRecord::Base
     ## TODO: add logic to validate argument
     name = args[0]
     
-    id = -1
+    id   = -1
+    type = nil
     begin
         # Try to create with title
         type = self.new("title" => name)
@@ -88,7 +90,7 @@ class LinkType < ActiveRecord::Base
             puts e.message
     end
     
-    return id
+    return type
     
   end
   
@@ -101,20 +103,21 @@ class LinkType < ActiveRecord::Base
     name = args[0]
     
     already_retried = false
-    project_id = -1
+    id   = -1
+    type = nil
     begin
         # Try to select Type by title first
-        id = self.select(name)
+        type = self.select(name)
         
         # If not exists then insert
-        unless (id > -1)
-            id = self.insert(name)
+        unless (type.id > -1)
+            type = self.insert(name)
         end
     rescue Exception => e
         #ActiveRecord::Base.connection.reconnect!
         unless already_retried
             already_retried = true
-            puts "Retrying Type entry"
+            puts "Retrying Link type"
             retry
         else
             #ActiveRecord::Base.clear_active_connections!
@@ -124,7 +127,7 @@ class LinkType < ActiveRecord::Base
         end
     end
     
-    return id    
+    return type    
   
   end
   
@@ -136,7 +139,8 @@ class LinkType < ActiveRecord::Base
     ## TODO: add logic to validate argument
     name = args[0]
     
-    id = -1
+    id  = -1
+    row = nil
     begin
         # Try to find Project by title first
         row = self.find(:first, :conditions => "title='#{name}'")
@@ -154,7 +158,7 @@ class LinkType < ActiveRecord::Base
             puts e.message
     end
     
-    return id
+    return row
   end
   
 end

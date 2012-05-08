@@ -47,16 +47,19 @@ class CMD_Create
     when 'project'
       obj = Project.select_or_insert(name)
       driver.interface.working_values["Current Project"] = obj
+      driver.interface.working_values["Current Selection Type"] = type
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Project"]
       driver.interface.working_values["Current Dispatcher"] = 'ProjectDispatcher'
     when 'section'
       obj = Section.select_or_insert(driver.interface.working_values["Current Project"].id, name)
       driver.interface.working_values["Current Section"] = obj
+      driver.interface.working_values["Current Selection Type"] = type
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Section"]
       driver.interface.working_values["Current Dispatcher"] = 'SectionDispatcher'
     when 'transform'
       obj = Transform.select_or_insert(name)
       driver.interface.working_values["Current Transform"] = obj
+      driver.interface.working_values["Current Selection Type"] = type
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Transform"]
       driver.interface.working_values["Current Dispatcher"] = 'TransformDispatcher'
     when 'entity'
@@ -64,6 +67,7 @@ class CMD_Create
                                     driver.interface.working_values["Current Section"].id, 
                                     name)
       driver.interface.working_values["Current Entity"] = obj
+      driver.interface.working_values["Current Selection Type"] = type
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Entity"]
       driver.interface.working_values["Current Dispatcher"] = 'EntityDispatcher'
     when 'link'
@@ -71,18 +75,38 @@ class CMD_Create
                                   driver.interface.working_values["Current Section"].id, 
                                   name)
       driver.interface.working_values["Current Link"] = obj
+      driver.interface.working_values["Current Selection Type"] = type
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Link"]
       driver.interface.working_values["Current Dispatcher"] = 'LinkDispatcher'
     when 'entity_type'
       obj = EntityType.select_or_insert(name)
       driver.interface.working_values["Current EntityType"] = obj
+      driver.interface.working_values["Current Selection Type"] = type
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current EntityType"]
       driver.interface.working_values["Current Dispatcher"] = 'EntityTypeDispatcher'
     when 'link_type'
       obj = LinkType.select_or_insert(name)
       driver.interface.working_values["Current LinkType"] = obj
+      driver.interface.working_values["Current Selection Type"] = type
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current LinkType"]
       driver.interface.working_values["Current Dispatcher"] = 'LinkTypeDispatcher'  
+    when 'field'
+      if (driver.interface.working_values["Current Selection Type"] == 'entity')
+        obj = EntityField.select_or_insert(driver.interface.working_values["Current Entity"].id, name)
+      elsif (driver.interface.working_values["Current Selection Type"] == 'link')
+        obj = LinkField.select_or_insert(driver.interface.working_values["Current Link"].id, name)
+      elsif (driver.interface.working_values["Current Selection Type"] == 'link_type')
+        # Add a field to a Link Type
+        obj = LinkTypeField.select_or_insert(driver.interface.working_values["Current LinkType"].id,
+                                               name)  
+      elsif (driver.interface.working_values["Current Selection Type"] == 'entity_type')
+        # Add a field to an Entity Type
+        obj = EntityTypeField.select_or_insert(driver.interface.working_values["Current EntityType"].id,
+                                               name)   
+      end
+    when 'descriptor'
+      obj = SectionDescriptor.select_or_insert(driver.interface.working_values["Current Section"].id,
+                                               name)
     else
       print_error("Invalid type: #{type}")
       return
@@ -92,7 +116,7 @@ class CMD_Create
       print_error("Invalid #{type} name, use list for list of valid #{type}s.")
       return   
     else
-      driver.interface.working_values["Current Selection Type"] = type
+      #driver.interface.working_values["Current Selection Type"] = type
       driver.interface.update_default_type()
       print_status("Created #{type}, id #{obj.id}")
       set_prompt(driver)
@@ -108,7 +132,7 @@ class CMD_Create
     print_status("Description: create a thing for manipulation.")
     print_status("Usage      : 'create [type] <name>'")
     print_status("Details    :")
-    print_status("Where type is optional and name is required. Vaid types: project, section, transform, entity, link, entity_type, link_type.")
+    print_status("Where type is optional and name is required. Vaid types: project, section, transform, entity, link, entity_type, link_type, field, descriptor.")
     print_status("The default type is the current default type.")
   end
 

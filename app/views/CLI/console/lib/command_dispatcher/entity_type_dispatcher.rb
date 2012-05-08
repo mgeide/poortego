@@ -1,6 +1,6 @@
 ###
 #
-# Dispatcher for "project" commands
+# Dispatcher for "entitytype" commands
 #
 ###
 
@@ -10,12 +10,11 @@ module CommandDispatcher
 
 ###
 # 
-# Project Dispatcher Class
+# EntityType Dispatcher Class
 #
 ###  
 class EntityTypeDispatcher
   
-  # Inherit from CommandDispatcher
   include Poortego::Console::CommandDispatcher
   
   #
@@ -30,9 +29,11 @@ class EntityTypeDispatcher
   #
   def commands
     {
-      "add" => "Add a field to the type",
-      "remove" => "Remove a field from the type",
-      "fields" => "Show fields associated with the type"
+      # This is a place-holder dispatcher for EntityType
+      # in case there are EntityType specific commands
+      # 
+      # In general, you'll likely be using inherited commands:
+      # set/update, list/ls, delete/rm, create/add
     }
   end
   
@@ -41,53 +42,6 @@ class EntityTypeDispatcher
   #
   def name
     "EntityType"
-  end
-  
-  def cmd_add(*args)
-     field_name = args[0]
-     type_id = driver.interface.working_values["Current EntityType"].id
-     
-     field_obj = EntityTypeField.select_or_insert(type_id, field_name)
-  end
-  
-  def cmd_remove(*args)
-     field_name = args[0]
-     type_id = driver.interface.working_values["Current EntityType"].id
-     
-     field_obj = EntityTypeField.delete_from_name(type_id, field_name)
-  end
-
-  def cmd_fields(*args)
-     
-    type_id = driver.interface.working_values["Current EntityType"].id
-     
-    type_fields = EntityTypeField.list(type_id)
-    
-    # Build table of listing with 4 columns 
-    tbl = Rex::Ui::Text::Table.new('Indent' => 4,
-                                   'Columns' => ['','','',''])
-    col_num = 0
-    row_array = Array.new()
-      
-    type_fields.each do |type_field|
-      if (col_num > 3)
-        tbl << row_array
-        row_array = Array.new()
-        col_num = 0
-      end
-      row_array << type_field.field_name
-      col_num = col_num + 1  
-    end  # End of table loop
-      
-    if (col_num > 0)
-      while (col_num <= 3)
-        row_array << ''
-        col_num = col_num + 1
-      end
-      tbl << row_array
-    end  # End of table completion
-      
-    puts tbl.to_s + "\n"  
   end
   
 end

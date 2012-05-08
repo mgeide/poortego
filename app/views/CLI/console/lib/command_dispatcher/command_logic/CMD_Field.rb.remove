@@ -1,0 +1,71 @@
+class CMD_Field
+  attr_accessor :driver
+
+  include Rex::Ui::Text::DispatcherShell::CommandDispatcher
+
+  #
+  # Constructor
+  #
+  def initialize(driver)
+    super
+    
+    self.driver = driver
+  end
+  
+  #
+  # "field" command logic
+  #
+  def cmd_field(*args)
+    
+    entity_id    = driver.interface.working_values["Current Entity"].id
+    field_action = nil
+    field_name   = nil
+    
+    if (args.length < 1)
+      field_action = list
+    else 
+      field_action = args[0] # list, set, add, remove
+      if (args.length >= 2)
+        field_name   = args[1]
+      end
+    end
+    
+    case field_action
+    when '-h', '-?'
+      cmd_field_help
+      return
+    when 'list'  
+      entity_fields = EntityField.list(entity_id)
+      entity_fields.each {|entity_field|
+       puts "#{entity_field.name}  |  #{entity_field.value}"  
+      }
+    when 'set'
+      field_value = args[2]
+      
+      field_obj   = EntityField.select_or_insert(entity_id, field_name)
+      field_obj.update_attributes(:value => field_value)
+      field_obj.save
+      print_status("Set #{field_name} to #{field_value}")    
+    when 'add'
+      field_obj = EntityField.select_or_insert(entity_id, field_name)
+      print_status("Selected/Inserted Field #{field_name}")
+    when 'remove'
+      field_obj = EntityField.delete_from_name(entity_id, field_name)
+      print_status("Deleted Field #{field_name}")      
+    end  
+    
+  end
+  
+  #
+  # "Field" command help
+  #
+  def cmd_field_help
+    print_status("Command    : field")
+    print_status("Description: manipulate fields for current entity.")
+    print_status("Usage      : 'field <action> <field_name> [field_value]'")
+    print_status("Details    :")
+    print_status("Where action is: list, set, add, remove.") 
+    print_status("The field_value parameter is only used for set.")    
+  end
+  
+end

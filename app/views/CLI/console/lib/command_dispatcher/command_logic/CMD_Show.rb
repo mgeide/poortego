@@ -77,6 +77,30 @@ class CMD_Show
     # Table addendum for certain types
     #
     case show_type
+    when 'entity_type'
+      display_flag = 0
+      tbl_more = Rex::Ui::Text::Table.new('Ident'   => 4,
+                                          'Columns' => ['associated types'] )                                      
+      type_fields = EntityTypeField.list(show_obj.id)
+      type_fields.each do |type_field|
+        tbl_more << [type_field.field_name]
+        display_flag = 1
+      end
+      if (display_flag == 1)
+         puts "\n" + tbl_more.to_s
+      end
+    when 'link_type'
+      display_flag = 0
+      tbl_more = Rex::Ui::Text::Table.new('Ident'   => 4,
+                                          'Columns' => ['associated types'] )                                    
+      type_fields = LinkTypeField.list(show_obj.id)
+      type_fields.each do |type_field|
+        tbl_more << [type_field.field_name]
+        display_flag = 1
+      end
+      if (display_flag == 1)
+         puts "\n" + tbl_more.to_s
+      end  
     when 'section'        # Show Section Descriptors
        display_flag = 0
        tbl_more = Rex::Ui::Text::Table.new('Indent' => 4,
@@ -84,7 +108,7 @@ class CMD_Show
                                                          'values'   ])
        descriptors = SectionDescriptor.list(show_obj.id)
        descriptors.each {|descriptor|
-         tbl_more << [decriptor.field_name, descriptor.value]
+         tbl_more << [descriptor.field_name, descriptor.value]
          display_flag = 1 
        }
        if (display_flag == 1)

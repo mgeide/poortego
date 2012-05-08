@@ -1,4 +1,33 @@
 
+5/8 - working this bug
+> select entity_type Person
+[-] Error while running command select: undefined method `id' for 1:Fixnum
+CMD_Select - 126, home dispatcher 227
+
+need to figure out link / link_to command ... use create/set/delete or separate cmd?
+
+-=-=-
+
+* remove un-needed commands to eliminate confusion:
+
+- CMD_EntityType.rb logic should be moved to "set type <value>" command when current type is entitytype
+- Same as above should exist for LinkType
+- CMD_Field.rb logic should be moved to: create, set, delete commands
+- Move Section Descriptor to create, set, delete commands
+
+
+Note: the "back" command seems to break after about 3x use
+
+
+-=-=-=-
+
+To Do:
+
+- Thinking about moving Section->Descriptor command to Field command
+
+
+-=-=-=-
+
 Moving commands into CMD files, did this for home_dispatcher, do this for other dispatchers, e.g., entity_dispatcher
 
 Figured out tab completion ... see connect command

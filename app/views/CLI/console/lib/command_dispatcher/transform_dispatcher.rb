@@ -4,9 +4,6 @@
 #
 ###################
 
-
-
-
 # Poortego::Console::CommandDispatcher
 module Poortego
 module Console
@@ -27,7 +24,7 @@ class TransformDispatcher
   end
   
   ########################
-  # ProjectShell Commands
+  # Transform Commands
   ########################
   def commands
     {

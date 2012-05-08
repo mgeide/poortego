@@ -28,7 +28,7 @@ require "#{current_dir}/../../../../../models/link_field"
 # Put command logic in separate files
 #  to limit the size of the dispatcher files
 #
-require "#{current_dir}/command_logic/CMD_functions"
+require "#{current_dir}/command_logic/CMD_functions"  # Any helper functions
 require "#{current_dir}/command_logic/CMD_Connect"
 require "#{current_dir}/command_logic/CMD_List"
 require "#{current_dir}/command_logic/CMD_Select"
@@ -36,7 +36,9 @@ require "#{current_dir}/command_logic/CMD_Show"
 require "#{current_dir}/command_logic/CMD_Create"
 require "#{current_dir}/command_logic/CMD_Delete"
 require "#{current_dir}/command_logic/CMD_Set"
+require "#{current_dir}/command_logic/CMD_Run"
 require "#{current_dir}/command_logic/CMD_Export"
+require "#{current_dir}/command_logic/CMD_Import"
 
 module Poortego
 module Console
@@ -79,23 +81,56 @@ class HomeDispatcher
   #
   # Supports these commands
   #
-  def commands
+  def commands  # Note, most commands have an alias
     {
+      # HELP commands (completed)
       "?"         => "Help menu",
+      "help"      => "Help menu (alias)",
+      
+      # EXIT commands (completed)
       "exit"      => "Exit the console",
-      "help"      => "Help menu",
+      "quit"      => "Alias for exit command",
+ 
+      # BACK / HOME commands (completed)
       "back"      => "Return to previous dispatcher level",
-      "connect"   => "Connect to DB (TODO: move constructor to allow on-the-fly DB connectivity)",
+      "home"      => "Return to home level",
+      
+      # CURRENT / SHOW commands (completed)
       "current"   => "Display the current state of things",
-      "list"      => "List available objects (at current selection or parents)",
       "show"      => "Show a current object (at current selection or parents)",
+      
+      # CONNECT command (TODO)
+      "connect"   => "Connect to DB (TODO: move constructor to allow on-the-fly DB connectivity)",
+      
+      # LIST command (completed)
+      "list"      => "List available objects (at current selection or parents)",
+      "ls"        => "Alias for list command",
+     
+      # SELECT command (completed)     
       "select"    => "Select an object to manipulate",
-      "create"    => "Create an object",
-      "set"       => "Set field values for current object",
-      "delete"    => "Delete an object",
-      #"run"       => "Run transform/plugin in the current scope",  ## TODO
-      "export"    => "Export data in the current scope to a specific format (e.g., graph)", ## TODO
-      #"import"    => "Import pcap, XML, JSON, etc.",  ## TODO
+      "use"       => "Alias for select command",
+      
+      # CREATE command (completed)
+      "create"    => "Create an object or object field",
+      "add"       => "Alias for create command",
+      
+      # SET command (completed)
+      "set"       => "Set atrribute or field values for current object",
+      "update"    => "Alias for set command",
+      
+      # DELETE command (completed)
+      "delete"    => "Delete an object or object field",
+      "rm"        => "Alias for delete command",
+      
+      # RUN command (TODO)
+      "run"       => "Run transform/plugin in the current scope",
+      
+      # EXPORT command (graphviz supported only atm, more TODO)
+      "export"    => "Export data in the current scope to a specific format (e.g., graph)",
+      
+      # IMPORT command (TODO)
+      "import"    => "Import CSV, pcap, XML, JSON, etc.",
+      
     }
   end
   
@@ -116,6 +151,17 @@ class HomeDispatcher
       set_prompt(driver)
     end
   end
+ 
+  #
+  # "Home" command logic
+  #
+  def cmd_home(*args)
+    while (driver.dispatcher_stack.size > 1 and driver.current_dispatcher.name != 'Home')
+      driver.destack_dispatcher
+    end
+    driver.interface.initialize_working_values()
+    set_prompt(driver)
+  end 
  
   #
   # "Connect" command: see CMD_Connect.rb
@@ -255,6 +301,19 @@ class HomeDispatcher
   end
   
   #
+  # Run command, see: CMD_Run.rb
+  #
+  def cmd_run(*args)
+    cmd = CMD_Run.new(driver)
+    cmd.cmd_run(*args)
+  end
+  
+  def cmd_run_help(*args)
+    cmd = CMD_Run.new(driver)
+    cmd.cmd_run_help(*args)
+  end
+  
+  #
   # Export command, see: CMD_Export.rb
   #
   def cmd_export(*args)
@@ -266,7 +325,20 @@ class HomeDispatcher
     cmd = CMD_Export.new(driver)
     cmd.cmd_export_help(*args)
   end
+
+  #
+  # Import command, see: CMD_Import.rb
+  #
+  def cmd_import(*args)
+    cmd = CMD_Import.new(driver)
+    cmd.cmd_import(*args)
+  end
   
+  def cmd_import_help(*args)
+    cmd = CMD_Import.new(driver)
+    cmd.cmd_import_help(*args)
+  end
+
   #
   # "Exit" command logic
   #
@@ -275,9 +347,14 @@ class HomeDispatcher
   end
   
   #
-  # "Quit" command alias
+  # Command Aliases
   #
-  alias cmd_quit cmd_exit
+  alias cmd_quit   cmd_exit
+  alias cmd_ls     cmd_list
+  alias cmd_rm     cmd_delete
+  alias cmd_use    cmd_select
+  alias cmd_add    cmd_create
+  alias cmd_update cmd_set
   
 end  # Class end
 
