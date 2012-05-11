@@ -109,6 +109,7 @@ class HomeDispatcher
       # SELECT command (completed)     
       "select"    => "Select an object to manipulate",
       "use"       => "Alias for select command",
+      "cd"        => "Alias for select command",
       
       # CREATE command (completed)
       "create"    => "Create an object or object field",
@@ -121,6 +122,7 @@ class HomeDispatcher
       # DELETE command (completed)
       "delete"    => "Delete an object or object field",
       "rm"        => "Alias for delete command",
+      "del"       => "Alias for delete command",
       
       # RUN command (TODO)
       "run"       => "Run transform/plugin in the current scope",
@@ -352,7 +354,9 @@ class HomeDispatcher
   alias cmd_quit   cmd_exit
   alias cmd_ls     cmd_list
   alias cmd_rm     cmd_delete
+  alias cmd_del    cmd_delete
   alias cmd_use    cmd_select
+  alias cmd_cd     cmd_select
   alias cmd_add    cmd_create
   alias cmd_update cmd_set
   

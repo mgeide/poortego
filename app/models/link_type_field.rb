@@ -23,7 +23,7 @@ class LinkTypeField < ActiveRecord::Base
     field_rows = Array.new()
     begin
       type_id = args[0]
-      field_rows = self.find(:all, :conditions => "link_type_id=#{type_id}", :order => "field_name ASC")
+      field_rows = self.find(:all, :conditions => { :link_type_id => type_id }, :order => "field_name ASC")
     rescue Exception => e
       puts "Exception listing type fields"
       puts self.inspect
@@ -40,7 +40,7 @@ class LinkTypeField < ActiveRecord::Base
     begin
       type_id   = args[0]
       name      = args[1]
-      field_row = self.find(:first, :conditions => "field_name='#{name}' AND link_type_id=#{type_id}")
+      field_row = self.find(:first, :conditions => { :field_name => name, :link_type_id => type_id })
     rescue Exception => e
       puts "Exception selecting type field"
       puts self.inspect
@@ -96,7 +96,7 @@ class LinkTypeField < ActiveRecord::Base
     begin
       type_id = args[0]
       name    = args[1]
-      field_row = self.find(:first, :conditions => "link_type_id=#{type_id} AND field_name='#{name}'")
+      field_row = self.find(:first, :conditions => { :link_type_id => type_id, :field_name => name })
       unless (field_row.nil?)
         self.delete(field_row.id)
         puts "[DEBUG] DELETED type field with name #{name}, Id = #{field_row.id}"

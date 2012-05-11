@@ -35,8 +35,20 @@ class CMD_Linkto
       return
     end
     
-    link_name = driver.interface.working_values["Current Entity"].title + " --> " + linkto_entity_name    
-    link_obj = Link.select_or_insert(project_id, section_id, entity_obj.title, linkto_entity_name, link_name)
+    linkto_entity_obj = Entity.select(project_id, section_id, linkto_entity_name)
+    if (linkto_entity_obj.nil?)
+      if (linkto_entity_name =~ /^\d+$/)
+        linkto_entity_obj = Entity.find(linkto_entity_name)
+        if (linkto_entity_obj.nil?)
+          print_error("Unable to build link to: #{linkto_entity_name}")
+          return
+        end
+      end
+    end
+    
+    link_name = driver.interface.working_values["Current Entity"].title + " --> " + linkto_entity_obj.title
+    link_obj = Link.select_or_insert(project_id, section_id, entity_obj.title, linkto_entity_obj.title, link_name)    
+        
     unless (link_obj.nil?)
       driver.interface.working_values["Current Link"] = link_obj
       driver.interface.working_values["Current Object"] = driver.interface.working_values["Current Link"]
@@ -44,7 +56,7 @@ class CMD_Linkto
       driver.interface.working_values["Current Dispatcher"] = "LinkDispatcher"
       set_prompt(driver)
     else
-      print_error("Unable to build link: #{link_name}")
+      print_error("Unable to build link to: #{link_name}")
     end  
   end
   

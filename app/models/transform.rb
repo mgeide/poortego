@@ -34,7 +34,7 @@ class Transform < ActiveRecord::Base
     transform_row = nil
     begin
       name = args[0]
-      transform_row = self.find(:first, :conditions => "title='#{name}'")
+      transform_row = self.find(:first, :conditions => { :title => name })
     rescue Exception => e
       puts "Exception selecting Transform"
       puts self.inspect
@@ -87,7 +87,7 @@ class Transform < ActiveRecord::Base
     transform_row = nil
     begin
       name = args[0]
-      transform_row = self.find(:first, :conditions => "title='#{name}'")
+      transform_row = self.find(:first, :conditions => { :title => name })
       unless (transform_row.nil?)
         self.delete(transform_row.id)
         puts "[DEBUG] DELETED transform with title #{name}, Id = #{transform_id}"

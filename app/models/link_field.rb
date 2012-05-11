@@ -23,7 +23,7 @@ class LinkField < ActiveRecord::Base
     field_rows = Array.new()
     begin
       link_id = args[0]
-      field_rows = self.find(:all, :conditions => "link_id=#{link_id}", :order => "name ASC")
+      field_rows = self.find(:all, :conditions => { :link_id => link_id }, :order => "name ASC")
     rescue Exception => e
       puts "Exception listing fields"
       puts self.inspect
@@ -40,7 +40,7 @@ class LinkField < ActiveRecord::Base
     begin
       link_id = args[0]
       name    = args[1]
-      field_row = self.find(:first, :conditions => "name='#{name}' AND link_id=#{link_id}")
+      field_row = self.find(:first, :conditions => { :name => name, :link_id => link_id })
     rescue Exception => e
       puts "Exception selecting field"
       puts self.inspect
@@ -96,7 +96,7 @@ class LinkField < ActiveRecord::Base
     begin
       link_id = args[0]
       name    = args[1]
-      field_row = self.find(:first, :conditions => "link_id=#{link_id} AND name='#{name}'")
+      field_row = self.find(:first, :conditions => { :link_id => link_id, :name => name })
       unless (field_row.nil?)
         self.delete(field_row.id)
         puts "[DEBUG] DELETED field with name #{name}, Id = #{id}"

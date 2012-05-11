@@ -36,9 +36,9 @@ class Link < ActiveRecord::Base
       section_id = args[1]
       if (args.length == 3)
         entity_a_id = args[2]
-        link_rows = self.find(:all, :conditions => "project_id=#{project_id} AND section_id=#{section_id} AND entity_a_id=#{entity_a_id}", :order => "title ASC")
+        link_rows = self.find(:all, :conditions => { :project_id => project_id, :section_id => section_id, :entity_a_id => entity_a_id }, :order => "title ASC")
       else
-        link_rows = self.find(:all, :conditions => "project_id=#{project_id} AND section_id=#{section_id}", :order => "title ASC")
+        link_rows = self.find(:all, :conditions => { :project_id => project_id, :section_id => section_id }, :order => "title ASC")
       end
     rescue Exception => e
       puts "Exception listing Links"
@@ -57,7 +57,7 @@ class Link < ActiveRecord::Base
       project_id = args[0]
       section_id = args[1]
       link_name  = args[2]
-      link_row   = self.find(:first, :conditions => "title='#{link_name}' AND project_id=#{project_id} AND section_id=#{section_id}")
+      link_row   = self.find(:first, :conditions => { :title => link_name, :project_id => project_id, :section_id => section_id })
     rescue Exception => e
       puts "Exception selecting Link"
       puts self.inspect
@@ -81,9 +81,9 @@ class Link < ActiveRecord::Base
       
       if (args.length == 5)
         link_name = args[4]
-        link_row = self.find(:first, :conditions => "title='#{link_name}' AND project_id=#{project_id} AND section_id=#{section_id} AND entity_a_id=#{entityA_obj.id} AND entity_b_id=#{entityB_obj.id}")
+        link_row = self.find(:first, :conditions => { :title => link_name, :project_id => project_id, :section_id => section_id, :entity_a_id => entityA_obj.id, :entity_b_id => entityB_obj.id })
       else
-        link_row = self.find(:first, :conditions => "project_id=#{project_id} AND section_id=#{section_id} AND entity_a_id=#{entityA_obj.id} AND entity_b_id=#{entityB_obj.id}")
+        link_row = self.find(:first, :conditions => { :project_id => project_id, :section_id => section_id, :entity_a_id => entityA_obj.id, :entity_b_id => entityB_obj.id })
       end
       
     rescue Exception => e

@@ -49,7 +49,7 @@ class LinkType < ActiveRecord::Base
     row = nil
     begin
         # Try to find by title first
-        row = self.find(:first, :conditions => "title='#{name}'")
+        row = self.find(:first, :conditions => { :title => name })
         unless (row.nil?)
             if (row.id > -1)
               id = row.id
@@ -143,7 +143,7 @@ class LinkType < ActiveRecord::Base
     row = nil
     begin
         # Try to find Project by title first
-        row = self.find(:first, :conditions => "title='#{name}'")
+        row = self.find(:first, :conditions => { :title => name })
         unless (row.nil?)
             if (row.id > -1)
               id = row.id

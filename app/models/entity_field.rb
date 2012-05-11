@@ -22,7 +22,7 @@ class EntityField < ActiveRecord::Base
     field_rows = Array.new()
     begin
       entity_id = args[0]
-      field_rows = self.find(:all, :conditions => "entity_id=#{entity_id}", :order => "name ASC")
+      field_rows = self.find(:all, :conditions => { :entity_id => entity_id }, :order => "name ASC")
     rescue Exception => e
       puts "Exception listing fields"
       puts self.inspect
@@ -39,7 +39,7 @@ class EntityField < ActiveRecord::Base
     begin
       entity_id = args[0]
       name = args[1]
-      field_row = self.find(:first, :conditions => "name='#{name}' AND entity_id=#{entity_id}")
+      field_row = self.find(:first, :conditions => { :name => name, :entity_id => entity_id })
     rescue Exception => e
       puts "Exception selecting field"
       puts self.inspect
@@ -94,7 +94,7 @@ class EntityField < ActiveRecord::Base
     begin
       entity_id = args[0]
       name    = args[1]
-      field_row = self.find(:first, :conditions => "entity_id=#{entity_id} AND name='#{name}'")
+      field_row = self.find(:first, :conditions => { :entity_id => entity_id, :name => name })
       unless (field_row.nil?)
         self.delete(field_row.id)
         puts "[DEBUG] DELETED field with name #{name}, Id = #{field_row.id}"

@@ -40,7 +40,7 @@ class Project < ActiveRecord::Base
     project_row = nil
     begin
       name = args[0]
-      project_row = self.find(:first, :conditions => "title='#{name}'")
+      project_row = self.find(:first, :conditions => { :title => name })
     rescue Exception => e
       puts "Exception selecting Project"
       puts self.inspect
@@ -96,7 +96,7 @@ class Project < ActiveRecord::Base
     begin
       name = args[0]
       # Try to find Project by title first
-      project_row = self.find(:first, :conditions => "title='#{name}'")
+      project_row = self.find(:first, :conditions => { :title => name })
       unless (project_row.nil?)
         self.delete(project_row.id)
         puts "[DEBUG] DELETED project with title #{name}, Id = #{project_row.id}"

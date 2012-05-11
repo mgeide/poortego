@@ -25,7 +25,7 @@ class Section < ActiveRecord::Base
     section_rows = Array.new()
     begin
       project_id = args[0]
-      section_rows = self.find(:all, :conditions => "project_id=#{project_id}", :order => "title ASC")
+      section_rows = self.find(:all, :conditions => { :project_id => project_id }, :order => "title ASC")
     rescue Exception => e
       puts "Exception listing Sections"
       puts self.inspect
@@ -42,7 +42,7 @@ class Section < ActiveRecord::Base
     begin
       project_id   = args[0]
       section_name = args[1]
-      section_row  = self.find(:first, :conditions => "title='#{section_name}' AND project_id=#{project_id}")
+      section_row  = self.find(:first, :conditions => { :title => section_name, :project_id => project_id })
     rescue Exception => e
       puts "Exception selecting Section"
       puts self.inspect

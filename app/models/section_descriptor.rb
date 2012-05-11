@@ -22,7 +22,7 @@ class SectionDescriptor < ActiveRecord::Base
     descriptor_rows = Array.new()    
     begin
       section_id = args[0]
-      descriptor_rows = self.find(:all, :conditions => "section_id=#{section_id}", :order => "field_name ASC")
+      descriptor_rows = self.find(:all, :conditions => { :section_id => section_id }, :order => "field_name ASC")
     rescue Exception => e
       puts "Exception listing Descriptors"
       puts self.inspect
@@ -39,7 +39,7 @@ class SectionDescriptor < ActiveRecord::Base
     begin
       section_id = args[0]
       descriptor_name = args[1]
-      descriptor_row = self.find(:first, :conditions => "field_name='#{descriptor_name}' AND section_id=#{section_id}")
+      descriptor_row = self.find(:first, :conditions => { :field_name => descriptor_name, :section_id => section_id })
     rescue Exception => e
       puts "Exception selecting descriptor"
       puts self.inspect

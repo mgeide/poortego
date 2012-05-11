@@ -37,7 +37,7 @@ class Entity < ActiveRecord::Base
     begin
       project_id = args[0]
       section_id = args[1]
-      entity_rows = self.find(:all, :conditions => "project_id=#{project_id} AND section_id=#{section_id}", :order => "title ASC")
+      entity_rows = self.find(:all, :conditions => { :project_id => project_id, :section_id => section_id }, :order => "title ASC")
     rescue Exception => e
       puts "Exception listing Entities"
       puts self.inspect
@@ -55,7 +55,7 @@ class Entity < ActiveRecord::Base
       project_id  = args[0]
       section_id  = args[1]
       entity_name = args[2]
-      entity_row  = self.find(:first, :conditions => "title='#{entity_name}' AND project_id=#{project_id} AND section_id=#{section_id}")
+      entity_row  = self.find(:first, :conditions => { :title => entity_name, :project_id => project_id, :section_id => section_id }) 
     rescue Exception => e
       puts "Exception selecting Entity"
       puts self.inspect
