@@ -36,6 +36,8 @@ class EntityDispatcher
   def commands
     {
       "linkto"     => "Link entity to another",
+      # linkfrom
+      # linkbi
       ## TODO: decide whether to keep this command or make it part of create/add 
     }
   end

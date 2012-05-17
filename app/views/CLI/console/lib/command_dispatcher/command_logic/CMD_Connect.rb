@@ -13,9 +13,16 @@ class CMD_Connect
   end
   
   @@connect_opts = Rex::Parser::Arguments.new(
-    "help" => [ false, "Help"],
-    "database" => [ true, "Database Connection"],
-    "test" => [ false, "Testing Connection"]
+    "-h"        => [ false, "Help"],
+    "-yaml"     => [ true,  "YAML config file to use"], 
+    "-adapter"  => [ true,  "Define database adapter to use (e.g., sqlite3, mysql2)."],
+    "-database" => [ true,  "The DB name or path to DB file in the case of SQLite."],
+    "-username" => [ true,  "The DB username."],
+    "-password" => [ true,  "The DB user credentials."],
+    "-host"     => [ true,  "The system hosting the DB."]
+    
+    #"database" => [ true, "Database Connection"],
+    #"test" => [ false, "Testing Connection"]
   )
   
   #
@@ -28,25 +35,47 @@ class CMD_Connect
       return
     end
     
+    connection_config = Hash.new()
+    
     @@connect_opts.parse(args) {|opt, idx, val|
       #print_line "[DEBUG] opt #{opt} idx #{idx} val #{val}"
-      case val  # Change this to opt if "-h" style arguments are being passed
+      #print_line "[DEBUG] opt class: #{opt.class}"
+      #print_line "[DEBUG] Arg #{args[idx]}"
+      #case opt  # Change this to opt if "-h" style arguments are being passed
                 # Change this to val if "help" style arguments are being passed
-        when "help"
+      case (args[idx-1])
+        when "-h"
           cmd_connect_help
-        when "database"
-          print_line "Opt: #{opt}"
-          print_line "Idx: #{idx}"
-          print_line "Val: #{val}"
-        when "test"
-          print_line "Opt: #{opt}"
-          print_line "Idx: #{idx}"
-          print_line "Val: #{val}"
+        when "-adapter"
+          connection_config['adapter'] = val
+          puts "[DEBUG] Setting adapter to #{val}"
+        when "-database"
+          connection_config['database'] = val
+          puts "[DEBUG] Setting database to #{val}"
+        when "-username"
+          connection_config['username'] = val
+          puts "[DEBUG] Setting username to #{val}"
+        when "-password"
+          connection_config['password'] = val
+          puts "[DEBUG] Setting password to #{val}"
+        when "-host"
+          connection_config['host'] = val
+          puts "[DEBUG] Setting host to #{val}"  
         else
           print_error("Invalid option.")
           return
         end  
     }
+    
+    if (connection_config.length > 1)
+      begin
+        ActiveRecord::Base.establish_connection(connection_config)
+      rescue Exception => e
+        puts "Exception establishing activerecord connection"
+        puts self.inspect
+        puts e.message  
+      end
+    end
     
   end  
   

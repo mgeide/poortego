@@ -99,8 +99,11 @@ class HomeDispatcher
       "current"   => "Display the current state of things",
       "show"      => "Show a current object (at current selection or parents)",
       
-      # CONNECT command (TODO)
-      "connect"   => "Connect to DB (TODO: move constructor to allow on-the-fly DB connectivity)",
+      # CONNECT / DISCONNECT commands (TODO)
+      ## Connect tested with connecting to another SQLite DB
+      ## TODO: need a way of building a new database
+      "connect"    => "Connect to DB (TODO: move constructor to allow on-the-fly DB connectivity)",
+      "disconnect" => "Remove current DB connection, and re-establish previous DB connection",  # TODO
       
       # LIST command (completed)
       "list"      => "List available objects (at current selection or parents)",
@@ -313,6 +316,11 @@ class HomeDispatcher
   def cmd_run_help(*args)
     cmd = CMD_Run.new(driver)
     cmd.cmd_run_help(*args)
+  end
+  
+  def cmd_run_tabs(str, words)
+    cmd = CMD_Run.new(driver)
+    cmd.cmd_run_tabs(str, words)
   end
   
   #
