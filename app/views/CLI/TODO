@@ -1,4 +1,15 @@
 
+Have built poortego_transform_responseXML
+This class is used in transforms to output XML
+
+Use the CMD_Run.rb to open/run transform scripts, take the XML string as output from these scripts and
+use it as input into building a transform object from poortego_transform_responseXML, then
+take the transform object that contains the entities and links and insert approriately, and
+display the ResponseMessages approriately on the CLI
+
+
+-=-=-
+
 5/8 - working this bug
 > select entity_type Person
 [-] Error while running command select: undefined method `id' for 1:Fixnum

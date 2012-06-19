@@ -2,13 +2,8 @@ require 'rubygems'
 require 'popen4'
 
 current_dir = File.expand_path(File.dirname(__FILE__))
-require "#{current_dir}/../../../../../../../models/transform_model/poortego_transform_responseXML.rb"
+require "#{current_dir}/transforms/maltego_response"
 
-###
-#
-# Class responsible for RUN logic
-#
-###
 class CMD_Run
   attr_accessor :driver
 
@@ -69,10 +64,9 @@ class CMD_Run
           puts "status     : #{ status.inspect }"
           #puts "exitstatus : #{ status.exitstatus }" 
           
-          response_obj = PoortegoTransformResponseXML.new(result_str)
-          
-          #(response_obj.maltego_transform).resultEntities.each {|entity|
-          #  puts "Type #{entity.entityType} Value #{entity.value}" 
+          response_obj = MaltegoResponse.new(result_str)
+          (response_obj.maltego_transform).resultEntities.each {|entity|
+            puts "Type #{entity.entityType} Value #{entity.value}" 
             ## Left off here:
             ## Example of running from_domain-to_ip transform for google.com is:
             ## Type CNAME Value www.l.google.com

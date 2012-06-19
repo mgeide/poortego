@@ -1,33 +1,6 @@
-require 'rubygems'
-require 'popen4'
-
-current_dir = File.expand_path(File.dirname(__FILE__))
-require "#{current_dir}/../../../../../../../models/transform_model/poortego_transform_responseXML.rb"
-
-###
-#
-# Class responsible for RUN logic
-#
-###
-class CMD_Run
-  attr_accessor :driver
-
-  include Rex::Ui::Text::DispatcherShell::CommandDispatcher
-
-  #
-  # Constructor
-  #
-  def initialize(driver)
-    super
-    
-    self.driver = driver
-    
-    current_dir = File.expand_path(File.dirname(__FILE__))
-    @transform_directory = "#{current_dir}/transforms/"
-    
-  end
+module Commands
   
-  #
+   #
   # Run command logic
   #
   def cmd_run(*args)
@@ -47,7 +20,7 @@ class CMD_Run
         transform_argument_one = driver.interface.working_values["Current Entity"].title
         transform_argument_two = '';
         
-        entity_fields = EntityField.list(driver.interface.working_values["Current Entity"].id)
+        entity_fields = PoortegoEntityField.list(driver.interface.working_values["Current Entity"].id)
         entity_fields.each {|entity_field|
           arg_name  = "#{entity_field.name}".gsub(/\#/, '\#')
           arg_value = "#{entity_field.value}".gsub(/\#/, '\#') 
@@ -80,10 +53,7 @@ class CMD_Run
             ## TODO: create entity with title=value
             ## TODO: need to create type detection and easier way of defining entity type
             ## TODO: recurse, e.g., return CNAME, and CNAME has A RCDs
-          }
-          
         end
-
         
       when 'link'
       when 'section'
@@ -118,6 +88,5 @@ class CMD_Run
     end
     return res
   end
-  
   
 end
