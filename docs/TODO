@@ -1,0 +1,40 @@
++--------------------------------------------+
+| Bug Reports, Issues, Features, To Do Lists |
++--------------------------------------------+ 
+
+!!Current place is to build an XML response message from the autotype transform...
+-- Just got this working for "IP Address" type!! 
+   -- Need to build out common types like "IP Address"
+      -- Maybe have different grouping of types to include/exclude
+Working in run_cmd.rb file to handle the XML response message,
+building out a transform object from the response, then
+looping through the responseEntities, responseLinks, and responseMessages
+attempting to build Entity and Link objects from these response to then
+store/update within the DB.
+
+
+* To Do: intial transform building and testing:
+-- Continue to update the autotype transform to get this working as our first transform!
+-- Related to this is ensurance of logic that properly handles the reciept of the XML messages and takes the appropriate actions
+such as creates, updates, deletes (can a transform delete entities?)
+
+* To Do: Need a command to build a new poortego DB that will initialize the tables to include the types in the next TODO item
+
+* To Do: Need to build out common entity and link types that are loaded into poortego databases during intializations
+Such as: "IP Address", "Domain Name", "Netblock", etc., etc.
+Need to have a standard naming convention too with capitalization, etc. - look at Maltego type names
+
+* Bug/Issue: lib/rails/app/config/database.yml directly defines the path location of the default SQLite database
+This should be modified to be a relative path from the POORTEGO_LOCAL_BASE environment variable.
+
+* To Do: build out a simple transform based on "Transform_HOWTO" and kick it off using the "run" command from CLI
+
+* To Do: build a transform_scheduler.rb tool in the root to run hourly in cron and run transforms that are scheduled
+
+* To Do / Wish List: automate the unit testing of RexUI CLIs
+
+* Bug/Issue: after we get poortego transforms working- take a look at supporting maltego
+
+* Future feature: PHP/web UI
+
+* Future feature - look at using this project for blocklist management

@@ -1,0 +1,49 @@
++-----------------+
+| Transform HOWTO |
++-----------------+
+
+(1) Create sub directories under the main transforms directory where each sub-dir corresponds to an
+entity or link type, e.g., "IP Address", "Domain", etc.
+
+(2) Build a transform file that receives as it's arguments:
+Argument 1: the entity/link value/title
+Argument 2 (optional): the entity/link fields delimited by a '#'
+Have the transform return a PoortegoTransformResponseXML object
+
+Make sure you set the permisions of the transform to be executable:
+$ chmod 775 xyz_transform.rb
+
+(3) Set standard object fields for entities/links of interest as applicable, e.g.,
+
+xyz_transform          = enabled (default), disabled
+xyz_transform_status   = none (default), successful/failed run 2012/06/20 00:00:00
+xyz_transform_message  = none (default), <Message>...</Message> 
+xyz_transform_schedule = none (default), 123 hours/days 
+
+The field/value pair need not be set if the default is to be used.
+
+(4) Transforms that are enabled and have a status of 'none' are executed when on of these conditions occurs:
+    (A) Transforms for the project, section, or object are requested to be run by the user ("run" command)
+    (B) The transform scheduler program is run (should be setup in cron for every hour)
+
+Note: the "run" command to manually run transforms only runs transforms for objects that are enabled
+and have a none status AND for those that are scheduled and are past due. To force a "run" for all
+enabled transforms regardless of status/schedule do a "run force" command.
+    
+(5) Transforms that are enabled, scheduled, and already have a status are run again
+when the transform scheduler program determines that the transform is past due to be run.
+
++-----------------+
+| Transform Notes |
++-----------------+
+
+Transform arguments are passed within single quotes, e.g., xyz_transform 'arg1' 'arg2'
+-- This is to be able to pass things like spaces
+-- Single quotes are escaped within the args like \', this is done within the "run" CLI command
+-- The "run" CLI command also converts the '#' character in argument names/values as '%P_ESC%'
+which is then returned to '#' within poortego_transform.rb, this is because the '#' character
+is used as a delimiter for arg2 data
+-- May need/wish to escape other characters that could negatively impact the command line
+  -- This is not really secure and should not be exposed to anyone where arbitrary input can be done
+  
+  

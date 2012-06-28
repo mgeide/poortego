@@ -1,0 +1,34 @@
+CLI Commands to test
+
+Simple Tests: no dependencies
+> ?
+> help
+> exit
+> quit
+> connect
+> disconnect (?)
+
+Medium Tests: depends on current object
+> back
+> home
+> show
+> current
+> list
+> ls
+> select
+> use
+> cd
+
+Hard Tests: manipulates an object
+> create
+> add
+> set
+> update
+> delete
+> rm
+> del
+      
+Hard-Hard Tests: execution of transform, exporter, importer
+> run
+> export
+> import

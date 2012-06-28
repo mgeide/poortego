@@ -1,0 +1,23 @@
++----------------+
+| Exporter HOWTO |
++----------------+
+
+Pass in a hash of current "working values" tied to what it is that you want to export from poortego.
+The hash is defined as / has the keys:
+
+    self.working_values = Hash.new()
+    self.working_values["Current Dispatcher"]     = 'HomeDispatcher'
+    self.working_values["Current Selection Type"] = 'none'
+    self.working_values["Default Command Type"]   = 'project'
+    self.working_values["Current Object"]         = nil
+    self.working_values["Current Project"]        = nil
+    self.working_values["Current Section"]        = nil
+    self.working_values["Current Transform"]      = nil
+    self.working_values["Current Entity"]         = nil
+    self.working_values["Current Link"]           = nil
+    self.working_values["Current Descriptor"]     = nil
+    self.working_values["Current EntityType"]     = nil
+    self.working_values["Current LinkType"]       = nil
+
+The exporter should be a stand-alone class with an export() function that processes the poortego data/values and
+exports them to a file that is another usable format somewhere else.

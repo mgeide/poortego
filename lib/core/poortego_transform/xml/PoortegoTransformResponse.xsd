@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<!--
+  Message Type: string with title and type attributes
+-->
+<xs:complexType name="messagetype">
+  <xs:simpleContent>
+   <xs:extension base="xs:string">
+    <xs:attribute name="title" type="xs:string"/>
+    <xs:attribute name="type" type="xs:string"/>
+   </xs:extension>
+  </xs:simpleContent>
+</xs:complexType>
+
+<!--
+  Response Message Type: 0 or more message types
+-->
+<xs:complexType name="responsemessagestype">
+ <xs:sequence>
+  <xs:element name="Message" type="messagetype" minOccurs="0" maxOccurs="100" />
+ </xs:sequence>
+</xs:complexType>
+
+<!-- 
+  additionalfieldtype
+-->
+<xs:complexType name="additionalfieldtype">
+  <xs:attribute name="name" type="xs:string" />
+  <xs:attribute name="value" type="xs:string" />
+</xs:complexType>
+
+<!--
+  linktype
+-->
+<xs:complexType name="linktype">
+ <xs:sequence>
+    <xs:element name="AdditionalField" type="additionalfieldtype" minOccurs="0" maxOccurs="10000" />
+ </xs:sequence>
+ <xs:attribute name="title" type="xs:string" />
+ <xs:attribute name="entity_a" type="xs:string" />
+ <xs:attribute name="entity_b" type="xs:string" />
+</xs:complexType>
+
+<!--
+  linkstype
+-->
+<xs:complexType name="linkstype">
+   <xs:sequence>
+    <xs:element name="Link" type="linktype" minOccurs="1" maxOccurs="10000" />
+   </xs:sequence>
+</xs:complexType>
+
+<!--
+  entities_type	
+-->
+<xs:complexType name="entitiestype">
+   <xs:sequence>
+    <xs:element name="Entity" type="entitytype" minOccurs="1" maxOccurs="10000" />
+   </xs:sequence>
+</xs:complexType>
+
+<!--
+  entitytype
+-->
+<xs:complexType name="entitytype">
+  <xs:sequence> 
+    <xs:element name="AdditionalField" type="additionalfieldtype" minOccurs="0" maxOccurs="10000" />
+  </xs:sequence>
+  <xs:attribute name="title" type="xs:string"/>
+  <xs:attribute name="type" type="xs:string"/>
+</xs:complexType>
+
+<!--
+  Response Data Type: Entities and Links Sections
+-->
+<xs:complexType name="responsedatatype">
+ <xs:sequence>
+  <xs:element name="Entities" type="entitiestype" minOccurs="0" maxOccurs="1" />
+  <xs:element name="Links" type="linkstype" minOccurs="0" maxOccurs="1" />
+ </xs:sequence>
+</xs:complexType>
+
+<!--
+  PoortegoTransformResponse: contains ResponseData and ResponseMesssages sections
+-->
+<xs:element name="PoortegoTransformResponse">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element name="ResponseData" type="responsedatatype" minOccurs="1" maxOccurs="1" />
+    <xs:element name="ResponseMessages" type="responsemessagestype" minOccurs="1" maxOccurs="1" />
+   </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+</xs:schema>
