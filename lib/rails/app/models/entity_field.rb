@@ -83,7 +83,8 @@ class EntityField < ActiveRecord::Base
       puts "Exception selecting/inserting Field"
       puts self.inspect
       puts e.message
-    end  
+    end 
+    return field_row 
   end
   
   #

@@ -57,6 +57,8 @@ class EntityType < ActiveRecord::Base
             if (row.id > -1)
               id = row.id
               puts "[DEBUG] SELECTED type with title #{name}, Id = #{id}"
+            else 
+              return nil
             end
         end
     rescue Exception => e
@@ -114,7 +116,7 @@ class EntityType < ActiveRecord::Base
         type = self.select(name)
         
         # If not exists then insert
-        unless (type.nil?)
+        if (type.nil?)
             type = self.insert(name)
         end
     rescue Exception => e

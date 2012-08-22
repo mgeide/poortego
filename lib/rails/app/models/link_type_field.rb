@@ -77,7 +77,7 @@ class LinkTypeField < ActiveRecord::Base
       type_id = args[0]
       name    = args[1]
       field_row = self.select(type_id, name)
-      if (field_row.nil)
+      if (field_row.nil?)
         field_row = self.insert(type_id, name)
       end
     rescue Exception => e

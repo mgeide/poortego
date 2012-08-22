@@ -17,7 +17,14 @@ entity_attributeHash = Hash.new()
 entity_attributeHash['title'] = '1.1.1.1'
 entity_attributeHash['type'] = 'IP Address'
 entity_fieldHash = Hash.new()
+
+## NOTE: for debugging, add an extra attribute, e.g.,
+## <AdditionalField name='source' value='DigTransform' />
+entity_fieldHash['source'] = 'DigTransform'
+
 transform.addEntity(entity_attributeHash, entity_fieldHash)
+
+
 ## Link Info example
 link_attributeHash = Hash.new()
 link_attributeHash['title'] = 'A rcd'

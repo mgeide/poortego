@@ -47,7 +47,7 @@
 -->
 <xs:complexType name="linkstype">
    <xs:sequence>
-    <xs:element name="Link" type="linktype" minOccurs="1" maxOccurs="10000" />
+    <xs:element name="Link" type="linktype" minOccurs="0" maxOccurs="10000" />
    </xs:sequence>
 </xs:complexType>
 
@@ -56,7 +56,7 @@
 -->
 <xs:complexType name="entitiestype">
    <xs:sequence>
-    <xs:element name="Entity" type="entitytype" minOccurs="1" maxOccurs="10000" />
+    <xs:element name="Entity" type="entitytype" minOccurs="0" maxOccurs="10000" />
    </xs:sequence>
 </xs:complexType>
 

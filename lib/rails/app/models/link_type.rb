@@ -110,7 +110,7 @@ class LinkType < ActiveRecord::Base
         type = self.select(name)
         
         # If not exists then insert
-        unless (type.id > -1)
+        if (type.id > -1)
             type = self.insert(name)
         end
     rescue Exception => e

@@ -2,16 +2,40 @@
 | Bug Reports, Issues, Features, To Do Lists |
 +--------------------------------------------+ 
 
-!!Current place is to build an XML response message from the autotype transform...
--- Just got this working for "IP Address" type!! 
-   -- Need to build out common types like "IP Address"
-      -- Maybe have different grouping of types to include/exclude
+AutoType transform is working and responding correctly even if there are no actions to perform.
+
+Finished building parse_entities_hash() and parse_links_hash() functions within poortego_transform_responseXML.rb
+these functions are called from the parseXML() function, which is called in the poortego_transform_responseXML.rb initializer
+if XML is passed in the constructor.  This happens in the run command handling the response from a transform call.
+
+Have not tested the parse_links_hash() function within the poortego_transform_responseXML.rb
+
+Suggested next steps are to:
+(1) Note: the transforms are broken down into sub-dirs by type - need to add this logic in place ...
+Right now the run_cmd.rb is hard-coded to launch the auto_type transform purely for testing purposes.
+Need to change this logic to appropriately launch transforms against the proper entities/links and theit types.
+- is it plausable that transforms can be run against links - if so, maybe have a sub-dir to differentiate entity
+versus link transforms?
+
+
+(2) Create another transform "dns_dig.rb" since this will create new entities and links it will be a better
+transform test, and will also force me to move any hard-coded stuff into re-usable classes/methods for other
+transforms to leverage without having to copy/paste.
+
+ 
 Working in run_cmd.rb file to handle the XML response message,
 building out a transform object from the response, then
 looping through the responseEntities, responseLinks, and responseMessages
 attempting to build Entity and Link objects from these response to then
 store/update within the DB.
 
+An XML response message is built from the autotype transform and is being used as the first test transform
+to handle the response from
+-- This is working for "IP Address" type
+   -- Need to build out common types like "IP Address", "Domain", etc.
+      -- Maybe have different grouping of types to include/exclude - ?
+
+-=-=-=-
 
 * To Do: intial transform building and testing:
 -- Continue to update the autotype transform to get this working as our first transform!

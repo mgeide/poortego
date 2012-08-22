@@ -20,8 +20,9 @@ module Commands
     # set the entity/link type based on the entity/link values if the
     # entity/link type is not already set
     ####
-    
     transform_script = "#{transform_full_path}/any_type/autotype_transform.rb"
+    # TODO: transform_script should be defined from args[0]
+    
     if ((File.exists?(transform_script)) == true)
         
       # Scopes: project, section, entity, link
@@ -70,7 +71,16 @@ module Commands
           puts "status     : #{ status.inspect }"
           #puts "exitstatus : #{ status.exitstatus }" 
           
-          response_obj = PoortegoTransformResponseXML.new(result_str)
+          require "lib/core/poortego_transform/poortego_transform_responseXML"
+          response_obj = PoortegoTransformResponseXML.new(driver.interface.working_values["Current Project"].id,
+                                                          driver.interface.working_values["Current Section"].id,
+                                                          result_str)
+          
+          ## If the response isn't valid, then return
+          unless (response_obj.validated)
+            return
+          end
+          
           transform_result = response_obj.transform 
           ## TODO: move the below transform result logic into the transform file
           ## since this will be called from other things beyond the CLI run command
@@ -91,9 +101,11 @@ module Commands
               entity_type = PoortegoEntityType.find(:first, :conditions => { :title => transform_entity.attributes['type'] })
               if (entity_type.nil?)
                 puts "[ERROR] entity type #{transform_entity.attributes['type']} does not exist."
+                puts "Must manually create, or modify run_cmd.rb handler to automatically create type."
                 ## TODO? insertion of this new type, or assume that it is an error
               end
               if (entity_type.id > 0)
+                puts "[DEBUG] Updating entity type based on transform."
                 response_entity.type_id = entity_type.id
               end
             end

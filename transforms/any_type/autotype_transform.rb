@@ -34,8 +34,14 @@ entityValue = transform.transformInput["entityValue"]
 
 ## Only run transform if no entityType is set...
 if (transform.transformInput.include?("entityType"))
-  puts "Entity type already set (#{transform.transformInput["entityType"]}), this transform has no action to perform."
-  exit(0)
+  
+  transform.addMessage("AutoType Transform", "NOTE", "Entity type already set (#{transform.transformInput['entityType']}), this transform has no action to perform.")
+      
+  transform_response = PoortegoTransformResponseXML.new()
+  xml_response = transform_response.buildXML(transform)
+  puts "#{xml_response}"
+  return
+  
 else
   case entityValue
   when 'test'   ## Test 1
@@ -49,7 +55,13 @@ else
     entity_attributeHash['title'] = entityValue
     entity_attributeHash['type'] = 'IP Address'
     entity_fieldHash = Hash.new()
+    entity_fieldHash['test_attributeA'] = 'just using this for test purposes' ## TODO: delete after testing
+    entity_fieldHash['test_attributeB'] = 'just using this for test purposes2'
     transform.addEntity(entity_attributeHash, entity_fieldHash)
+    
+    ## Add 2 test messages for debugging purposes ... TODO: remove after testing
+    transform.addMessage("Test Message Title1", "DEBUG", "Test Message Body1")
+    transform.addMessage("Test Message Title2", "DEBUG", "Test Message Body2")
     
     transform_response = PoortegoTransformResponseXML.new()
     xml_response = transform_response.buildXML(transform)

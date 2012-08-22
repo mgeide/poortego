@@ -2,6 +2,9 @@
 | Transform HOWTO |
 +-----------------+
 
+NOTE: all transforms should return valid XML even if they ended up performing no action,
+they can/should respond back with a transform message noting this fact for tracking purposes.
+
 (1) Create sub directories under the main transforms directory where each sub-dir corresponds to an
 entity or link type, e.g., "IP Address", "Domain", etc.
 
