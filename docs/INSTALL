@@ -1,0 +1,31 @@
+
++------------------------+
+| Poortego Install Guide |
++------------------------+
+
+1. Install Ruby 1.9+ (I have only tested on 1.9.3)
+   Recommend using RVM (https://rvm.io/rvm/install/) for install
+
+   $ curl -L https://get.rvm.io | bash -s stable --ruby
+
+2. Install bundler gem to be able to use the Gemfile
+
+   $ gem install bundler
+
+3. Do a git clone of poortego:
+
+   $ git clone https://github.com/mgeide/poortego.git
+
+4. Change directory to where you have pulled down the poortego files
+   and get the remaining gemfiles needed:
+
+   $ bundle install
+
+   (you should see librex among other gems installed)
+
+5. Test it out
+
+   $ ruby poortego/poortego_cli.rb
+
+   (you should see a poortego prompt)
+
