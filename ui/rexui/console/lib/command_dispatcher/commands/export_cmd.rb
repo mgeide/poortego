@@ -1,6 +1,6 @@
 module Commands
   
-    #
+  #
   # Export command logic
   #
   def cmd_export(*args)
@@ -17,7 +17,13 @@ module Commands
     when "graphviz"
       require "exporters/graphviz_exporter"
       gv_generator = GraphvizExporter.new(driver.interface.working_values)
-      gv_generator.export()
+
+      if (args.include?(1)) # Pass export path as optional argument 2
+        print_status("Exporting to #{args[1]}")
+        gv_generator.export(args[1])
+      else
+        gv_generator.export()
+      end
     else
       print_error("Invalid export format.")
       return

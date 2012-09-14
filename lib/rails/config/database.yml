@@ -5,9 +5,14 @@
 #   gem 'sqlite3'
 development:
   adapter: sqlite3
-  database: /home/missile/Projects/poortego_v2/lib/rails/db/development.sqlite3
+  database: /home/mgeide/PROJECTS/POORTEGO/poortego/lib/rails/db/development.sqlite3
   pool: 5
   timeout: 5000
+#development:
+#  adapter: postgresql
+#  database: poortego
+#  username: xxx 
+#  password: xxx 
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

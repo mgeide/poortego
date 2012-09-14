@@ -1,5 +1,7 @@
 CLI Commands to test
 
+TODO: write unit tests for each of these commands...
+
 Simple Tests: no dependencies
 > ?
 > help

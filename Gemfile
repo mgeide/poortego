@@ -9,8 +9,15 @@ gem "librex"
 # Used for launching transforms
 gem "popen4"
 
+
 # Install gems for talking to your DB
 # sqlite is for testing or a really small instance
 # You should consider mysql, postgres, mongo, etc.
 gem "sqlite3"
+#gem "pg"
+#gem "mysql"
+#gem "mongo"
 
+# Install gems for exportation support
+# e.g., Graphviz
+gem "ruby-graphviz"
