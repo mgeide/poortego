@@ -15,6 +15,7 @@ while File.symlink?(poortego_base)
   poortego_base = File.expand_path(File.readlink(poortego_base), File.dirname(poortego_base))
 end
 poortego_base_path = File.expand_path(File.dirname(poortego_base))
+poortego_base_path = "#{poortego_base_path}/../"
 
 # Store the Poortego base dir as an environment variable
 if ENV['POORTEGO_LOCAL_BASE']
@@ -24,7 +25,7 @@ else
   $:.unshift(poortego_base_path)
 end
 
-require "ui/rexui/console/shell"
+require "poortego/ui/rexui/console/shell"
 
 #
 # Launch Console Shell

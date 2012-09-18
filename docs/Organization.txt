@@ -4,7 +4,7 @@
 
 Environment Variables Used:
 
- * POORTEGO_LOCAL_BASE  : set at poortego run-time to be the path of the poortego root directory 
+ * POORTEGO_LOCAL_BASE  : set at poortego run-time to be the path of the directory containing the poortego directory 
 
 
 Directory Structure:

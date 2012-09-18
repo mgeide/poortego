@@ -37,6 +37,19 @@ to handle the response from
 
 -=-=-=-
 
+* Bug/Issue - DB support using Ruby/Rails rake/migrate missing
+
+* Bug/Issue - deletions of Entities doesn't propogate to their links, so crash occurs when viewing these garbage links
+
+* Bug/Issue - tab completion for commands
+
+* Bug/Issue - secondary dispatchers, e.g., Entity not used when launched from Metasploit (so commands like "linkto" go missing)
+--> Probably just only need one dispatcher for this project versus sub-dispatchers
+
+* Bug/Issue - need a cmd_poortego_help command so that poortego specific help will be visible from Metasploit 
+
+-=-=-=-
+
 * To Do: intial transform building and testing:
 -- Continue to update the autotype transform to get this working as our first transform!
 -- Related to this is ensurance of logic that properly handles the reciept of the XML messages and takes the appropriate actions
@@ -62,3 +75,9 @@ This should be modified to be a relative path from the POORTEGO_LOCAL_BASE envir
 * Future feature: PHP/web UI
 
 * Future feature - look at using this project for blocklist management
+
+-=-=-
+
+* Export into other formats: Maltego (using sploitego), TheBrain, OpenIOC
+* Import from other formats: Maltego (using sploitego), TheBrain, OpenIOC
+

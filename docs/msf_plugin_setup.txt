@@ -1,0 +1,23 @@
+(1) Create symbolic link to the poortego directory within the metasploit lib directory, e.g.,
+
+$ ln -s ~/poortego ~/metasploit-framework/lib/poortego
+
+(2) Copy or create symbolic link to poortego_msf.rb to metasploit plugins directory
+
+$ cp ~/poortego/poortego_msf.rb ~/metasploit-framework/plugins/poortego.rb
+OR
+$ ln -s ~/poortego/poortego_msf.rb ~/metasploit-framework/plugins/poortego.rb 
+
+(3) Define environment variables needed for pointing to directory above the poortego location:
+
+For example,
+$ export POORTEGO_LOCAL_BASE=/home/user/   (means that poortego resides here: /home/user/pooretgo/)
+
+(once you confirm this working, you can put this export statement in your ~/.profile)
+
+(4) Launch from msfconsole:
+
+$ msfconsole
+msf> load poortego 
+
+
