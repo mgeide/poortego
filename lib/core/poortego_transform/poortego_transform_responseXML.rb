@@ -44,7 +44,7 @@ class PoortegoTransformResponseXML
   #
   def buildXML(transform_obj)
     xml_string = '<PoortegoTransformResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="' + "#{ENV['POORTEGO_LOCAL_BASE']}/lib/core/poortego_transform/xml/PoortegoTransformResponse.xsd" + '">'
+    xsi:noNamespaceSchemaLocation="' + "#{ENV['POORTEGO_LOCAL_BASE']}/poortego/lib/core/poortego_transform/xml/PoortegoTransformResponse.xsd" + '">'
     
     xml_string << '<ResponseData>'
     ## Entities
@@ -107,8 +107,9 @@ class PoortegoTransformResponseXML
       #end
       @validated = true
     rescue => e
-      #puts "LibXML error: #{e.message}"
-      #puts "Backtrace: #{e.backtrace}"
+      puts "[XML Validation Failure] XML String: #{xml_string}"
+      puts "[XML Validation Failure] LibXML error: #{e.message}"
+      puts "[XML Validation Failure] Backtrace: #{e.backtrace}"
       @validated = false 
     end
     

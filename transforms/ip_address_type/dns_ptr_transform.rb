@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+#require 'resolv'
+
 poortego_base = __FILE__
 while File.symlink?(poortego_base)
   poortego_base = File.expand_path(File.readlink(poortego_base), File.dirname(poortego_base))
@@ -34,12 +36,16 @@ entityValue = transform.transformInput["entityValue"]
 
 ## Only run transform if no entityType is set...
 if (transform.transformInput.include?("entityType"))
-  if (transform.transformInput["entityType"] == "ip_address")
-  
-    # Using dig initially - we can use a Ruby gem in the future
-    ptr_result = `/usr/bin/dig -x #{entityValue}`
-    if (ptr_result =~ /.*\s+IN\s+PTR\s+([A-Za-z0-9\.\-\_]+)\./s)
+  if (transform.transformInput["entityType"] == "ip_address") 
+    #dns_resolver = Resolv::DNS.new()
+    #resources = dns_resolver.getresources("#{entityValue}", Resolv::DNS::Resource::PTR)
+    #resources.each do |resource|  
+    #  ptr_domain = resource.name.to_s
+    
+    ptr_response = `/usr/bin/dig -x #{entityValue}`
+    if (ptr_response =~ /.*\s+IN\s+PTR\s+([A-Za-z0-9\-\_\.]+)\./s)
       ptr_domain = $1
+      
       entityA_attributeHash = Hash.new()
       entityA_attributeHash['title'] = entityValue
       entityA_attributeHash['type'] = 'ip_address'
@@ -67,7 +73,6 @@ if (transform.transformInput.include?("entityType"))
       puts "#{xml_response}"   
                
     end
-  
   end
 else
   transform.addMessage("DigPTR Transform", "NOTE", "Entity type not set (#{transform.transformInput['entityType']}), this transform has no action to perform.")

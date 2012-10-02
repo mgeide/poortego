@@ -28,7 +28,16 @@ module PoortegoCommands
     transform_script_name = args[0]
     transform_script      = "#{transform_full_path}/#{transform_script_name}" 
     
-    if ((File.exists?(transform_script)) == true)
+    ## TODO: or transform_script could be "ALL"
+    
+    if (transform_script == 'ALL')
+    
+          #
+          # TODO: logic to handle "run all" transforms to recurse through results
+          #  - need to also have a recursion depth set
+          #
+    
+    elsif ((File.exists?(transform_script)) == true)
         
       # Scopes: project, section, entity, link
       scope = @poortego_session.session_values["Current Selection Type"]
@@ -83,6 +92,7 @@ module PoortegoCommands
           response_obj = PoortegoTransformResponseXML.new(@poortego_session.session_values["Current Project"].id,
                                                           @poortego_session.session_values["Current Section"].id,
                                                           result_str)
+             
           
           ## If the response isn't valid, then return
           unless (response_obj.validated)

@@ -10,7 +10,7 @@ class GraphvizExporter
     if (args.include?(0))
       export_path = args[0]
     else
-      export_path = "graphviz_export.png"
+      export_path = "#{ENV['POORTEGO_LOCAL_BASE']}/poortego/graphviz_export.png"
     end
 
     type = @working_values["Current Selection Type"]

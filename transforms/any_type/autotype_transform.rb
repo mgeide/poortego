@@ -43,41 +43,47 @@ if (transform.transformInput.include?("entityType"))
   return
   
 else
+  transform_response = PoortegoTransformResponseXML.new()
+  entity_attributeHash = Hash.new()
+  entity_attributeHash['title'] = entityValue
+  entity_fieldHash = Hash.new()
+
   case entityValue
+    
   #when 'test'   ## Test 1
   #  puts "This is a test"
   #when /test[\d]/   ## Test 2
   #  puts "This is a test2"
   when /^[A-Za-z0-9][a-zA-Z0-9\-\_\.]*\.[a-zA-Z]{2,4}$/ ## Domain Regex Match
-    puts "domain"
+    #puts "domain"
+    entity_attributeHash['type'] = 'domain'
+    
   when /^([0-9]{1,3}\.){3}[0-9]{1,3}$/  ## IP Address Regex Match
-    entity_attributeHash = Hash.new()
-    entity_attributeHash['title'] = entityValue
     entity_attributeHash['type'] = 'ip_address'
-    entity_fieldHash = Hash.new()
     #entity_fieldHash['test_attributeA'] = 'just using this for test purposes' ## TODO: delete after testing
     #entity_fieldHash['test_attributeB'] = 'just using this for test purposes2'
-    transform.addEntity(entity_attributeHash, entity_fieldHash)
     
     ## Add 2 test messages for debugging purposes ... TODO: remove after testing
     #transform.addMessage("Test Message Title1", "DEBUG", "Test Message Body1")
     #transform.addMessage("Test Message Title2", "DEBUG", "Test Message Body2")
-    
-    transform_response = PoortegoTransformResponseXML.new()
-    xml_response = transform_response.buildXML(transform)
-    puts "#{xml_response}"
+
   when /^[A-Za-z0-9][a-zA-Z0-9\-\_\.]*\@[A-Za-z0-9][a-zA-Z0-9\-\_\.]*\.[a-zA-Z]{2,4}$/  ## Email Regex Match
-    puts "email_address"
+    entity_attributeHash['type'] = "email_address"
   when /^[0-9A-Fa-f]{32}$/  ## MD5 Regex Match
-    puts "md5"
+    entity_attributeHash['type'] = "md5"
   when /^[A-Z][a-z]{1,15} [A-Z][a-z]{1,20}$/  ## Name Regex Match
-    puts "name"
+    entity_attributeHash['type'] = "name"
   when /^https?\:\/\/\S+$/  ## URL Regex Match
-    puts "url"
+    entity_attributeHash['type'] = "url"
   when /^\/[A-Za-z0-9\-\_\.\~\?\=\&\%\#\+\/]+$/
-    puts "path"
+    entity_attributeHash['type'] = "path"
   else
     puts "No auto type detection rules fired"
-    puts "Default to type Phrase or Unknown"
+    puts "TODO: Default to type Phrase or Unknown"
   end
+  
+  transform.addEntity(entity_attributeHash, entity_fieldHash)
+  xml_response = transform_response.buildXML(transform)
+  puts "#{xml_response}"
+  
 end
