@@ -1,6 +1,6 @@
 development:
   adapter: sqlite3
-  #database: "<%= ENV['POORTEGO_LOCAL_BASE'] %>/poortego/lib/rails/db/development.sqlite3"
+  #database: "<%= ENV['POORTEGO_LOCAL_BASE'] %>/poortego/lib/poortego_rails/db/development.sqlite3"
   ## TODO: ERB baffles me ... the above seems like it should work, but it doesn't
   database: /home/missile/PUNCH/poortego/lib/poortego_rails/db/development.sqlite3
   pool: 5

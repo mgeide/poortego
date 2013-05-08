@@ -6,13 +6,13 @@ module PoortegoCore
     begin
       # Load database config from yaml file
       local_path = ENV['POORTEGO_LOCAL_BASE']
-      config = YAML::load(IO.read("#{local_path}/poortego/lib/rails/config/database.yml"))
+      config = YAML::load(IO.read("#{local_path}/poortego/lib/poortego_rails/config/database.yml"))
 
       # Establish ActiveRecord Connection, update this based on the connection type
       ActiveRecord::Base.establish_connection(config['development'])
 
       # Evaluate ActiveRecord models -- below loop not really needed:
-      #Dir["#{local_lib_path}/rails/app/models/*.rb"].each { |file|
+      #Dir["#{local_lib_path}/poortego_rails/app/models/*.rb"].each { |file|
       #  eval(IO.read(file), binding)
       #}
     rescue Exception => e

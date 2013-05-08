@@ -61,7 +61,7 @@ such as creates, updates, deletes (can a transform delete entities?)
 Such as: "IP Address", "Domain Name", "Netblock", etc., etc.
 Need to have a standard naming convention too with capitalization, etc. - look at Maltego type names
 
-* Bug/Issue: lib/rails/app/config/database.yml directly defines the path location of the default SQLite database
+* Bug/Issue: lib/poortego_rails/app/config/database.yml directly defines the path location of the default SQLite database
 This should be modified to be a relative path from the POORTEGO_LOCAL_BASE environment variable.
 
 * To Do: build out a simple transform based on "Transform_HOWTO" and kick it off using the "run" command from CLI

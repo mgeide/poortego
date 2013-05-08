@@ -5,7 +5,7 @@
 #
 ###
 
-require "poortego/lib/rails/app/models/link_type"
+require "poortego/lib/poortego_rails/app/models/link_type"
 
 class PoortegoLinkType < LinkType
  

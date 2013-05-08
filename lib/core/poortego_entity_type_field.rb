@@ -5,7 +5,7 @@
 #
 ###
 
-require "poortego/lib/rails/app/models/entity_type_field"
+require "poortego/lib/poortego_rails/app/models/entity_type_field"
 
 class PoortegoEntityTypeField < EntityTypeField
  

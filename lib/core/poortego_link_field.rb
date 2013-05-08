@@ -5,7 +5,7 @@
 #
 ###
 
-require "poortego/lib/rails/app/models/link_field"
+require "poortego/lib/poortego_rails/app/models/link_field"
 
 class PoortegoLinkField < LinkField
  

@@ -5,7 +5,7 @@
 #
 ###
 
-require "poortego/lib/rails/app/models/link"
+require "poortego/lib/poortego_rails/app/models/link"
 
 class PoortegoLink < Link
  

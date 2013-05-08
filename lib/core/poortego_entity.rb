@@ -5,7 +5,7 @@
 #
 ###
 
-require "poortego/lib/rails/app/models/entity"
+require "poortego/lib/poortego_rails/app/models/entity"
 
 class PoortegoEntity < Entity
  

@@ -5,7 +5,7 @@
 #
 ###
 
-require "poortego/lib/rails/app/models/section_descriptor"
+require "poortego/lib/poortego_rails/app/models/section_descriptor"
 
 class PoortegoSectionDescriptor < SectionDescriptor
  
