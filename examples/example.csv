@@ -1,0 +1,42 @@
+# example.csv
+#
+# A basic poortego CSV example file
+#
+# Empty lines or those beginning with '#' are ignored
+#
+
+#
+# Node format: node,name,label1,label2,...,property1=value1,property2=value2,...
+#   Required: node,name - name is treated as a primary, indexed key for the node
+#   Optional, but strongely encouraged: labels - these tie types, categories, tags to node
+#   Optional, use as needed: properties - key/value pairs to tie to node
+#
+node,"Google, Inc.",COMPANY
+node,google.com,DOMAIN
+node,www.google.com,FQDN
+node,74.125.228.80,IP
+node,74.125.228.81,IP
+node,74.125.228.82,IP
+node,74.125.228.83,IP
+node,74.125.228.84,IP
+node,74.125.0.0/16,NETBLOCK,notation=CIDR
+
+#
+# Link format: link,start node name,end node name,link name,property1=value1,property2=value2
+#  Required: link,start node name,end node name
+#  Optional, but strongely encouraged: link name
+#  Optional, use as needed: properties - key/value pairs to tie to link
+#
+link,www.google.com,google.com,PARENT-DOMAIN
+link,google.com,www.google.com,SUB-DOMAIN
+link,www.google.com,74.125.228.80,DNS A RCD,ttl=300,source=dig
+link,www.google.com,74.125.228.81,DNS A RCD,ttl=300,source=dig
+link,www.google.com,74.125.228.82,DNS A RCD,ttl=300,source=dig
+link,www.google.com,74.125.228.83,DNS A RCD,ttl=300,source=dig
+link,www.google.com,74.125.228.84,DNS A RCD,ttl=300,source=dig
+link,74.125.228.80,74.125.0.0/16,NETBLOCK,source=whois
+link,74.125.228.81,74.125.0.0/16,NETBLOCK,source=whois
+link,74.125.228.82,74.125.0.0/16,NETBLOCK,source=whois
+link,74.125.228.83,74.125.0.0/16,NETBLOCK,source=whois
+link,74.125.228.84,74.125.0.0/16,NETBLOCK,source=whois
+link,74.125.0.0/16,"Google, Inc.",OWNER,source=whois

@@ -1,0 +1,13 @@
+# poortego_passwd.txt
+#
+# Default file for stupid/basic user authentication
+# Format: username:password MD5:group
+#
+
+# Example users:
+#  username: guest, password: guest, group: guest
+#  username: analyst, password: analyst, group: analyst
+#  username: admin, password: admin, group: admin
+guest:2ec099f2d602cc4968c5267970be1326:guest
+analyst:6729c39d4f99cf38c5814e4eb720503a:analyst
+admin:456b7016a916a4b178dd72b947c152b7:admin
