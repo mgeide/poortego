@@ -1,8 +1,0 @@
-
-+------------------------------------------------------------------------------------------------
-|
-| These are a bunch of .rb files for a Maltego transform API ... not sure that we need all that
-|
-| I have a basic conversion script in transforms/maltego_wrapper.rb
-|
-+-------------------------------------------------------------------------------------------------
