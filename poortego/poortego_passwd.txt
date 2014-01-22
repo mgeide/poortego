@@ -5,9 +5,9 @@
 #
 
 # Example users:
-#  username: guest, password: guest, group: guest
-#  username: analyst, password: analyst, group: analyst
-#  username: admin, password: admin, group: admin
-guest:2ec099f2d602cc4968c5267970be1326:guest
-analyst:6729c39d4f99cf38c5814e4eb720503a:analyst
-admin:456b7016a916a4b178dd72b947c152b7:admin
+#  username: guest, password: guest, groups: guest
+#  username: analyst, password: analyst, groups: analyst, guest
+#  username: admin, password: admin, groups: admin, analyst, guest
+guest:084e0343a0486ff05530df6c705c8bb4:guest
+analyst:05d5c5dfb743a5bd8fd7494fdc9bdb00:analyst,guest
+admin:21232f297a57a5a743894a0e4a801fc3:admin,analyst,guest

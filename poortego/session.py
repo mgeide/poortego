@@ -5,6 +5,8 @@
 #  - Track user, current object, etc.
 # 
 
+import time
+
 class Session:
 	"""Used for tracking Poortego session state"""
 	def __init__(self):
@@ -19,7 +21,7 @@ class Session:
 			"last_accessed_by":self.username,
 			"last_accessed_at":now_string,
 			"last_modified_by":self.username,
-			"last_modified_at":now_string,
+			"last_modified_at":now_string
 		}
 		self.default_link_meta = {
 			"created_by":self.username,
@@ -28,16 +30,17 @@ class Session:
 			"last_accessed_by":self.username,
 			"last_accessed_at":now_string,
 			"last_modified_by":self.username,
-			"last_modified_at":now_string,
+			"last_modified_at":now_string
 		}
 
 
 	def update_node_meta(self):
 		# TODO - update datetime to current
-		
-
+		print "TODO"	
+	
 	def update_link_meta(self):
 		# TODO - update datetime to current
+		print "TODO"
 
 	def display(self):
 		print "Session Info:"

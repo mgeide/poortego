@@ -171,7 +171,7 @@ class Dispatcher(Cmd):
 	#
 	@options([
 			make_option('-c', '--csv', action="store_true", help="Export data to CSV file"),
-			make_option('-g', '--graphviz', action="store_true" help="Export data to graphviz PNG"),
+			make_option('-g', '--graphviz', action="store_true", help="Export data to graphviz PNG"),
 			make_option('-m', '--maltego', action="store_true", help="Export data to Maltego file"),	
 			make_option('-s', '--stix', action="store_true", help="Export data to STIX file"),
 	])
