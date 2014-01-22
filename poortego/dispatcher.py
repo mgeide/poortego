@@ -33,6 +33,7 @@ class Dispatcher(Cmd):
 	# 
 	def __init__(self):
 		Cmd.__init__(self)
+		self.namespace = 'poortego'
 		self.prompt = 'poortego> '
 		self.do_poortego_reinitialize('')
 
@@ -56,7 +57,7 @@ class Dispatcher(Cmd):
 		self.stdout.write("\n  Password:  ")
 		password_string = (self.stdin.readline()).replace('\n','')
 		attempted_user = User(username_string, password_string)
-		if (attempted_user.is_authenticated):
+		if (attempted_user.authenticate()):
 			self.my_session.user = attempted_user
 
 	#
@@ -161,6 +162,7 @@ class Dispatcher(Cmd):
 			fn = arg
 			# TODO
 		elif opts.stix:
+			# TODO
 			fn = arg
 			(stix_package, stix_package_binding_obj) = STIXPackage.from_xml(fn)
 			stix_dict = stix_package.to_dict() # parse to dictionary
@@ -201,7 +203,7 @@ class Dispatcher(Cmd):
 		"""Command to delete EVERYTHING from GraphDB"""
 		self.stdout.write("This will delete EVERYTHING from the GraphDB!!! Are you sure you want to do this [Y/N]: ")
 		response = (self.stdin.readline()).replace('\n','')
-		if (response == 'Y'):
+		if response == 'Y' or response == 'y':
 			self.my_graph.PURGE()
 			self.stdout.write("Database purged.\n")
 			self.do_poortego_reinitialize('')

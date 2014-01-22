@@ -10,6 +10,7 @@ import hashlib
 class User:
 	"""Used for tracking Poortego user"""
 	def __init__(self, username, password):
+		self.password_file = 'poortego_passwd.txt'
 		self.username = username
 		self.password = password
 		self.authenticated = False
@@ -18,7 +19,7 @@ class User:
 	def authenticate(self):
 		"""Stupid/basic authentication against a file - update before using in production"""
 		# TODO - improve authentication
-		with open('poortego_passwd.txt', 'r') as users_file:
+		with open(self.password_file, 'r') as users_file:
 			userreader = csv.reader(users_file, delimiter=':')
 			for row in userreader:
 				if len(row) == 3:
@@ -47,4 +48,5 @@ if __name__ == "__main__":
 	#user = User('guest', 'guest')
 	#user = User('analyst','analyst')
 	user = User('admin', 'admin')
+	user.password_file = "../" + user.password_file
 	user.authenticate()
