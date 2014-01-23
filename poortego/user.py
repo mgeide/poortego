@@ -10,15 +10,15 @@ import hashlib
 class User:
 	"""Used for tracking Poortego user"""
 	def __init__(self, username, password):
-		self.password_file = 'poortego_passwd.txt'
 		self.username = username
 		self.password = password
 		self.authenticated = False
 		self.groups = set()
 	
-	def authenticate(self):
+	def authenticate(self, password_file):
 		"""Stupid/basic authentication against a file - update before using in production"""
 		# TODO - improve authentication
+		self.password_file = password_file
 		with open(self.password_file, 'r') as users_file:
 			userreader = csv.reader(users_file, delimiter=':')
 			for row in userreader:

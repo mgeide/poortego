@@ -11,9 +11,10 @@ from .user import User
 
 class Session:
 	"""Used for tracking Poortego session state"""
-	def __init__(self):
+	def __init__(self, conf_settings):
+		self.conf_settings = conf_settings
 		self.user = User('guest','guest')
-		self.user.authenticate()
+		self.user.authenticate(conf_settings['password_file'])
 		self.home_node_id = -1
 		self.current_node_id = -1
 		now_string = time.strftime("%Y-%m-%d %H:%M:%S")

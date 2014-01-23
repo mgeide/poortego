@@ -31,10 +31,11 @@ class Dispatcher(Cmd):
 	#
 	# Construction
 	# 
-	def __init__(self):
+	def __init__(self, conf_settings):
 		Cmd.__init__(self)
+		self.conf_settings = conf_settings
 		self.namespace = 'poortego'
-		self.prompt = 'poortego> '
+		self.prompt = self.conf_settings['poortego_prompt'] + ' '
 		self.do_poortego_reinitialize('')
 
 	#
@@ -42,8 +43,8 @@ class Dispatcher(Cmd):
 	#
 	def do_poortego_reinitialize(self, arg):
 		"""Command to reset poortego settings back to default"""
-		self.my_graph = Graph()
-		self.my_session = Session()
+		self.my_graph = Graph(self.conf_settings)
+		self.my_session = Session(self.conf_settings)
 		self.my_graph.set_defaults()
 		self.my_session.current_node_id = self.my_graph.poortego_root_node._id
 
@@ -57,7 +58,7 @@ class Dispatcher(Cmd):
 		self.stdout.write("\n  Password:  ")
 		password_string = (self.stdin.readline()).replace('\n','')
 		attempted_user = User(username_string, password_string)
-		if (attempted_user.authenticate()):
+		if (attempted_user.authenticate(self.conf_settings['password_file'])):
 			self.my_session.user = attempted_user
 
 	#

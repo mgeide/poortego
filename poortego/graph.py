@@ -17,9 +17,10 @@ from py2neo import neo4j, node, rel
 class Graph:
 	"""Used for GraphDB interaction"""
 	
-	def __init__(self):
+	def __init__(self, conf_settings):
 		"""Constructor, setup GraphDB connection"""
-		self.graph_db = neo4j.GraphDatabaseService()
+		self.conf_settings = conf_settings
+		self.graph_db = neo4j.GraphDatabaseService(str(self.conf_settings['neo4j_uri']))
 		self.set_defaults()
 
 	def set_defaults(self):
