@@ -19,6 +19,8 @@ from .session import Session
 from .graph import Graph
 from .user import User
 
+from .command.add import poortego_add
+
 import io
 from pprint import pprint
 from stix.core import STIXPackage
@@ -83,7 +85,7 @@ class Dispatcher(Cmd):
 			self.stdout.write("\n")
 		elif opts.from_nodes:
 			self.stdout.write("\nNodes From Current:\n")
-                        self.my_graph.show_nodes_from(self.my_session.current_node_id)
+			self.my_graph.show_nodes_from(self.my_session.current_node_id)
 			self.stdout.write("\n")
 		elif opts.to_nodes:
 			self.stdout.write("\nNodes To Current:\n")
@@ -123,14 +125,8 @@ class Dispatcher(Cmd):
 		])
 	def do_add(self, arg, opts=None):
 		"""Command to add node"""
-		if opts.prompt:
-			self.stdout.write("Name: ")
-			name_string = (self.stdin.readline()).replace('\n','')
-			self.stdout.write("Type: ")
-			type_string = (self.stdin.readline()).replace('\n','')
-			node_dict = {'name':name_string, 'type':type_string}
-			self.my_graph.create_node_from_dict(node_dict)	
-			print "You added '" + name_string + "' of type '" + type_string + "'"
+		# Code moved to .command.add sub-module for easier reading/debugging	
+		poortego_add(self, arg, opts)
 
 	#
 	# ln
@@ -218,4 +214,7 @@ class Dispatcher(Cmd):
 		my_graph_info = self.my_graph.get_graph_info()
 		for k, v in my_graph_info.iteritems():
 			self.stdout.write(str(k) + " : " + str(v) + "\n")
+
+
+
 
