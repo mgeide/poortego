@@ -1,5 +1,10 @@
 # graph.py
 
+###
+### NOTE: this has been replaced/removed in favor of database module
+### See ./database/poortego_neo4j_database.py
+###
+
 #
 # Poortego Graph
 #  - Methods for accessing GraphDB
@@ -25,8 +30,8 @@ class Graph:
 
 	def set_defaults(self):
 		"""Create Default Poortego Nodes, Indexes, etc. if not exists"""
-		node_name_index = self.graph_db.get_or_create_index(neo4j.Node, "Name")
-		self.poortego_root_node = self.graph_db.get_or_create_indexed_node("Name", "name", "Poortego Root", {'name':'Poortego Root', 'type':'ROOT'})
+		node_name_index = self.graph_db.get_or_create_index(neo4j.Node, "NameIdx")
+		self.poortego_root_node = self.graph_db.get_or_create_indexed_node("NameIdx", "name", "Poortego Root", {'name':'Poortego Root', 'type':'ROOT'})
 	
 	def PURGE(self):
 		"""Delete everything from GraphDB -be sure you want to do this"""
@@ -107,7 +112,7 @@ class Graph:
 
 		#TODO: check for name/type within dict
 		# Create New Node
-		new_node = self.graph_db.get_or_create_indexed_node("Name", "name", node_dict['name'], node_dict)
+		new_node = self.graph_db.get_or_create_indexed_node("NameIdx", "name", node_dict['name'], node_dict)
 		# Create Default Paths tying Node to root
 		from_root_path = self.poortego_root_node.get_or_create_path(node_dict['type'], new_node)
 		to_root_path = self.new_node.get_or_create_path("ROOT", self.poortego_root_node)

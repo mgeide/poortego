@@ -18,6 +18,7 @@ class Poortego:
 
 	def _process_conf(self):
 		"""Open conf file and store conf settings"""
+		# TODO - is there a python module for handling conf files that I should be using instead
 		with open(self.conf_dir + self.conf_file, 'r') as conf_file:
 			confreader = csv.reader(conf_file, delimiter='=')
 			for row in confreader:

@@ -1,0 +1,4 @@
+This module will take the place of ../graph.py in order to abstract and support whatever storage mechanism the analyst want.
+
+Neo4j is/will be the primary development path.
+I'm including a small code snippet that I may work on separately related to a tracking project leveraging mongo (CRITs).

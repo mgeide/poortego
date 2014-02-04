@@ -16,7 +16,10 @@
 import sys
 from cmd2 import Cmd, make_option, options
 from .session import Session
-from .graph import Graph
+
+#from .graph import Graph
+from .database.poortego_neo4j_database import PoortegoNeo4jDatabase
+
 from .user import User
 
 from .command.add import poortego_add
@@ -45,9 +48,10 @@ class Dispatcher(Cmd):
 	#
 	def do_poortego_reinitialize(self, arg):
 		"""Command to reset poortego settings back to default"""
-		self.my_graph = Graph(self.conf_settings)
+		#self.my_graph = Graph(self.conf_settings)
+		self.my_graph = PoortegoNeo4jDatabase(self.conf_settings)
 		self.my_session = Session(self.conf_settings)
-		self.my_graph.set_defaults()
+		self.my_graph.set_database_defaults()
 		self.my_session.current_node_id = self.my_graph.poortego_root_node._id
 
 	#
@@ -211,7 +215,7 @@ class Dispatcher(Cmd):
 	#
 	def do_poortego_info(self, arg):
 		"""Command to show GraphDB info"""
-		my_graph_info = self.my_graph.get_graph_info()
+		my_graph_info = self.my_graph.get_database_info()
 		for k, v in my_graph_info.iteritems():
 			self.stdout.write(str(k) + " : " + str(v) + "\n")
 
