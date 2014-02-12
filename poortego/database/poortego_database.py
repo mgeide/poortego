@@ -19,7 +19,55 @@ class PoortegoDatabase:
                 """Setup default indices, ensure root node exists, and point to it"""
                 self.poortego_root_node = None          # Point to root node
 
-        def get_database_info(self):
+        def database_info(self):
                 """Return dict containing database info"""
                 db_info = {}
                 return db_info
+
+	def get_nodes(self, query_dicts):
+		"""Find node if exists given the query dict values, return set of node dict results"""
+		"""Example query_dicts:
+		
+		"""
+		results = [{}]
+		return results
+		 
+
+	def create_nodes(self, node_dicts):
+		"""Add nodes into database given the set of dict values, return set of nodes dict added"""
+		"""Example node_dict:
+		node_dicts = [
+				{ 	"name" : "localhost.local", 
+					"type" : "DOMAIN", 
+					"properties" : {
+						"property_key1" : "property_value1",
+						"property_key2" : "property_value2"
+						}
+				},
+				{	"name" : "127.0.0.1",
+					"type" : "IPv4",
+					"properties" : {
+						"description" : "RFC1918 IP Address"
+					}
+				}	
+			]
+		"""
+		results = [{}]
+		return results
+
+	def remove_nodes(self, node_dicts):
+		"""Remove nodes into database given the set of dict values, return the set of nodes dict removed"""
+		results = [{}]
+		return results
+
+	def update_nodes(self, node_dicts):
+		"""Update nodes given the set of dict values, return the set of nodes dict updated"""
+		results = [{}]
+		return results
+
+	def upsert_nodes(self, node_dicts):
+		"""Insert or update nodes, return set of nodes upserted"""
+		results = [{}]
+		return results	
+	
+		 

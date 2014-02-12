@@ -1,0 +1,1 @@
+Maybe move database, user, and session objects as something that gets passed into a dispatcher versus a dispatcher declaring

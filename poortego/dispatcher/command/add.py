@@ -5,7 +5,36 @@
 #
 
 def poortego_add(dispatcher_object, args, opts):
-	if opts.prompt: # DEFAULT option too
+
+	# -t / --type
+	if opts.node_type:
+		node_dict = {}
+		# -v / --value
+		if opts.node_value:
+			node_dict = {'name':opts.node_value}
+                else:
+			dispatcher_object.stdout.write("Object Name or Value: ")
+                	object_val = (dispatcher_object.stdin.readline()).replace('\n','')		
+			node_dict = {'name':object_val}
+		# Get or Create Node
+                node_addition = dispatcher_object.my_graph.get_or_create_indexed_node("NameIdx", "name", node_dict['name'], node_dict)
+
+                # Add type/category (labels in neo4j 2.x)
+		dispatcher_object.my_graph.add_labels(node_addition, opts.node_type)
+
+	# -v / --value
+	elif opts.node_value:
+		node_dict = {'name':opts.node_value}
+		node_addition = dispatcher_object.my_graph.get_or_create_indexed_node("NameIdx", "name", node_dict['name'], node_dict)
+		if opts.node_type:
+			dispatcher_object.my_graph.add_labels(node_addition, opts.node_type)
+		else:
+                        dispatcher_object.stdout.write("Object Type/Category/Tag: ")
+                        object_type = (dispatcher_object.stdin.readline()).replace('\n','')		
+			dispatcher_object.my_graph.add_labels(node_addition, object_type)
+
+
+	elif opts.prompt: # DEFAULT option too
 
 		# Ask for and get object name/value (primary/unique identification)
 		dispatcher_object.stdout.write("Object Name or Value: ")

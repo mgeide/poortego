@@ -15,12 +15,12 @@
 
 import sys
 from cmd2 import Cmd, make_option, options
-from .session import Session
+from ..session import Session
 
 #from .graph import Graph
-from .database.poortego_neo4j_database import PoortegoNeo4jDatabase
+from ..database.poortego_neo4j_database import PoortegoNeo4jDatabase
 
-from .user import User
+from ..user import User
 
 from .command.add import poortego_add
 
@@ -29,6 +29,7 @@ from pprint import pprint
 from stix.core import STIXPackage
 from stix.indicator import Indicator
 import stix.bindings.stix_core as stix_core_binding
+import pprint
 
 class Dispatcher(Cmd):
 	"""Used for handling CMD2 commands"""
@@ -40,8 +41,128 @@ class Dispatcher(Cmd):
 		Cmd.__init__(self)
 		self.conf_settings = conf_settings
 		self.namespace = 'poortego'
+		self.namespaces = ['poortego', 'cmd2']
 		self.prompt = self.conf_settings['poortego_prompt'] + ' '
 		self.do_poortego_reinitialize('')
+
+	#
+	# Track & Change Dispatcher Namespace
+	#
+	@options([
+			make_option('-c', '--change', type="string", dest="change_namespace", help="Change the current namespace of the dispatcher to change the handling of commands"),
+			make_option('-l', '--list', action="store_true", dest="list_namespaces", help="Show the current namespaces available to the dispatcher"),
+			make_option('-p', '--print', action="store_true", dest="print_namespace", default=True, help="Show the current namespace of the dispatcher")
+		])
+	def do_namespace(self, arg, opts):
+		"""Command to show and change command namespace"""
+		if opts.list_namespaces:
+			for ns in self.namespaces:
+				self.stdout.write("%s\n" % ns)
+		elif opts.change_namespace:
+			self.namespace = opts.change_namespace
+		elif opts.print_namespace:
+			self.stdout.write("Current namespace: %s\n" % self.namespace)				
+
+
+	#
+	# Help - attempt at manipulation via namespace
+	#
+	def do_help(self, arg):
+		"""Command to show how to use commands in namespace"""
+		self.stdout.write("\n%s Namespace Help\n" % self.namespace)
+		if (self.namespace == 'cmd2'):
+			Cmd.do_help(self, arg)
+		# TODO - allow for cross namespace help, e.g., "help cmd2.show"
+		# The below code doesn't fix the problem for some reason
+		#elif (arg.startswith('cmd2.')):
+		#	cmd2_func = arg[5:]
+		#	arg = cmd2_func
+		#	self.stdout.write("[DEBUG] Running help for CMD2 command %s\n" % arg)
+		#	Cmd.do_help(self, arg)
+		elif (self.namespace == 'poortego'):
+			"""Code taken and modified from cmd base"""
+			if arg:
+				try:
+					func = getattr(self, 'help_poortego_' + arg)
+				except AttributeError:
+					try:
+						doc=getattr(self, 'do_poortego_' + arg).__doc__
+						if doc:
+							self.stdout.write("%s\n"%str(doc))
+							return
+					except AttributeError:
+						try:
+							doc=getattr(self, 'do_' + arg).__doc__
+							if doc:
+								self.stdout.write("%s\n"%str(doc))
+								return
+						except AttributeError:	
+							pass
+					self.stdout.write("%s\n"%str(self.nohelp % (arg,)))
+					return
+				func()
+        		else:
+            			names = self.get_names()
+            			cmds_doc = []
+            			cmds_undoc = []
+				cmds_cmd2_namespace = []
+            			help = {}
+            			for name in names:
+                			if name[:14] == 'help_poortego_':
+                    				help[name[14:]]=1
+            			names.sort()
+            			# There can be duplicates if routines overridden
+            			prevname = ''
+            			for name in names:
+                			if name[:12] == 'do_poortego_':
+                    				if name == prevname:
+                        				continue
+                    				prevname = name
+                    				cmd=name[12:]
+                    				if cmd in help:
+                        				cmds_doc.append(cmd)
+                        				del help[cmd]
+                    				elif getattr(self, name).__doc__:
+                        				cmds_doc.append(cmd)
+                    				else:
+                        				cmds_undoc.append(cmd)
+					elif name[:3] == 'do_':
+						cmd=name[3:]
+						cmds_cmd2_namespace.append(cmd)
+            			self.stdout.write("%s\n"%str(self.doc_leader))
+            			self.print_topics(self.doc_header,   cmds_doc,   15,80)
+            			self.print_topics(self.misc_header,  help.keys(),15,80)
+            			self.print_topics(self.undoc_header, cmds_undoc, 15,80)
+				self.print_topics("'cmd2' Namespace Commands", cmds_cmd2_namespace, 15, 80)
+
+
+	#
+	# CMD2 override for getting function name
+	#
+	def func_named(self, arg):
+		"""Method resposible for locating `do_*` for commands"""
+		result = None
+		target = 'do_' + arg
+		if (arg.startswith('cmd2.')):
+			cmd2_func  = arg[5:]
+			target = 'do_' + cmd2_func
+		elif (self.namespace != 'cmd2'):
+			if not arg in ['help', 'namespace', 'exit']:
+				target = 'do_' + self.namespace + '_' + arg
+		
+		if target in dir(self):
+			result = target
+		else:
+			if self.abbrev:
+				funcs = [fname for fname in self.keywords if fname.startswith(arg)]
+				if len(funcs) == 1:
+					result = 'do_' + funcs[0]
+                			if (self.namespace != 'cmd2'):
+                        			if not funcs[0] in ['help', 'namespace', 'exit']:
+                                			result = 'do_' + self.namespace + '_' + funcs[0]
+		return result
+		 
+
 
 	#
 	# poortego_reinitialize
@@ -76,7 +197,7 @@ class Dispatcher(Cmd):
 			make_option('-f', '--from', action="store_true", dest="from_nodes", help="List only nodes with link from current node"),
 			make_option('-t', '--to', action="store_true", dest="to_nodes", help="List only nodes with link to current node"),	
 		])	
-	def do_ls(self, arg, opts):
+	def do_poortego_ls(self, arg, opts):
 		"""Command to show node adjacency"""
 		self.stdout.write("Output format: '[id] name  [type]'\n")
 		if opts.all_nodes:
@@ -105,14 +226,14 @@ class Dispatcher(Cmd):
 	#
 	# cd
 	#
-	def do_cd(self, arg):
+	def do_poortego_cd(self, arg):
 		"""Command to change current node"""
 		self.my_session.current_node_id = arg[0]
 
 	#
 	# show
 	#
-	def do_show(self, arg):
+	def do_poortego_show(self, arg):
 		"""Command to show stuff within Poortego"""
 		if (arg == 'types'):
 			self.my_graph.show_types()
@@ -125,9 +246,11 @@ class Dispatcher(Cmd):
 	# add
 	#
 	@options([
-			make_option('-p', '--prompt', action="store_true", help="Prompt user for node values")
+			make_option('-p', '--prompt', action="store_true", default=True, help="Prompt user for node values"),
+			make_option('-t', '--type', type="string", dest="node_type", help="Define the type of thing being added"),
+			make_option('-v', '--value', type="string", dest="node_value", help="Define the value of the thing")
 		])
-	def do_add(self, arg, opts=None):
+	def do_poortego_add(self, arg, opts=None):
 		"""Command to add node"""
 		# Code moved to .command.add sub-module for easier reading/debugging	
 		poortego_add(self, arg, opts)
@@ -135,14 +258,14 @@ class Dispatcher(Cmd):
 	#
 	# ln
 	#						
-	def do_ln(self, arg):
+	def do_poortego_ln(self, arg):
 		"""Command to add link"""
 		# TODO
 
 	#
 	# rm
 	#
-	def do_rm(self, arg):	
+	def do_poortego_rm(self, arg):	
 		"""Command to remove node/link"""
 		# TODO
 
@@ -154,7 +277,7 @@ class Dispatcher(Cmd):
 			make_option('-m', '--maltego', action="store_true", help="Import data from Maltego file"),
 			make_option('-s', '--stix', action="store_true", help="Import data from STIX file"),
 	])
-	def do_import(self, arg, opts=None):
+	def do_poortego_import(self, arg, opts=None):
 		"""Command to import data (STIX, CSV, IOC, etc.)"""
 		if opts.csv:
 			fn = arg
@@ -178,7 +301,7 @@ class Dispatcher(Cmd):
 			make_option('-m', '--maltego', action="store_true", help="Export data to Maltego file"),	
 			make_option('-s', '--stix', action="store_true", help="Export data to STIX file"),
 	])
-	def do_export(self, arg):
+	def do_poortego_export(self, arg):
 		"""Command to export parts/all of graph to another format"""
 		# TODO
 
@@ -186,7 +309,7 @@ class Dispatcher(Cmd):
 	#
 	# transform
 	#
-	def do_transform(self, arg):
+	def do_poortego_transform(self, arg):
 		"""Command to run a transform"""
 		# TODO
 	
@@ -215,7 +338,7 @@ class Dispatcher(Cmd):
 	#
 	def do_poortego_info(self, arg):
 		"""Command to show GraphDB info"""
-		my_graph_info = self.my_graph.get_database_info()
+		my_graph_info = self.my_graph.database_info()
 		for k, v in my_graph_info.iteritems():
 			self.stdout.write(str(k) + " : " + str(v) + "\n")
 

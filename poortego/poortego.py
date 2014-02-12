@@ -6,7 +6,7 @@
 
 
 import csv
-from .dispatcher import Dispatcher
+from .dispatcher.dispatcher import Dispatcher
 
 class Poortego:
 	"""Main Poortego Class"""

@@ -21,7 +21,7 @@ class PoortegoNeo4jDatabase(PoortegoDatabase):
                 node_name_index = self.db_conn.get_or_create_index(neo4j.Node, "Name")
                 self.poortego_root_node = self.db_conn.get_or_create_indexed_node("Name", "name", "Poortego Root", {'name':'Poortego Root', 'type':'ROOT'})
 
-        def get_database_info(self):
+        def database_info(self):
                 """Return dict containing database info"""
                 db_info = {}
                 db_info["neo4j version"] = str(self.db_conn.neo4j_version)
