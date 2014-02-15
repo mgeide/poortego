@@ -32,6 +32,9 @@ class PoortegoNeo4jDatabase(PoortegoDatabase):
                 db_info["Supports Schema Indexes"] = str(self.db_conn.supports_schema_indexes)
                 return db_info
 
+	def root_id(self):
+		return self.poortego_root_node._id
+
         def PURGE(self):
                 """Delete everything from GraphDB -be sure you want to do this"""
                 self.db_conn.clear()
@@ -88,10 +91,24 @@ class PoortegoNeo4jDatabase(PoortegoDatabase):
                         ret_rels[rel._id] = str(rel)
                 return ret_rels
 
+	def display_node(self, node):
+		ret_str = "Node Id: " + str(node._id) + "\n"
+		ret_str = ret_str + "Node Name: " + str(node["name"]) + "\n"	
+		ret_str = ret_str + "Node Properties:\n"
+		for prop_key,prop_val in node.get_properties().iteritems():
+			ret_str = ret_str + "\t" + str(prop_key) + " : " + str(prop_val) + "\n"
+		ret_str = ret_str + "Node Labels:\n"
+		for label in node.get_labels():
+			ret_str = ret_str + "\t" + str(label) + "\n"
+		return ret_str
+
+
         def get_node_by_id(self, id_num):
                 node = self.db_conn.node(id_num)
-                node_dict = {'id':id_num, 'name':node['name']}
-                return node_dict
+                # TODO - build node dict
+		#node_dict = {'id':id_num, 'name':node['name']}
+                #return node_dict
+		return node
 
         def create_node_from_dict(self, node_dict):
                 """Create and return node from dictionary containing node properties"""
@@ -109,12 +126,10 @@ class PoortegoNeo4jDatabase(PoortegoDatabase):
                 to_root_path = new_node.get_or_create_path("ROOT", self.poortego_root_node)
                 return new_node
 
-
         def create_rel(self, graph_start_node, graph_end_node, rel_type, rel_prop_dict):
                 """Create and return relationship"""
                 graph_rel = self.db_conn.create((graph_start_node, rel_type, graph_end_node, rel_prop_dict))
                 return graph_rel
-
 
 	def add_labels(self, node_obj, labels):
 		for label in labels:

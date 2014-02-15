@@ -15,6 +15,7 @@ class Session:
 		self.conf_settings = conf_settings
 		self.user = User('guest','guest')
 		self.user.authenticate(conf_settings['password_file'])
+		# Set in set_default_nodes() method called from poortego reset()
 		self.home_node_id = -1
 		self.current_node_id = -1
 		now_string = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -37,6 +38,10 @@ class Session:
 			"last_modified_at":now_string
 		}
 
+
+	def set_default_nodes(self, node_id):
+		self.home_node_id = node_id
+		self.current_node_id = node_id
 
 	def update_node_meta(self):
 		# TODO - update datetime to current

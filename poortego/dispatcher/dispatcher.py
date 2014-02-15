@@ -29,6 +29,7 @@ from .command.rm import poortego_rm
 from .command.ln import poortego_ln
 from .command.cat import poortego_cat
 from .command.man import poortego_man
+from .command.pwd import poortego_pwd
 from .command.reset import poortego_reset
 from .command.purge import poortego_purge
 from .command.imports import poortego_import
@@ -80,6 +81,13 @@ class Dispatcher(Cmd):
 		"""Command to show how to use commands in namespace"""
 		poortego_help(self, arg)
 
+
+	#
+	# pwd - print current working node data
+	#
+	def do_poortego_pwd(self, arg):
+		"""Command to show data for current working node"""
+		poortego_pwd(self, arg)
 
 	#
 	# Storage - command to manipulate/show storage details
@@ -228,11 +236,18 @@ class Dispatcher(Cmd):
 
 	#
 	# ln
-	#						
+	#
+	@options([
+			make_option('-o', '--out', action="store_true", default=True, help="Create out-going link from current node"),
+			make_option('-i', '--in', action="store_true", help="Create in-coming link to current node"),
+			make_option('-b', '--bi', action="store_true", help="Create bi-directional link to/from current node"),
+			make_option('-c', '--current', type="string", help="Specific a different node id to use than the current/working node"),
+			make_option('-p', '--prompt', action="store_true", help="Prompt for link values")
+		]) 						
 	def do_poortego_ln(self, arg):
 		"""Command to add link"""
-		# TODO
-		poortego_ln(self, arg)
+		# TODO - also account for link properties
+		poortego_ln(self, arg, opts)
 
 	#
 	# rm
