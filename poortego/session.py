@@ -5,7 +5,7 @@
 #  - Track user, current object, etc.
 # 
 
-import time
+#import time
 
 from .user import User
 
@@ -18,24 +18,24 @@ class Session:
 		# Set in set_default_nodes() method called from poortego reset()
 		self.home_node_id = -1
 		self.current_node_id = -1
-		now_string = time.strftime("%Y-%m-%d %H:%M:%S")
+		#now_string = time.strftime("%Y-%m-%d %H:%M:%S")
 		self.default_node_meta = {
-			"created_by":self.user.username,
-			"created_at":now_string,
+			"created_by":"username", #self.user.username,
+			"created_at":"datetime", #now_string,
 			"creation_method":"Poortego shell",
-			"last_accessed_by":self.user.username,
-			"last_accessed_at":now_string,
-			"last_modified_by":self.user.username,
-			"last_modified_at":now_string
+			"last_accessed_by":"username", #self.user.username,
+			"last_accessed_at":"datetime", #now_string,
+			"last_modified_by":"username", #self.user.username,
+			"last_modified_at":"datetime" #now_string
 		}
 		self.default_link_meta = {
-			"created_by":self.user.username,
-			"created_at":now_string,
+			"created_by":"username", #self.user.username,
+			"created_at":"datetime", #now_string,
 			"creation_method":"Poortego shell",
-			"last_accessed_by":self.user.username,
-			"last_accessed_at":now_string,
-			"last_modified_by":self.user.username,
-			"last_modified_at":now_string
+			"last_accessed_by":"username", #self.user.username,
+			"last_accessed_at":"datetime", #now_string,
+			"last_modified_by":"username", #self.user.username,
+			"last_modified_at":"datetime" #now_string
 		}
 
 

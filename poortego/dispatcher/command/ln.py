@@ -4,6 +4,8 @@
 # Module poortego.command.ln
 #
 
+import time
+
 def poortego_ln(dispatcher_object, arg, opts):
 	"""Command to link objects"""
 	if opts.prompt:
@@ -49,6 +51,17 @@ def ln_wizard(dispatcher_object):
 
 		dispatcher_object.stdout.write("Property Key (return for none): ")
 		property_key = (dispatcher_object.stdin.readline()).replace('\n','')
+
+
+	# Handle default properties
+	## TODO - updates to links/properties
+        now_string = time.strftime("%Y-%m-%d %H:%M:%S")
+        for meta_key,meta_value in dispatcher_object.my_session.default_link_meta.iteritems():
+                if (meta_value == 'datetime'):
+                        meta_value = now_string
+                elif (meta_value == 'username'):
+                        meta_value = dispatcher_object.my_session.user.username
+                property_dict[meta_key] = meta_value
 
 	# Create/update link based on:
 	##  - current_node

@@ -136,8 +136,9 @@ class PoortegoNeo4jDatabase(PoortegoDatabase):
 			node_obj.add_labels(label)
 
 	def set_properties(self, node_obj, prop_dict):
-		for k, v in prop_dict.iteritems():
-			self.db_conn.set_property(node_obj, k, v)
+		node_obj.update_properties(prop_dict)
+		#for k, v in prop_dict.iteritems():
+		#	self.db_conn.set_property(node_obj, k, v)
 
 	def node_labels(self):
 		return self.db_conn.node_labels	

@@ -30,6 +30,7 @@ from .command.ln import poortego_ln
 from .command.cat import poortego_cat
 from .command.man import poortego_man
 from .command.pwd import poortego_pwd
+from .command.find import poortego_find
 from .command.reset import poortego_reset
 from .command.purge import poortego_purge
 from .command.imports import poortego_import
@@ -88,6 +89,13 @@ class Dispatcher(Cmd):
 	def do_poortego_pwd(self, arg):
 		"""Command to show data for current working node"""
 		poortego_pwd(self, arg)
+
+	#
+	# find - find data within db
+	# 
+	def do_poortego_find(self, arg):
+		"""Command to find data within database"""
+		poortego_find(self, arg)
 
 	#
 	# Storage - command to manipulate/show storage details
