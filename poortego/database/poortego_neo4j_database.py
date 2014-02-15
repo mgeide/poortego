@@ -106,11 +106,31 @@ class PoortegoNeo4jDatabase(PoortegoDatabase):
                 new_node = self.db_conn.get_or_create_indexed_node("NameIdx", "name", node_dict['name'], node_dict)
                 # Create Default Paths tying Node to root
                 from_root_path = self.poortego_root_node.get_or_create_path(node_dict['type'], new_node)
-                to_root_path = self.new_node.get_or_create_path("ROOT", self.poortego_root_node)
+                to_root_path = new_node.get_or_create_path("ROOT", self.poortego_root_node)
                 return new_node
+
 
         def create_rel(self, graph_start_node, graph_end_node, rel_type, rel_prop_dict):
                 """Create and return relationship"""
                 graph_rel = self.db_conn.create((graph_start_node, rel_type, graph_end_node, rel_prop_dict))
                 return graph_rel
+
+
+	def add_labels(self, node_obj, labels):
+		for label in labels:
+			node_obj.add_labels(label)
+
+	def set_properties(self, node_obj, prop_dict):
+		for k, v in prop_dict.iteritems():
+			self.db_conn.set_property(node_obj, k, v)
+
+	def node_labels(self):
+		return self.db_conn.node_labels	
+
+#
+# Debug - unit testing
+#
+if __name__ == "__main__":
+        # TODO
+        print "TODO - any local unit testing"
 

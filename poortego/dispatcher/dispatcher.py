@@ -15,14 +15,29 @@
 
 import sys
 from cmd2 import Cmd, make_option, options
-from ..session import Session
 
+from ..session import Session
 #from .graph import Graph
 from ..database.poortego_neo4j_database import PoortegoNeo4jDatabase
-
 from ..user import User
 
+from .command.help import poortego_help
 from .command.add import poortego_add
+from .command.cd import poortego_cd
+from .command.ls import poortego_ls
+from .command.rm import poortego_rm
+from .command.ln import poortego_ln
+from .command.cat import poortego_cat
+from .command.man import poortego_man
+from .command.reset import poortego_reset
+from .command.purge import poortego_purge
+from .command.imports import poortego_import
+from .command.exports import poortego_export
+from .command.transforms import poortego_transform
+from .command.namespace import poortego_namespace
+from .command.storage import poortego_storage
+from .command.session import poortego_session
+from .command.user import poortego_user
 
 import io
 from pprint import pprint
@@ -43,7 +58,7 @@ class Dispatcher(Cmd):
 		self.namespace = 'poortego'
 		self.namespaces = ['poortego', 'cmd2']
 		self.prompt = self.conf_settings['poortego_prompt'] + ' '
-		self.do_poortego_reinitialize('')
+		self.do_poortego_reset('')
 
 	#
 	# Track & Change Dispatcher Namespace
@@ -55,13 +70,7 @@ class Dispatcher(Cmd):
 		])
 	def do_namespace(self, arg, opts):
 		"""Command to show and change command namespace"""
-		if opts.list_namespaces:
-			for ns in self.namespaces:
-				self.stdout.write("%s\n" % ns)
-		elif opts.change_namespace:
-			self.namespace = opts.change_namespace
-		elif opts.print_namespace:
-			self.stdout.write("Current namespace: %s\n" % self.namespace)				
+		poortego_namespace(self, arg, opts)
 
 
 	#
@@ -69,71 +78,43 @@ class Dispatcher(Cmd):
 	#
 	def do_help(self, arg):
 		"""Command to show how to use commands in namespace"""
-		self.stdout.write("\n%s Namespace Help\n" % self.namespace)
-		if (self.namespace == 'cmd2'):
-			Cmd.do_help(self, arg)
-		# TODO - allow for cross namespace help, e.g., "help cmd2.show"
-		# The below code doesn't fix the problem for some reason
-		#elif (arg.startswith('cmd2.')):
-		#	cmd2_func = arg[5:]
-		#	arg = cmd2_func
-		#	self.stdout.write("[DEBUG] Running help for CMD2 command %s\n" % arg)
-		#	Cmd.do_help(self, arg)
-		elif (self.namespace == 'poortego'):
-			"""Code taken and modified from cmd base"""
-			if arg:
-				try:
-					func = getattr(self, 'help_poortego_' + arg)
-				except AttributeError:
-					try:
-						doc=getattr(self, 'do_poortego_' + arg).__doc__
-						if doc:
-							self.stdout.write("%s\n"%str(doc))
-							return
-					except AttributeError:
-						try:
-							doc=getattr(self, 'do_' + arg).__doc__
-							if doc:
-								self.stdout.write("%s\n"%str(doc))
-								return
-						except AttributeError:	
-							pass
-					self.stdout.write("%s\n"%str(self.nohelp % (arg,)))
-					return
-				func()
-        		else:
-            			names = self.get_names()
-            			cmds_doc = []
-            			cmds_undoc = []
-				cmds_cmd2_namespace = []
-            			help = {}
-            			for name in names:
-                			if name[:14] == 'help_poortego_':
-                    				help[name[14:]]=1
-            			names.sort()
-            			# There can be duplicates if routines overridden
-            			prevname = ''
-            			for name in names:
-                			if name[:12] == 'do_poortego_':
-                    				if name == prevname:
-                        				continue
-                    				prevname = name
-                    				cmd=name[12:]
-                    				if cmd in help:
-                        				cmds_doc.append(cmd)
-                        				del help[cmd]
-                    				elif getattr(self, name).__doc__:
-                        				cmds_doc.append(cmd)
-                    				else:
-                        				cmds_undoc.append(cmd)
-					elif name[:3] == 'do_':
-						cmd=name[3:]
-						cmds_cmd2_namespace.append(cmd)
-            			self.stdout.write("%s\n"%str(self.doc_leader))
-            			self.print_topics(self.doc_header,   cmds_doc,   15,80)
-            			self.print_topics(self.misc_header,  help.keys(),15,80)
-            			self.print_topics(self.undoc_header, cmds_undoc, 15,80)
-				self.print_topics("'cmd2' Namespace Commands", cmds_cmd2_namespace, 15, 80)
+		poortego_help(self, arg)
+
+
+	#
+	# Storage - command to manipulate/show storage details
+	#
+	@options([
+			make_option('-l', '--list', action="store_true", dest="list_details", help="Show the storage details")
+		])
+	def do_poortego_storage(self, arg, opts):
+		"""Command to show and change storage details"""
+		poortego_storage(self, arg, opts)
+
+
+
+	#
+	# Session - command to manipulate/show session
+	#
+	@options([
+			make_option('-l', '--list', action="store_true", dest="list_details", help="Show the current session details")
+		])
+	def do_poortego_session(self, arg, opts):
+		"""Command to show and change session details"""
+		poortego_session(self, arg, opts)
+
+
+
+	#
+	# User - command to manipulate/show users
+	#
+	@options([
+			make_option('-c', '--change', action="store_true", dest="change_user", help="Change the current user"),
+			make_option('-l', '--list', action="store_true", dest="list_details", help="Show the current user details")
+		])
+	def do_poortego_user(self, arg, opts):
+		"""Command to show and change user details"""
+		poortego_user(self, arg, opts)
 
 
 	#
@@ -165,28 +146,24 @@ class Dispatcher(Cmd):
 
 
 	#
-	# poortego_reinitialize
+	# poortego_reset
 	#
-	def do_poortego_reinitialize(self, arg):
+	def do_poortego_reset(self, arg):
 		"""Command to reset poortego settings back to default"""
-		#self.my_graph = Graph(self.conf_settings)
-		self.my_graph = PoortegoNeo4jDatabase(self.conf_settings)
-		self.my_session = Session(self.conf_settings)
-		self.my_graph.set_database_defaults()
-		self.my_session.current_node_id = self.my_graph.poortego_root_node._id
+		poortego_reset(self, arg)
 
 	#
 	# poortego_login
 	# 
-	def do_poortego_login(self, arg):
-		"""Command to login as poortego user"""
-		self.stdout.write("\n  Username:  ")
-		username_string = (self.stdin.readline()).replace('\n','')
-		self.stdout.write("\n  Password:  ")
-		password_string = (self.stdin.readline()).replace('\n','')
-		attempted_user = User(username_string, password_string)
-		if (attempted_user.authenticate(self.conf_settings['password_file'])):
-			self.my_session.user = attempted_user
+	#def do_poortego_login(self, arg):
+	#	"""Command to login as poortego user"""
+	#	self.stdout.write("\n  Username:  ")
+	#	username_string = (self.stdin.readline()).replace('\n','')
+	#	self.stdout.write("\n  Password:  ")
+	#	password_string = (self.stdin.readline()).replace('\n','')
+	#	attempted_user = User(username_string, password_string)
+	#	if (attempted_user.authenticate(self.conf_settings['password_file'])):
+	#		self.my_session.user = attempted_user
 
 	#
 	# ls
@@ -199,36 +176,30 @@ class Dispatcher(Cmd):
 		])	
 	def do_poortego_ls(self, arg, opts):
 		"""Command to show node adjacency"""
-		self.stdout.write("Output format: '[id] name  [type]'\n")
-		if opts.all_nodes:
-			self.my_graph.show_nodes_from(self.my_graph.poortego_root_node._id)
-		elif opts.bi:
-			self.stdout.write("\nNodes From Current:\n")
-			self.my_graph.show_nodes_from(self.my_session.current_node_id)
-			self.stdout.write("\nNodes To Current:\n")
-			self.my_graph.show_nodes_to(self.my_session.current_node_id)		
-			self.stdout.write("\n")
-		elif opts.from_nodes:
-			self.stdout.write("\nNodes From Current:\n")
-			self.my_graph.show_nodes_from(self.my_session.current_node_id)
-			self.stdout.write("\n")
-		elif opts.to_nodes:
-			self.stdout.write("\nNodes To Current:\n")
-			self.my_graph.show_nodes_to(self.my_session.current_node_id)            
-			self.stdout.write("\n")
-		else: # Default, same as "--bi"
-			self.stdout.write("\nNodes From Current:\n")
-			self.my_graph.show_nodes_from(self.my_session.current_node_id)
-			self.stdout.write("\nNodes To Current:\n")
-			self.my_graph.show_nodes_to(self.my_session.current_node_id)		
-			self.stdout.write("\n")
+		poortego_ls(self, arg, opts)
 
 	#
 	# cd
 	#
 	def do_poortego_cd(self, arg):
 		"""Command to change current node"""
-		self.my_session.current_node_id = arg[0]
+		poortego_cd(self, arg)
+
+	#
+	# man
+	#
+	def do_poortego_man(self, arg):
+		"""Command to display manual pages"""
+		# TODO
+		poortego_man(self, arg)
+
+	#
+	# cat
+	#
+	def do_poortego_cat(self, arg):
+		"""Command to show contents of object"""
+		# TODO
+		poortego_cat(self, arg)
 
 	#
 	# show
@@ -261,6 +232,7 @@ class Dispatcher(Cmd):
 	def do_poortego_ln(self, arg):
 		"""Command to add link"""
 		# TODO
+		poortego_ln(self, arg)
 
 	#
 	# rm
@@ -268,6 +240,7 @@ class Dispatcher(Cmd):
 	def do_poortego_rm(self, arg):	
 		"""Command to remove node/link"""
 		# TODO
+		poortego_rm(self, arg)
 
 	#
 	# import
@@ -279,18 +252,8 @@ class Dispatcher(Cmd):
 	])
 	def do_poortego_import(self, arg, opts=None):
 		"""Command to import data (STIX, CSV, IOC, etc.)"""
-		if opts.csv:
-			fn = arg
-			# TODO
-		elif opts.maltego:
-			fn = arg
-			# TODO
-		elif opts.stix:
-			# TODO
-			fn = arg
-			(stix_package, stix_package_binding_obj) = STIXPackage.from_xml(fn)
-			stix_dict = stix_package.to_dict() # parse to dictionary
-			pprint(stix_dict)
+		# TODO
+		poortego_import(self, arg, opts)
 
 	#
 	# export
@@ -301,10 +264,10 @@ class Dispatcher(Cmd):
 			make_option('-m', '--maltego', action="store_true", help="Export data to Maltego file"),	
 			make_option('-s', '--stix', action="store_true", help="Export data to STIX file"),
 	])
-	def do_poortego_export(self, arg):
+	def do_poortego_export(self, arg, opts=None):
 		"""Command to export parts/all of graph to another format"""
 		# TODO
-
+		poortego_export(self, arg, opts)
 
 	#
 	# transform
@@ -312,35 +275,30 @@ class Dispatcher(Cmd):
 	def do_poortego_transform(self, arg):
 		"""Command to run a transform"""
 		# TODO
+		poortego_transform(self, arg)
 	
 	#
 	# poortego_session_info
 	#
-	def do_poortego_session_info(self, arg):
-		"""Command to show info about the Poortego session"""
-		self.my_session.display()
+	#def do_poortego_session_info(self, arg):
+	#	"""Command to show info about the Poortego session"""
+	#	self.my_session.display()
 
 	#
 	# poortego_purge
 	#
 	def do_poortego_purge(self, arg):
 		"""Command to delete EVERYTHING from GraphDB"""
-		self.stdout.write("This will delete EVERYTHING from the GraphDB!!! Are you sure you want to do this [Y/N]: ")
-		response = (self.stdin.readline()).replace('\n','')
-		if response == 'Y' or response == 'y':
-			self.my_graph.PURGE()
-			self.stdout.write("Database purged.\n")
-			self.do_poortego_reinitialize('')
-			self.stdout.write("Poortego ReInitialized.\n")	
+		poortego_purge(self, arg)
 
 	#
 	# poortego_info
 	#
-	def do_poortego_info(self, arg):
-		"""Command to show GraphDB info"""
-		my_graph_info = self.my_graph.database_info()
-		for k, v in my_graph_info.iteritems():
-			self.stdout.write(str(k) + " : " + str(v) + "\n")
+	#def do_poortego_info(self, arg):
+	#	"""Command to show GraphDB info"""
+	#	my_graph_info = self.my_graph.database_info()
+	#	for k, v in my_graph_info.iteritems():
+	#		self.stdout.write(str(k) + " : " + str(v) + "\n")
 
 
 
