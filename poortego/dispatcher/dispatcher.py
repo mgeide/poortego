@@ -244,7 +244,7 @@ class Dispatcher(Cmd):
 			make_option('-c', '--current', type="string", help="Specific a different node id to use than the current/working node"),
 			make_option('-p', '--prompt', action="store_true", help="Prompt for link values")
 		]) 						
-	def do_poortego_ln(self, arg):
+	def do_poortego_ln(self, arg, opts):
 		"""Command to add link"""
 		# TODO - also account for link properties
 		poortego_ln(self, arg, opts)
