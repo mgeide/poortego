@@ -1,0 +1,23 @@
+INSTALLATION:
+
+git clone https://github.com/mgeide/poortego
+
+install neo4j 2.x
+Example install:
+http://www.delimited.io/blog/2014/1/15/getting-started-with-neo4j-on-ubuntu-server
+
+install py2neo:
+git clone https://github.com/nigelsmall/py2neo.git
+python ./setup.py build
+python ./setup.py install
+
+install cmd2:
+easy_install https://pypi.python.org/packages/2.7/c/cmd2/cmd2-0.6.7-py2.7.egg#md5=10adeed6fb33ae86d768b682f828fbbf
+
+
+Other random python module installs:
+
+STIX:
+apt-get install libxml2-dev libxslt-dev
+pip install stix
+
