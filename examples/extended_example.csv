@@ -3,6 +3,7 @@
 # A poortego CSV example file showing extended features of CSV file import
 #
 # Empty lines or those beginning with '#' are ignored
+# Use double quotes for complex values
 #
 
 #
@@ -25,13 +26,13 @@ label,"Test Case"
 #
 # Some default properties set by poortego
 #
-#property,created_by="username"
-#property,creation_method="example.csv import"
-#property,created_at="2014/01/20"
-#property,last_accessed_by="username"
-#property,last_accessed_at="2014/01/20"
-#property,last_modified_by="username"
-#property,last_modified_at="2014/01/20"
+#property,created_by='username'
+#property,creation_method='example.csv import'
+#property,created_at='2014/01/20'
+#property,last_accessed_by='username'
+#property,last_accessed_at='2014/01/20'
+#property,last_modified_by='username'
+#property,last_modified_at='2014/01/20'
 
 #
 # Node format: node,name,label1,label2,...,property1=value1,property2=value2,...
@@ -51,7 +52,7 @@ node,74.125.0.0/16,NETBLOCK,notation=CIDR
 node,"Test Report",REPORT
 
 #
-# "Set" format: set,$set name,node name 1,node name 2,...
+# 'Set' format: set,$set name,node name 1,node name 2,...
 # Used for building a set of nodes to more easily create links across multiple nodes
 # Sets themselves are not a structure stored within GraphDB - they're just used for bulk link creation, see usage in links below
 # Sets of course are completely optional directives
@@ -71,8 +72,8 @@ link,$IP_SET,74.125.0.0/16,NETBLOCK,source=whois
 link,74.125.0.0/16,"Google, Inc.",OWNER,source=whois
 
 #
-# Special, default set "$ALL_NODES" is used to link all nodes in CSV to/from another node
-# The connecting node ("Test Report" in this example) won't be linked to itself
+# Special, default set '$ALL_NODES' is used to link all nodes in CSV to/from another node
+# The connecting node ('Test Report' in this example) won't be linked to itself
 #
 link,"Test Report",$ALL_NODES,"CONTAINS"
 link,$ALL_NODES,"Test Report","LISTED IN"

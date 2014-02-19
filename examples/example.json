@@ -1,0 +1,35 @@
+# example.json
+#
+# A basic poortego JSON example file
+#
+# Empty lines or those beginning with '#' are ignored
+#
+
+{
+"nodes": [
+  { "name":"Google, Inc.", "labels":["TEST","COMPANY"], "properties":{} },
+  { "name":"google.com", "labels":["TEST","DOMAIN"], "properties":{} },
+  { "name":"www.google.com", "labels":["TEST","FQDN"], "properties":{} },
+  { "name":"74.125.228.80", "labels":["TEST","IP"], "properties":{} },
+  { "name":"74.125.228.81", "labels":["TEST","IP"], "properties":{} },
+  { "name":"74.125.228.82", "labels":["TEST","IP"], "properties":{} },
+  { "name":"74.125.228.83", "labels":["TEST","IP"], "properties":{} },
+  { "name":"74.125.228.84", "labels":["TEST","IP"], "properties":{} },
+  { "name":"74.125.0.0/16", "labels":["TEST","NETBLOCK"], "properties":{"notation":"CIDR"} }
+],
+"links": [
+  { "start_node":"www.google.com", "end_node":"google.com", "name":"PARENT-DOMAIN", "properties":{} },
+  { "start_node":"google.com", "end_node":"www.google.com", "name":"SUB-DOMAIN", "properties":{} },
+  { "start_node":"www.google.com", "end_node":"74.125.228.80", "name":"DNS A RCD", "properties":{"ttl":"300","source":"dig"} },
+  { "start_node":"www.google.com", "end_node":"74.125.228.81", "name":"DNS A RCD", "properties":{"ttl":"300","source":"dig"} },
+  { "start_node":"www.google.com", "end_node":"74.125.228.82", "name":"DNS A RCD", "properties":{"ttl":"300","source":"dig"} },
+  { "start_node":"www.google.com", "end_node":"74.125.228.83", "name":"DNS A RCD", "properties":{"ttl":"300","source":"dig"} },
+  { "start_node":"www.google.com", "end_node":"74.125.228.84", "name":"DNS A RCD", "properties":{"ttl":"300","source":"dig"} },
+  { "start_node":"74.125.228.80", "end_node":"74.125.0.0/16", "name":"NETBLOCK", "properties":{"source":"whois"} },
+  { "start_node":"74.125.228.81", "end_node":"74.125.0.0/16", "name":"NETBLOCK", "properties":{"source":"whois"} },
+  { "start_node":"74.125.228.82", "end_node":"74.125.0.0/16", "name":"NETBLOCK", "properties":{"source":"whois"} },
+  { "start_node":"74.125.228.83", "end_node":"74.125.0.0/16", "name":"NETBLOCK", "properties":{"source":"whois"} },
+  { "start_node":"74.125.228.84", "end_node":"74.125.0.0/16", "name":"NETBLOCK", "properties":{"source":"whois"} },
+  { "start_node":"74.125.0.0/16", "end_node":"Google, Inc.", "name":"OWNER", "properties":{"source":"whois"} }
+]
+}

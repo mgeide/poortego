@@ -1,0 +1,38 @@
+# extended_example.json
+#
+# A JSON example file showing some extended fields/features
+#
+# Empty lines or those beginning with '#' are ignored
+#
+
+
+
+{
+"global_labels":["TEST"],
+"global_properties": [
+  { "type":"node", "properties":{"severity":"benign"} },
+  { "type":"link", "properties":{"confidence":"high"} },
+  { "type":"all", "properties":{"description":"This is a test"} }
+],
+"nodes": [
+  { "name":"Google, Inc.", "labels":["TEST","COMPANY"], "properties":{} },
+  { "name":"google.com", "labels":["TEST","DOMAIN"], "properties":{} },
+  { "name":"www.google.com", "labels":["TEST","FQDN"], "properties":{} },
+  { "name":"74.125.228.80", "labels":["TEST","IP"], "properties":{} },
+  { "name":"74.125.228.81", "labels":["TEST","IP"], "properties":{} },
+  { "name":"74.125.228.82", "labels":["TEST","IP"], "properties":{} },
+  { "name":"74.125.228.83", "labels":["TEST","IP"], "properties":{} },
+  { "name":"74.125.228.84", "labels":["TEST","IP"], "properties":{} },
+  { "name":"74.125.0.0/16", "labels":["TEST","NETBLOCK"], "properties":{"notation":"CIDR"} }
+],
+"node_sets": [
+  { "name":"$IP_SET", "nodes": [ "74.125.228.80","74.125.228.81","74.125.228.82","74.125.228.83","74.125.228.84" ] }
+],
+"links": [
+  { "start_node":"www.google.com", "end_node":"google.com", "name":"PARENT-DOMAIN", "properties":{} },
+  { "start_node":"google.com", "end_node":"www.google.com", "name":"SUB-DOMAIN", "properties":{} },
+  { "start_node":"www.google.com", "end_node":"$IP_SET", "name":"DNS A RCD", "properties":{"ttl":"300","source":"dig"} },
+  { "start_node":"$IP_SET", "end_node":"74.125.0.0/16", "name":"NETBLOCK", "properties":{"source":"whois"} },
+  { "start_node":"74.125.0.0/16", "end_node":"Google, Inc.", "name":"OWNER", "properties":{"source":"whois"} }
+]
+}
