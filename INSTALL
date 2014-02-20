@@ -17,6 +17,9 @@ easy_install https://pypi.python.org/packages/2.7/c/cmd2/cmd2-0.6.7-py2.7.egg#md
 
 Other random python module installs:
 
+Canari:
+easy_install canari
+
 STIX:
 apt-get install libxml2-dev libxslt-dev
 pip install stix
