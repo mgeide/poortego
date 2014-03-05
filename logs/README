@@ -1,0 +1,3 @@
+Make this directory writeable by whichever user/group is running poortego.
+
+Put info / debug / error messages into corresponding log files using log4py

@@ -1,0 +1,33 @@
+
+Poortego Parsers Module:
+========================
+
+Contains python modules for parsing different formats.
+	- Expects file or string input in.
+	- Returns Poortego json string result.
+
+Input/user-driven parsing should be called using the poortego_parser class:
+Using aguments:
+	Input Types: file or string
+	Input Formats: csv, json, stix, ioc, maltego, etc.
+	Input Value: file path or string value 
+
+File parsing example:
+---------------------
+my_parser = PoortegoParser('file', 'csv', 'input.csv') 	
+json_result = my_parser.run()
+
+
+String parsing example:
+-----------------------
+my_parser = PoortegoParser('string', 'csv', 'nodeA,link,nodeB')
+json_result = my_parser.run()
+
+
+Otherwise, static/known formatting can be parsed using the specific class minus the format argument:
+
+CSV parsing example:
+--------------------
+my_parser = CsvParser('string', 'nodeA,link,nodeB')
+json_result = my_parser.run()
+

@@ -1,0 +1,19 @@
+#
+# Basic CSV example that uses a heading to define fields
+# Field definitions can be: 
+#  - node types (e.g., DOMAIN) 
+#  - link name to use to tie the nodes together
+#
+HEADING:DOMAIN,link="resolves_to",IP
+www.google.com,74.125.228.80
+www.google.com,74.125.228.81
+www.google.com,74.125.228.82
+www.google.com,74.125.228.83
+www.google.com,74.125.228.84
+
+#
+# This also works
+#
+HEADING:DOMAIN,link,DOMAIN
+www.google.com,"subdomain_of",google.com
+google.com,"parentdomain_of",www.google.com

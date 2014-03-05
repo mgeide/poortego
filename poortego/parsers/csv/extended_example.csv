@@ -1,0 +1,79 @@
+# extended_example.csv
+#
+# A poortego CSV example file showing extended features of CSV file import
+#
+# Empty lines or those beginning with '#' are ignored
+# Use double quotes for complex values
+#
+
+#
+# Global Properties format: property,property type,property name=property value
+# Property type is either: node, link, or all (for both links/nodes)
+# These are properties to assign to all nodes/links handled in this CSV import
+# This section is completely optional
+#
+property,node,severity="benign"
+property,link,confidence="high"
+property,all,description="Entries added for CSV test case."
+
+#
+# Global Labels format: label,label name
+# These are labels to assign to all nodes in this CSV import
+# This section is completely optional
+#
+label,"Test Case"
+
+#
+# Some default properties set by poortego
+#
+#property,created_by='username'
+#property,creation_method='example.csv import'
+#property,created_at='2014/01/20'
+#property,last_accessed_by='username'
+#property,last_accessed_at='2014/01/20'
+#property,last_modified_by='username'
+#property,last_modified_at='2014/01/20'
+
+#
+# Node format: node,name,label1,label2,...,property1=value1,property2=value2,...
+#   Required: node,name - name is treated as a primary, indexed key for the node
+#   Optional, but strongely encouraged: labels - these tie types, categories, tags to node
+#   Optional, use as needed: properties - key/value pairs to tie to node
+#
+node,"Google, Inc.",COMPANY
+node,google.com,DOMAIN
+node,www.google.com,FQDN
+node,74.125.228.80,IP
+node,74.125.228.81,IP
+node,74.125.228.82,IP
+node,74.125.228.83,IP
+node,74.125.228.84,IP
+node,74.125.0.0/16,NETBLOCK,notation=CIDR
+node,"Test Report",REPORT
+
+#
+# 'Set' format: set,$set name,node name 1,node name 2,...
+# Used for building a set of nodes to more easily create links across multiple nodes
+# Sets themselves are not a structure stored within GraphDB - they're just used for bulk link creation, see usage in links below
+# Sets of course are completely optional directives
+#
+set,$IP_SET,74.125.228.80,74.125.228.81,74.125.228.82,74.125.228.83,74.125.228.84
+
+#
+# Link format: link,start node name,end node name,link name,property1=value1,property2=value2
+#  Required: link,start node name,end node name
+#  Optional, but strongely encouraged: link name
+#  Optional, use as needed: properties - key/value pairs to tie to link
+#
+link,www.google.com,google.com,PARENT-DOMAIN
+link,google.com,www.google.com,SUB-DOMAIN
+link,www.google.com,$IP_SET,DNS A RCD,ttl=300,source=dig
+link,$IP_SET,74.125.0.0/16,NETBLOCK,source=whois
+link,74.125.0.0/16,"Google, Inc.",OWNER,source=whois
+
+#
+# Special, default set '$ALL_NODES' is used to link all nodes in CSV to/from another node
+# The connecting node ('Test Report' in this example) won't be linked to itself
+#
+link,"Test Report",$ALL_NODES,"CONTAINS"
+link,$ALL_NODES,"Test Report","LISTED IN"
