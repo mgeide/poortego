@@ -116,7 +116,7 @@ class Neo4jDatabase:
     def create_node_from_dict(self, node_dict):
         new_node = self.db_conn.get_or_create_indexed_node("NameIdx", "name", node_dict['name'], node_dict)
         # Create Default Paths tying Node to root
-        from_root_path = self.neo4j_root_node.get_or_create_path(node_dict['type'], new_node)
+        from_root_path = self.neo4j_root_node.get_or_create_path("ROOT", new_node)
         to_root_path = new_node.get_or_create_path("ROOT", self.neo4j_root_node)
         p_node = self._neo4j_node_to_poortego_node(new_node)
         return p_node

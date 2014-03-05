@@ -35,7 +35,7 @@ class PoortegoDatabase:
 
     def get_node_by_id(self, id_num):
         """Return PoortegoNode of database node with id=id_num"""
-        return self.db_conn.get_node_by_id(id_num)
+        return self.db_conn.get_node_by_id(int(id_num))
 
     def get_node_by_name(self, name_str):
         return self.db_conn.get_node_by_name(name_str)  

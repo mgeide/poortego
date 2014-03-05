@@ -69,31 +69,119 @@ def create_implied_nodes(obj_val, obj_types, obj_properties):
 		# - Create Domain node and link to FQDN
 	print "TODO: create implied nodes"
 
+
+def add_nodes_wizard_prompt(interface_obj):
+	node_list = list()
+	interface_obj.stdout.write(":: Add Node Wizard :: (all nodes entered will be set to the same label/property values here)\n")
+	interface_obj.stdout.write("Enter node(s) unique/primary name or value (one per line, blank line at end of list):\n")
+	interface_obj.stdout.write("name> ") 
+	object_val = (interface_obj.stdin.readline()).replace('\n','')
+	while object_val:
+		node_dict = {'name':object_val}
+		node_list.append(node_dict)
+		interface_obj.stdout.write("name> ") 
+		object_val = (interface_obj.stdin.readline()).replace('\n','')
+	return node_list
+
+
+def add_node_labels_wizard_prompt(interface_obj):
+	label_set = set()
+	interface_obj.stdout.write("Enter node label(s) - these are node type, category, or tag values to assign to the node(s)\n")
+	interface_obj.stdout.write("('?' lists existing labels that you may wish to use, blank line ends the list of labels being set)\n")
+	interface_obj.stdout.write("label> ")
+	label_val = (interface_obj.stdin.readline()).replace('\n','')
+	while label_val:
+		if not label_val:
+			break
+		elif label_val == "?":
+			interface_obj.stdout.write("Existing labels:\n")
+			label_list = interface_obj.my_session.my_db.get_all_labels()
+			interface_obj.stdout.write(repr(label_list) + "\n")
+		else:
+			label_set.add(label_val)
+		interface_obj.stdout.write("label> ")
+		label_val = (interface_obj.stdin.readline()).replace('\n','')
+	return label_set
+
+
+def add_node_properties_wizard_prompt(interface_obj):
+	property_dict = {}
+	interface_obj.stdout.write("Enter node property(s) - these are key/value attributes to assign to node(s)\n")
+	interface_obj.stdout.write("(blank property key to ends list of properties being set)\n")
+	interface_obj.stdout.write("property key> ")
+	property_key = (interface_obj.stdin.readline()).replace('\n','')
+	while property_key:
+		if not property_key:
+			break
+		else:
+			interface_obj.stdout.write("%s value> " % property_key)
+			property_value = (interface_obj.stdin.readline()).replace('\n','')
+			property_dict[property_key] = property_value		
+			interface_obj.stdout.write("property key> ")
+			property_key = (interface_obj.stdin.readline()).replace('\n','')
+	return property_dict
+
+
+def add_wizard(interface_obj):
+	node_names = add_nodes_wizard_prompt(interface_obj)
+	node_labels = add_node_labels_wizard_prompt(interface_obj)
+	node_properties = add_node_properties_wizard_prompt(interface_obj)
+	
+	# Add meta to properties - TODO: move this somewhere
+	now_string = time.strftime("%Y-%m-%d %H:%M:%S")
+	for meta_key,meta_value in interface_obj.my_session.default_node_meta.iteritems():
+		if (meta_value == 'datetime'):
+			meta_value = now_string
+		elif (meta_value == 'username'):
+			meta_value = interface_obj.my_session.my_user.username
+		node_properties[meta_key] = meta_value
+	
+	for node_dict in node_names:
+		node_addition = interface_obj.my_session.my_db.create_node_from_dict(node_dict)
+		interface_obj.my_session.my_db.set_node_labels(node_addition, node_labels)		
+		interface_obj.my_session.my_db.set_node_properties(node_addition, node_properties)
+	# TODO - provide feedback about what was / was not added	
+
+
 #
 # Add wizard - prompt user for appropriate inputs
 #
-def add_wizard(interface_obj):
+def add_wizard_old(interface_obj):
+
+	node_set = set()
 
 	# Determine name/value (primary/unique identification)
 	interface_obj.stdout.write("Node/Object primary, unique name or value: ")
 	object_val = (interface_obj.stdin.readline()).replace('\n','')
-	node_dict = {'name':object_val, 'type':''}
+	node_dict = {'name':object_val}
+	node_set.add(node_dict)
+	while True:
+			interface_obj.stdout.write("  Add another node/object that will have same labels/properties (Enter for none): ")
+			object_val = (interface_obj.stdin.readline()).replace('\n','')
+			if object_val:
+				node_dict = {'name':object_val}
+				node_set.add(node_dict)
+			else:
+				break
 		
 	# Ask for and get object type(s)
 	# TODO - loop for handling multiple object type/category/tag labels
 	object_type_set = set()
 	while True:
-		interface_obj.stdout.write("Object Type/Category/Tag ('?' will list existing): ")
+		interface_obj.stdout.write("Object Type/Category/Tag ('?' will list existing, Enter for no more): ")
 		object_type = (interface_obj.stdin.readline()).replace('\n','')
 		# On-the-fly support for listing existing object labels
-		if (object_type != "?"):
-			interface_obj.stdout.write("[DEBUG] Setting node type to %s\n" % object_type)
-			object_type_set.add(object_type)
-			node_dict['type'] = object_type
+		if not object_type:
 			break
-		object_types = interface_obj.my_session.my_db.get_all_labels()
-		# TODO - sort by alpha and allow "? chars" to search by chars
-		interface_obj.stdout.write(repr(object_types) + "\n")
+		elif object_type == "?":
+			object_types = interface_obj.my_session.my_db.get_all_labels()
+			# TODO - sort by alpha and allow "? chars" to search by chars
+			interface_obj.stdout.write(repr(object_types) + "\n")
+		else:
+			#interface_obj.stdout.write("[DEBUG] Setting node type to %s\n" % object_type)
+			object_type_set.add(object_type)
+			#node_dict['type'] = object_type
+		
 
 	# Ask for and get properties
 	property_dict = {}
