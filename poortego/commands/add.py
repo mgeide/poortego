@@ -51,7 +51,7 @@ def poortego_add(interface_obj, arg, opts):
 		# TODO - support for node that references a file
 		print "TODO: add values that reference a local file"	
 	else:
-		interface_obj.stdout.write("ERROR- no option provided")
+		add_wizard(interface_obj)
 
 # TODO - remove whitespace, lowercase if appropriate, etc
 def verify_and_normalize_values(obj_val, obj_types, obj_properties):

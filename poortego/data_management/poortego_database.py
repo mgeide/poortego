@@ -40,6 +40,16 @@ class PoortegoDatabase:
     def get_node_by_name(self, name_str):
         return self.db_conn.get_node_by_name(name_str)  
 
+    def get_node_by_id_or_name(self, value):
+        ret_node = None
+        if value.isdigit():
+            ret_node = self.get_node_by_id(value)
+            if not ret_node:
+                ret_node = self.get_node_by_name(value)
+        else:
+            ret_node = self.get_node_by_name(value)
+        return ret_node   
+
     def get_all_labels(self):
         """Return all labels used in current database"""
         return self.db_conn.get_all_labels()
