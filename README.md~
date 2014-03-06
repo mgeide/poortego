@@ -3,7 +3,7 @@ poortego
 
 Latest iteration of poortego is a completely new code-base (the old ruby/metasploit code is under the poortego-ruby branch in case this ever wants to be revived).
 
-This new iteration stems from the fun that I've had playing with neo4j and using the unix-shell command style for traversing data (nodes/links and their labels/properties within the graph). I'm planning on using this framework for cyber threat indicators- but this framework could easily be used for managing other data points.
+This new iteration stems from the fun that I've had playing with neo4j and the natural way of traversing data (files) in the unix file-system as a way of traversing indicators. I'm using this for cyber threat indicators- but this framework could easily be used for managing other data points that are basic node/link data-types.
 
 Current command interface/dispatcher is built ontop of python cmd2 and uses py2neo for neo4j REST communication.
 
@@ -17,7 +17,7 @@ The bare-bones commands work at present:
 Roadmap
 -------
 
-Soon to come (less than 1mo):
+Soon to come (1-2 weeks):
 - additional argument support for bare-bones commands
 - rm
 - cat
@@ -25,7 +25,7 @@ Soon to come (less than 1mo):
 - man
 - import/export (csv, json, mtgx, STIX, IOC, etc.)
 
-Then (1-2mo):
+Then:
 - "transforms" (scripts to interact with data and create new nodes/linkages)
 - "cron" (or "machines" in maltego lingo) to run/re-run scheduled transforms
 - document retrieval (ala- curl/wget)
