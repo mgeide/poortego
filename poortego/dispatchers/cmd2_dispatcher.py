@@ -11,8 +11,7 @@ from cmd2 import make_option, options
 # Imports for dispatcher supported command set
 #
 from ..commands.user import poortego_user
-from ..commands.storage import poortego_storage
-from ..commands.session import poortego_session
+from ..commands.env import poortego_env
 from ..commands.ls import poortego_ls
 from ..commands.cd import poortego_cd
 from ..commands.pwd import poortego_pwd
@@ -39,25 +38,16 @@ class Cmd2Dispatcher:
         
     #
     # Namespace: poortego
-    # Command: storage
+    # Command: env
     #
     @options([
-            make_option('-l', '--list', action="store_true", dest="list_details", help="Show the storage details")
+            make_option('-s', '--session', action="store_true", dest="session_details", help="Show the session details"),
+            make_option('-d', '--storage', action="store_true", dest="storage_details", help="Show the storage details"),
+            make_option('-u', '--user', action="store_true", dest="user_details", help="Show the user details")
         ])
-    def do_poortego_storage(self, arg, opts):
-        """Command to show and change storage details"""
-        poortego_storage(self.my_interface, arg, opts)
-        
-    #
-    # Namespace: poortego
-    # Command: session 
-    #
-    @options([
-            make_option('-l', '--list', action="store_true", dest="list_details", help="Show the current session details")
-        ])
-    def do_poortego_session(self, arg, opts):
-        """Command to show and change session details"""
-        poortego_session(self.my_interface, arg, opts)
+    def do_poortego_env(self, arg, opts):
+        """Command to show environment details"""
+        poortego_env(self.my_interface, arg, opts)
 
     #
     # Namespace: poortego

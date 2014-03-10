@@ -1,0 +1,13 @@
+<MaltegoEntity id="maltego.DNSName" displayName="DNS Name" displayNamePlural="DNS Names" description="Domain Name System server name" category="Infrastructure" smallIconResource="DNS Name" largeIconResource="DNS Name" allowedRoot="true" conversionOrder="100" visible="true">
+   <Converter>
+      <Value><![CDATA[[-\w]{1,120}\.[-\w]{1,120}\.[-\w]{0,120}\.*[-\w]{1,4}\.*[a-zA-Z]+[-\w]{1,3}]]></Value>
+   </Converter>
+   <Properties value="fqdn">
+      <Groups/>
+      <Fields>
+         <Field name="fqdn" type="string" nullable="true" hidden="false" readonly="false" displayName="DNS Name">
+            <SampleValue>alpine.paterva.com</SampleValue>
+         </Field>
+      </Fields>
+   </Properties>
+</MaltegoEntity>
