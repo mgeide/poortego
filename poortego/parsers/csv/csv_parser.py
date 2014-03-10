@@ -123,9 +123,9 @@ class CsvParser:
 	
 	
 	def _process_row_by_header(self, row):
-		field_number = 0
 		csv_nodes = list()
 		link_name = ''
+		field_number = 0
 		for col in row:
 			col_value = col.strip()
 			print "[DEBUG] row: %s\n" % repr(row)
@@ -133,6 +133,7 @@ class CsvParser:
 			print "[DEBUG] col: %s\n" % repr(col)
 			print "[DEBUG] header field number: %s\n" % repr(field_number)
 			field_header = self.heading[field_number]
+			print "[DEBUG] field header: %s\n" % field_header
 
 			while '=' in field_header:
 				default_values = field_header.split('=')
@@ -151,24 +152,29 @@ class CsvParser:
 				field_number = field_number + 1
 				field_header = self.heading[field_number]		
 
+			print "[DEBUG] header field number: %s\n" % repr(field_number)
+			print "[DEBUG] field header: %s\n" % field_header
+
+			if not '=' in field_header:
 				if field_header.startswith('link'):
 					# Treat as link name
 					link_name = col_value
 				else:
 					# Treat as node name
-					node_type = field_header
+					node_type = [field_header]
 					node_name = col_value
 					node_obj = PoortegoNode()
-					node_obj.set_value(node_name, [node_type], {})
+					node_obj.set_value(node_name, node_type, {})
 					self.parse_node_results[node_name] = node_obj
 					csv_nodes.append(node_obj)
-							
-				field_number = field_number + 1
 		
-			# Do link 
-			link_obj = PoortegoLink()
-			link_obj.set_value(csv_nodes[0], csv_nodes[1], link_name, {})
-			self.parse_link_results.add(link_obj)	
+			field_number = field_number + 1
+			
+		# Do link 
+		link_obj = PoortegoLink()
+		link_obj.set_value(csv_nodes[0], csv_nodes[1], link_name, {})
+		self.parse_link_results.add(link_obj)
+					
 		
 	
 	def _process_file(self):
