@@ -101,7 +101,7 @@ def add_node_labels_wizard_prompt(interface_obj):
 			label_set.add(label_val)
 		interface_obj.stdout.write("label> ")
 		label_val = (interface_obj.stdin.readline()).replace('\n','')
-	return label_set
+	return list(label_set)
 
 
 def add_node_properties_wizard_prompt(interface_obj):

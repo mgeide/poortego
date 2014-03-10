@@ -21,6 +21,11 @@ class PoortegoNode:
         node_data = [ { "id": self.id, "name": self.name, "labels": list(self.labels), "properties": self.properties } ]
         json_node = json.dumps(node_data)
         return json_node
+    def to_dict(self):
+        ret_dict = dict()
+        ret_dict["name"] = self.name
+        ret_dict.update(self.properties)
+        return ret_dict
     def to_str(self):
         ret_str = "Node Id: " + str(self.id) + "\n"
         ret_str = ret_str + "Node Name: " + self.name + "\n"    

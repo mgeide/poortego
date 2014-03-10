@@ -19,7 +19,7 @@ from ..commands.pwd import poortego_pwd
 from ..commands.add import poortego_add
 from ..commands.ln import poortego_ln
 from ..commands.purge import poortego_purge
-
+from ..commands.imports import poortego_import
 
 class Cmd2Dispatcher:
     def __init__(self, interface_obj):
@@ -126,3 +126,16 @@ class Cmd2Dispatcher:
     def do_poortego_purge(self, arg):
         """Command to delete EVERYTHING from database"""
         poortego_purge(self.my_interface, arg)
+        
+    #
+    # Namespace: poortego
+    # Command: import
+    #
+    @options([
+            make_option('-c', '--csv', action="store_true", help="Import data from CSV file"),
+            make_option('-m', '--maltego', action="store_true", help="Import data from Maltego file"),
+            make_option('-s', '--stix', action="store_true", help="Import data from STIX file"),
+    ])
+    def do_poortego_import(self, arg, opt):
+        """Command to import data"""
+        poortego_import(self.my_interface, arg, opt)

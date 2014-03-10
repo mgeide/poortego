@@ -76,8 +76,9 @@ class Neo4jDatabase:
 
     def set_node_labels(self, p_node, labels):
         neo4j_node = self._poortego_node_to_neo4j_node(p_node)
-        for label in labels:
-            neo4j_node.add_labels(label)
+        neo4j_node.add_labels(*labels)
+        #for label in labels:
+        #    neo4j_node.add_labels(label)
 
     def set_node_properties(self, p_node, prop_dict):
         neo4j_node = self._poortego_node_to_neo4j_node(p_node)
@@ -113,13 +114,38 @@ class Neo4jDatabase:
             p_nodes.append(self._neo4j_node_to_poortego_node(neo4j_node))
         return p_nodes
     
+    def add_nodes(self, poortego_nodes):
+        """Add PoortegoNodes to database"""
+        added_list = list()
+        for poortego_node in poortego_nodes:
+            new_neo4j_node = self.db_conn.get_or_create_indexed_node("NameIdx", "name", poortego_node.name, poortego_node.to_dict())
+            new_neo4j_node.add_labels(*poortego_node.labels)
+            #new_neo4j_node.update_properties(poortego_node.properties) # do by having properties in poortego_node dict
+            self._link_node_to_root(new_neo4j_node)
+            poortego_node_result = self._neo4j_node_to_poortego_node(new_neo4j_node)
+            added_list.append(poortego_node_result)
+        return added_list
+    
+    def _link_node_to_root(self, new_neo4j_node):
+        from_root_path = self.neo4j_root_node.get_or_create_path("ROOT", new_neo4j_node)
+        to_root_path = new_neo4j_node.get_or_create_path("ROOT", self.neo4j_root_node)
+    
     def create_node_from_dict(self, node_dict):
         new_node = self.db_conn.get_or_create_indexed_node("NameIdx", "name", node_dict['name'], node_dict)
         # Create Default Paths tying Node to root
-        from_root_path = self.neo4j_root_node.get_or_create_path("ROOT", new_node)
-        to_root_path = new_node.get_or_create_path("ROOT", self.neo4j_root_node)
+        self._link_node_to_root(new_node)
         p_node = self._neo4j_node_to_poortego_node(new_node)
         return p_node
+    
+    def add_links(self, poortego_links):
+        added_list = list()
+        for poortego_link in poortego_links:
+            added_list.append(self.create_link(poortego_link.start_node, 
+                                               poortego_link.end_node, 
+                                               poortego_link.name, 
+                                               poortego_link.properties))
+        return added_list
+    
     
     def create_link(self, start_node, end_node, link_name, prop_dict):
         neo4j_start_node = self._poortego_node_to_neo4j_node(start_node)
