@@ -79,3 +79,8 @@ class PoortegoDatabase:
         """Create link in database from parameters - return PoortegoLink"""
         link_addition = self.db_conn.create_link(start_node, end_node, link_name, prop_dict)
         return link_addition
+
+    def find_nodes(self, query_dict):
+        node_results = self.db_conn.find_nodes(query_dict)
+        return node_results
+

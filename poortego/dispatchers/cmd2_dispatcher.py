@@ -19,7 +19,7 @@ from ..commands.pwd import poortego_pwd
 from ..commands.add import poortego_add
 from ..commands.ln import poortego_ln
 from ..commands.purge import poortego_purge
-
+from ..commands.find import poortego_find
 
 class Cmd2Dispatcher:
     def __init__(self, interface_obj):
@@ -126,3 +126,11 @@ class Cmd2Dispatcher:
     def do_poortego_purge(self, arg):
         """Command to delete EVERYTHING from database"""
         poortego_purge(self.my_interface, arg)
+
+    #
+    # Namespace: poortego
+    # Command: find
+    #
+    def do_poortego_find(self, arg):
+        """Command to find nodes from database"""
+        poortego_find(self.my_interface, arg)
