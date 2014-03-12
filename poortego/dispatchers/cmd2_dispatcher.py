@@ -11,8 +11,7 @@ from cmd2 import make_option, options
 # Imports for dispatcher supported command set
 #
 from ..commands.user import poortego_user
-from ..commands.storage import poortego_storage
-from ..commands.session import poortego_session
+from ..commands.env import poortego_env
 from ..commands.ls import poortego_ls
 from ..commands.cd import poortego_cd
 from ..commands.pwd import poortego_pwd
@@ -20,6 +19,7 @@ from ..commands.add import poortego_add
 from ..commands.ln import poortego_ln
 from ..commands.purge import poortego_purge
 from ..commands.find import poortego_find
+from ..commands.imports import poortego_import
 
 class Cmd2Dispatcher:
     def __init__(self, interface_obj):
@@ -39,25 +39,16 @@ class Cmd2Dispatcher:
         
     #
     # Namespace: poortego
-    # Command: storage
+    # Command: env
     #
     @options([
-            make_option('-l', '--list', action="store_true", dest="list_details", help="Show the storage details")
+            make_option('-s', '--session', action="store_true", dest="session_details", help="Show the session details"),
+            make_option('-d', '--storage', action="store_true", dest="storage_details", help="Show the storage details"),
+            make_option('-u', '--user', action="store_true", dest="user_details", help="Show the user details")
         ])
-    def do_poortego_storage(self, arg, opts):
-        """Command to show and change storage details"""
-        poortego_storage(self.my_interface, arg, opts)
-        
-    #
-    # Namespace: poortego
-    # Command: session 
-    #
-    @options([
-            make_option('-l', '--list', action="store_true", dest="list_details", help="Show the current session details")
-        ])
-    def do_poortego_session(self, arg, opts):
-        """Command to show and change session details"""
-        poortego_session(self.my_interface, arg, opts)
+    def do_poortego_env(self, arg, opts):
+        """Command to show environment details"""
+        poortego_env(self.my_interface, arg, opts)
 
     #
     # Namespace: poortego
@@ -134,3 +125,16 @@ class Cmd2Dispatcher:
     def do_poortego_find(self, arg):
         """Command to find nodes from database"""
         poortego_find(self.my_interface, arg)
+        
+    #
+    # Namespace: poortego
+    # Command: import
+    #
+    @options([
+            make_option('-c', '--csv', action="store_true", help="Import data from CSV file"),
+            make_option('-m', '--maltego', action="store_true", help="Import data from Maltego file"),
+            make_option('-s', '--stix', action="store_true", help="Import data from STIX file"),
+    ])
+    def do_poortego_import(self, arg, opt):
+        """Command to import data"""
+        poortego_import(self.my_interface, arg, opt)

@@ -17,7 +17,7 @@ class PoortegoDatabase:
         """Direct database handling based on the db_type set in settings"""
         mod_name = 'poortego.data_management.' + self.db_type + '.' + self.db_type + '_database'
         class_name = self.db_type.capitalize() + 'Database'
-        print "[DEBUGing this] Trying to load module: %s\n" % mod_name
+        #print "[DEBUGing this] Trying to load module: %s\n" % mod_name
         db_module = importlib.import_module(mod_name)
         db_class = getattr(db_module, class_name)
         db_obj = db_class(self.conf_settings)
@@ -61,6 +61,14 @@ class PoortegoDatabase:
     def get_nodes_to(self, end_node_id):
         """Return list of PoortegoNodes connected to the end_node_id"""
         return self.db_conn.get_nodes_to(end_node_id)
+    
+    def add_nodes(self, poortego_nodes):
+        """Add PoortegoNodes to database"""
+        return self.db_conn.add_nodes(poortego_nodes)
+    
+    def add_links(self, poortego_links):
+        """Add PoortegoLinks to database"""
+        return self.db_conn.add_links(poortego_links)
     
     def create_node_from_dict(self, node_dict):
         """Create node in database from dict - return PoortegoNode"""

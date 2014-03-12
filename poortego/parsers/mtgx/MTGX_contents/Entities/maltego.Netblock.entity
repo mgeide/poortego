@@ -1,0 +1,13 @@
+<MaltegoEntity id="maltego.Netblock" displayName="Netblock" displayNamePlural="Netblocks" description="An internet Autonomous System (AS)" category="Infrastructure" smallIconResource="ClusterGolden" largeIconResource="ClusterGolden" allowedRoot="true" conversionOrder="70" visible="true">
+   <Converter>
+      <Value><![CDATA[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?) *- *(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)]]></Value>
+   </Converter>
+   <Properties value="ipv4-range">
+      <Groups/>
+      <Fields>
+         <Field name="ipv4-range" type="string" nullable="true" hidden="false" readonly="false" displayName="IP Range">
+            <SampleValue>74.207.243.0-74.207.243.255</SampleValue>
+         </Field>
+      </Fields>
+   </Properties>
+</MaltegoEntity>

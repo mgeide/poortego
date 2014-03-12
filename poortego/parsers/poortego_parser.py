@@ -23,6 +23,18 @@ class PoortegoParser:
 		self.input_format = input_format.strip().lower()
 		self.input_value = input_value.strip()
 		self._validate()
+		self.set_parser(self.input_format)
+			
+	def set_parser(self, input_format):	
+		if self.input_format:	
+			mod_name = 'poortego.parsers.' + self.input_format + '.' + self.input_format + '_parser'
+			class_name = self.input_format.capitalize() + 'Parser'
+			parser_module = importlib.import_module(mod_name)
+			parser_class = getattr(parser_module, class_name)
+			parser_obj = parser_class(self.input_type, self.input_value)
+			self.my_parser = parser_obj
+		else:
+			self.my_parser = None
 
 	def _validate(self):
 		"""Validate input type, format, and value variables"""
@@ -43,14 +55,12 @@ class PoortegoParser:
 			raise Exception(error_string)
 
 	def run(self):
-		"""Direct parsing based on format"""
-		pkg_name = '.'
-		mod_name = self.input_format + '.' + self.input_format + '_parser'
-		class_name = self.input_format.capitalize() + 'Parser'
-		
-		parser_module = importlib.import_module(mod_name, pkg_name)
-		parser_class = getattr(parser_module, class_name)
-		parser_obj = parser_class(self.input_type, self.input_value)
-		
-		result = parser_obj.run()
+		"""Direct parsing based on format"""		
+		result = self.my_parser.run()
 		return result								
+
+	def resulting_nodes(self):
+		return self.my_parser.resulting_nodes()
+	
+	def resulting_links(self):
+		return self.my_parser.resulting_links()

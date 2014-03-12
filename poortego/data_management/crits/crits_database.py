@@ -14,8 +14,8 @@ class CritsDatabase:
                 """Constructor, setup CRITs mongodb connection"""
                 self.conf_settings = conf_settings
                 self.db_type = "crits"
-                self.db_conn = pymongo.MongoClient(str(self.conf_settings['mongo_uri']))
-                self.db_conn = self.db_conn["crits"]
+                self.db_client = pymongo.MongoClient(str(self.conf_settings['mongo_uri']))
+                self.db_conn = self.db_client["crits"]
                 if self.conf_settings['mongo_user']:
 			self.db_conn.authenticate(str(self.conf_settings['mongo_user']), str(self.conf_settings['mongo_password']))
                 self.set_database_defaults()
@@ -52,7 +52,7 @@ class CritsDatabase:
         def get_db_info(self):
                 """Return info dictionary about the database"""
                 db_info = {}
-                db_info["Mongo Server Info"] = self.db_conn.server_info()
+                db_info["Mongo Server Info"] = self.db_client.server_info()
                 return db_info
 
 	def get_node_by_id(self, id_num):

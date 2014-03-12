@@ -1,0 +1,468 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
+  <VersionInfo createdBy="Maltego Tungsten" subtitle="" version="3.4.2.5125"/>
+  <key for="graphml" id="d0" yfiles.type="resources"/>
+  <key for="port" id="d1" yfiles.type="portgraphics"/>
+  <key for="port" id="d2" yfiles.type="portgeometry"/>
+  <key for="port" id="d3" yfiles.type="portuserdata"/>
+  <key attr.name="MaltegoEntity" for="node" id="d4"/>
+  <key for="node" id="d5" yfiles.type="nodegraphics"/>
+  <key attr.name="MaltegoLink" for="edge" id="d6"/>
+  <key for="edge" id="d7" yfiles.type="edgegraphics"/>
+  <graph edgedefault="directed" id="G">
+    <node id="n0">
+      <data key="d4">
+        <mtg:MaltegoEntity xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifk6" type="maltego.Domain">
+          <mtg:Properties>
+            <mtg:Property displayName="Domain Name" hidden="false" name="fqdn" nullable="true" readonly="false" type="string">
+              <mtg:Value>google.com</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="WHOIS Info" hidden="false" name="whois-info" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoEntity>
+      </data>
+      <data key="d5">
+        <mtg:EntityRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx">
+          <mtg:Position x="265.0" y="151.0"/>
+        </mtg:EntityRenderer>
+      </data>
+    </node>
+    <node id="n1">
+      <data key="d4">
+        <mtg:MaltegoEntity xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifk7" type="maltego.DNSName">
+          <mtg:Properties>
+            <mtg:Property displayName="DNS Name" hidden="false" name="fqdn" nullable="true" readonly="false" type="string">
+              <mtg:Value>www.google.com</mtg:Value>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoEntity>
+      </data>
+      <data key="d5">
+        <mtg:EntityRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx">
+          <mtg:Position x="532.0" y="78.0"/>
+        </mtg:EntityRenderer>
+      </data>
+    </node>
+    <node id="n2">
+      <data key="d4">
+        <mtg:MaltegoEntity xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifkf" type="maltego.IPv4Address">
+          <mtg:Properties>
+            <mtg:Property displayName="IP Address" hidden="false" name="ipv4-address" nullable="true" readonly="false" type="string">
+              <mtg:Value>74.125.228.80</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Internal" hidden="false" name="ipaddress.internal" nullable="true" readonly="false" type="boolean">
+              <mtg:Value>false</mtg:Value>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoEntity>
+      </data>
+      <data key="d5">
+        <mtg:EntityRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx">
+          <mtg:Position x="465.0" y="441.0"/>
+        </mtg:EntityRenderer>
+      </data>
+    </node>
+    <node id="n3">
+      <data key="d4">
+        <mtg:MaltegoEntity xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifkh" type="maltego.IPv4Address">
+          <mtg:Properties>
+            <mtg:Property displayName="IP Address" hidden="false" name="ipv4-address" nullable="true" readonly="false" type="string">
+              <mtg:Value>74.125.228.81</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Internal" hidden="false" name="ipaddress.internal" nullable="true" readonly="false" type="boolean">
+              <mtg:Value>false</mtg:Value>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoEntity>
+      </data>
+      <data key="d5">
+        <mtg:EntityRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx">
+          <mtg:Position x="548.0" y="312.0"/>
+        </mtg:EntityRenderer>
+      </data>
+    </node>
+    <node id="n4">
+      <data key="d4">
+        <mtg:MaltegoEntity xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifkj" type="maltego.IPv4Address">
+          <mtg:Properties>
+            <mtg:Property displayName="IP Address" hidden="false" name="ipv4-address" nullable="true" readonly="false" type="string">
+              <mtg:Value>74.125.228.82</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Internal" hidden="false" name="ipaddress.internal" nullable="true" readonly="false" type="boolean">
+              <mtg:Value>false</mtg:Value>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoEntity>
+      </data>
+      <data key="d5">
+        <mtg:EntityRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx">
+          <mtg:Position x="638.0" y="426.0"/>
+        </mtg:EntityRenderer>
+      </data>
+    </node>
+    <node id="n5">
+      <data key="d4">
+        <mtg:MaltegoEntity xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifkl" type="maltego.IPv4Address">
+          <mtg:Properties>
+            <mtg:Property displayName="IP Address" hidden="false" name="ipv4-address" nullable="true" readonly="false" type="string">
+              <mtg:Value>74.125.228.83</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Internal" hidden="false" name="ipaddress.internal" nullable="true" readonly="false" type="boolean">
+              <mtg:Value>false</mtg:Value>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoEntity>
+      </data>
+      <data key="d5">
+        <mtg:EntityRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx">
+          <mtg:Position x="705.0" y="262.0"/>
+        </mtg:EntityRenderer>
+      </data>
+    </node>
+    <node id="n6">
+      <data key="d4">
+        <mtg:MaltegoEntity xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifkn" type="maltego.IPv4Address">
+          <mtg:Properties>
+            <mtg:Property displayName="IP Address" hidden="false" name="ipv4-address" nullable="true" readonly="false" type="string">
+              <mtg:Value>74.125.228.84</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Internal" hidden="false" name="ipaddress.internal" nullable="true" readonly="false" type="boolean">
+              <mtg:Value>false</mtg:Value>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoEntity>
+      </data>
+      <data key="d5">
+        <mtg:EntityRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx">
+          <mtg:Position x="764.0" y="365.0"/>
+        </mtg:EntityRenderer>
+      </data>
+    </node>
+    <node id="n7">
+      <data key="d4">
+        <mtg:MaltegoEntity xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifl4" type="maltego.Netblock">
+          <mtg:Properties>
+            <mtg:Property displayName="Text" hidden="false" name="text" nullable="true" readonly="false" type="string">
+              <mtg:Value>74.125.0.0/16</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="IP Range" hidden="false" name="ipv4-range" nullable="true" readonly="false" type="string">
+              <mtg:Value>74.125.0.0/16</mtg:Value>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoEntity>
+      </data>
+      <data key="d5">
+        <mtg:EntityRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx">
+          <mtg:Position x="146.0" y="410.0"/>
+        </mtg:EntityRenderer>
+      </data>
+    </node>
+    <node id="n8">
+      <data key="d4">
+        <mtg:MaltegoEntity xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuiflk" type="maltego.Person">
+          <mtg:Properties>
+            <mtg:Property displayName="Full Name" hidden="false" name="person.fullname" nullable="true" readonly="false" type="string">
+              <mtg:Value>Google, Inc.</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="First Names" hidden="false" name="person.firstnames" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+            <mtg:Property displayName="Surname" hidden="false" name="person.lastname" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoEntity>
+      </data>
+      <data key="d5">
+        <mtg:EntityRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx">
+          <mtg:Position x="90.0" y="217.0"/>
+        </mtg:EntityRenderer>
+      </data>
+    </node>
+    <edge id="e0" source="n0" target="n1">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifka" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>sub-domain</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e1" source="n1" target="n0">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifkd" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>parent domain</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e2" source="n1" target="n5">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifkq" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>A</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e3" source="n1" target="n3">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifkt" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>A</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e4" source="n1" target="n2">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifkw" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>A</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e5" source="n1" target="n4">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifkz" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>A</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e6" source="n1" target="n6">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifl2" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>A</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e7" source="n2" target="n7">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifl7" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>netblock</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e8" source="n3" target="n7">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifla" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>netblock</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e9" source="n4" target="n7">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuifld" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>netblock</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e10" source="n6" target="n7">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuiflg" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>netblock</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e11" source="n5" target="n7">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuiflj" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>netblock</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e12" source="n8" target="n7">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuiflr" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>owner</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+    <edge id="e13" source="n8" target="n0">
+      <data key="d6">
+        <mtg:MaltegoLink xmlns:mtg="http://maltego.paterva.com/xml/mtgx" id="2054wisnuiflu" type="maltego.link.manual-link">
+          <mtg:Properties>
+            <mtg:Property displayName="Label" hidden="false" name="maltego.link.manual.type" nullable="true" readonly="false" type="string">
+              <mtg:Value>registrant</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Show Label" hidden="false" name="maltego.link.show-label" nullable="true" readonly="false" type="int">
+              <mtg:Value>0</mtg:Value>
+            </mtg:Property>
+            <mtg:Property displayName="Description" hidden="false" name="maltego.link.manual.description" nullable="true" readonly="false" type="string">
+              <mtg:Value/>
+            </mtg:Property>
+          </mtg:Properties>
+        </mtg:MaltegoLink>
+      </data>
+      <data key="d7">
+        <mtg:LinkRenderer xmlns:mtg="http://maltego.paterva.com/xml/mtgx"/>
+      </data>
+    </edge>
+  </graph>
+  <data key="d0">
+    <y:Resources/>
+  </data>
+</graphml>
