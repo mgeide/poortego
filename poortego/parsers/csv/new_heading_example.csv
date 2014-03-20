@@ -1,0 +1,19 @@
+# Basic CSV example that uses a heading to define fields
+HEADING:
+
+# Define field labels for nodes
+$field1:label = DOMAIN
+$field2:label = IP
+
+# Define properties if desired
+$field1:property:description = "This is a test"
+
+# Define linkage to build
+$link1 = $field1, "resolves_to", $field2
+
+DATA:
+www.google.com,74.125.228.80
+www.google.com,74.125.228.81
+www.google.com,74.125.228.82
+www.google.com,74.125.228.83
+www.google.com,74.125.228.84
